@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🔮</text></svg>">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Cauldron — Projects</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#06080a;--gold:#c9a84c;--gold-light:#e8cc7a;--gold-dim:#7a6330;
+      --green:#1db954;--green-dim:#0d5c2a;
+      --text:#e8dcc8;--text-dim:#9a8a6a;--border:rgba(201,168,76,0.2);
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{background:var(--bg);color:var(--text);font-family:'EB Garamond',Georgia,serif;min-height:100vh;overflow-x:hidden;}
+    body::before{content:'';position:fixed;inset:0;z-index:0;
+      background:radial-gradient(ellipse at 50% 80%,rgba(29,185,84,0.06) 0%,transparent 50%),
+        radial-gradient(ellipse at 30% 20%,rgba(107,33,168,0.05) 0%,transparent 40%);
+      pointer-events:none;}
+
+    .page{padding:80px 40px 80px;position:relative;z-index:1;max-width:1080px;margin:0 auto;}
+
+    /* Hero */
+    .hero{text-align:center;margin-bottom:48px;}
+    .eyebrow{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;color:var(--gold-dim);text-transform:uppercase;margin-bottom:10px;}
+    .hero-title{font-family:'Cinzel Decorative',serif;font-size:clamp(28px,5vw,52px);font-weight:900;
+background:linear-gradient(135deg,#0a2a14 0%,#1db954 35%,#3dda6f 55%,#0d5c2a 100%);
+filter:drop-shadow(0 0 30px rgba(29,185,84,0.4));      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      filter:drop-shadow(0 0 20px rgba(29,185,84,0.2));}
+    .hero-sub{font-size:15px;font-style:italic;color:var(--text-dim);margin-top:8px;}
+
+    /* LAYOUT PRINCIPAL */
+    .brew-layout{display:grid;grid-template-columns:280px 1fr;gap:40px;align-items:start;}
+
+    /* ── INGRÉDIENTS (compétences) ── */
+    .ingredients-panel{position:sticky;top:80px;display:flex;flex-direction:column;}
+    .ing-scroll-wrap{position:relative;max-height:520px;}
+    #ingredientsList{
+      overflow-y:scroll;
+      max-height:520px;
+      padding-right:12px;
+      scrollbar-width:none;
+    }
+    #ingredientsList::-webkit-scrollbar{display:none;}
+    /* Custom track — always visible */
+    .ing-scroll-track{
+      position:absolute;right:0;top:0;bottom:0;width:3px;
+      background:rgba(29,185,84,0.18);border-radius:2px;
+      pointer-events:none;
+    }
+    /* Custom thumb */
+    .ing-scroll-thumb{
+      position:absolute;right:0;width:3px;
+      background:var(--green);border-radius:2px;
+      pointer-events:none;transition:background 0.2s;
+      box-shadow:0 0 6px rgba(29,185,84,0.4);
+    }
+
+    .scroll-hint{
+      display:flex;flex-direction:column;align-items:center;gap:2px;
+      padding:6px 0 2px;flex-shrink:0;
+    }
+    .scroll-hint-text{
+      font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.15em;
+      color:var(--green);text-transform:uppercase;opacity:0.7;
+    }
+    .scroll-hint-arrow{
+      color:var(--green);font-size:14px;
+      animation:scrollBounce 1.2s ease-in-out infinite;
+    }
+    @keyframes scrollBounce{
+      0%,100%{transform:translateY(0);opacity:0.5;}
+      50%{transform:translateY(4px);opacity:1;}
+    }
+    .panel-title{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.2em;color:var(--gold-dim);
+      text-transform:uppercase;margin-bottom:16px;padding-bottom:8px;
+      border-bottom:1px solid var(--border);}
+    .ingredient-item{
+      background:rgba(0,0,0,0.4);
+      border:1px solid var(--border);
+      border-radius:8px;padding:10px 14px;
+      margin-bottom:8px;cursor:grab;
+      display:flex;align-items:center;gap:10px;
+      transition:all 0.2s;
+      user-select:none;
+    }
+    .ingredient-item:hover{border-color:rgba(201,168,76,0.4);background:rgba(30,20,5,0.5);}
+    .ingredient-item.dragging{opacity:0.4;cursor:grabbing;}
+    .ingredient-item.used{opacity:0.35;filter:grayscale(0.5);}
+
+
+    /* ── Ingredient icon tooltip in project cards ── */
+    .ing-tip{
+      position:relative;
+      display:inline-flex;align-items:center;
+      vertical-align:middle;cursor:default;
+    }
+    .ing-tip::after{
+      content:attr(data-tooltip);
+      position:absolute;
+      bottom:calc(100% + 6px);
+      left:50%;transform:translateX(-50%);
+      background:rgba(6,8,10,0.96);
+      border:1px solid rgba(201,168,76,0.35);
+      color:var(--text);
+      font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.06em;
+      white-space:nowrap;padding:4px 10px;border-radius:3px;
+      pointer-events:none;opacity:0;
+      transition:opacity 0.15s;z-index:50;
+      box-shadow:0 4px 12px rgba(0,0,0,0.7);
+    }
+    .ing-tip:hover::after{opacity:1;}
+    .ing-emoji{font-size:20px;display:flex;align-items:center;justify-content:center;width:28px;height:28px;flex-shrink:0;}
+    .ing-emoji img{width:24px;height:24px;object-fit:contain;display:block;}
+    .ing-name{font-family:'Cinzel',serif;font-size:12px;color:var(--text);letter-spacing:0.05em;}
+    .ing-sub{font-size:11px;font-style:italic;color:var(--text-dim);}
+
+    /* ── CHAUDRON CENTRAL ── */
+    .cauldron-area{display:flex;flex-direction:column;align-items:center;gap:24px;}
+
+    .cauldron-wrap{position:relative;width:280px;}
+
+    /* Le chaudron SVG */
+    .cauldron-svg{width:100%;filter:drop-shadow(0 8px 24px rgba(29,185,84,0.15));animation:cauldronGlowPulse 3s ease-in-out infinite;}
+    @keyframes cauldronGlowPulse{
+      0%,100%{filter:drop-shadow(0 8px 24px rgba(29,185,84,0.12));}
+      50%{filter:drop-shadow(0 8px 36px rgba(29,185,84,0.38)) drop-shadow(0 0 16px rgba(201,168,76,0.1));}
+    }
+
+    /* Zone de drop par-dessus le chaudron */
+    .cauldron-drop{
+      position:absolute;
+      top:20%;left:15%;width:70%;height:55%;
+      border-radius:50%;
+      transition:background 0.3s;
+    }
+    .cauldron-drop.drag-over{
+      background:rgba(29,185,84,0.08);
+      box-shadow:0 0 20px rgba(29,185,84,0.2) inset;
+    }
+
+    /* Ingredients into the cauldron */
+    .cauldron-contents{
+      position:absolute;
+      top:25%;left:18%;width:64%;
+      display:flex;flex-wrap:wrap;gap:4px;align-items:center;justify-content:center;
+    }
+    .cauldron-ing{font-size:22px;animation:floatIng 2s ease-in-out infinite;}
+    @keyframes floatIng{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+    .cauldron-ing:nth-child(2){animation-delay:0.5s;}
+    .cauldron-ing:nth-child(3){animation-delay:1s;}
+    .cauldron-ing:nth-child(4){animation-delay:1.5s;}
+
+    /* Bulles animées */
+    .bubble{
+      position:absolute;
+      border-radius:50%;
+      background:rgba(29,185,84,0.3);
+      animation:bubbleUp 2s ease-in infinite;
+    }
+    @keyframes bubbleUp{
+      0%{transform:translateY(0) scale(1);opacity:0.7;}
+      100%{transform:translateY(-40px) scale(0.2);opacity:0;}
+    }
+
+    /* Vapeur */
+    .steam{
+      position:absolute;
+      top:-24px;
+      width:100%;
+      pointer-events:none;
+      display:flex;justify-content:space-around;
+    }
+    .steam-line{
+      width:3px;height:20px;
+      background:linear-gradient(to top,rgba(29,185,84,0.4),transparent);
+      border-radius:2px;
+      animation:steamRise 1.5s ease-in-out infinite;
+    }
+    .steam-line:nth-child(2){animation-delay:0.3s;height:14px;}
+    .steam-line:nth-child(3){animation-delay:0.6s;height:18px;}
+    @keyframes steamRise{
+      0%,100%{transform:translateY(0) scaleX(1);opacity:0.5;}
+      50%{transform:translateY(-8px) scaleX(1.5);opacity:0.8;}
+    }
+
+    /* Bouton brasser */
+    .btn-brew{
+      font-family:'Cinzel',serif;font-size:12px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;
+      color:var(--bg);background:linear-gradient(135deg,var(--green-dim),var(--green));
+      border:none;padding:12px 32px;border-radius:4px;cursor:pointer;
+      transition:all 0.3s;box-shadow:0 4px 20px rgba(29,185,84,0.25);
+    }
+    .btn-brew:hover{box-shadow:0 4px 28px rgba(29,185,84,0.45);transform:translateY(-1px);}
+    .btn-brew:disabled{opacity:0.3;cursor:not-allowed;transform:none;}
+    .btn-clear{
+      font-family:'Cinzel',serif;font-size:11px;color:var(--text-dim);background:none;
+      border:1px solid var(--border);padding:10px 20px;border-radius:4px;cursor:pointer;transition:all 0.3s;
+    }
+    .btn-clear:hover{color:var(--gold);border-color:var(--gold);}
+
+    .brew-hint{
+      position:absolute;
+      top:-32px;left:50%;transform:translateX(-50%);
+      font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;
+      color:var(--gold-dim);text-transform:uppercase;
+      white-space:nowrap;pointer-events:none;z-index:5;
+    }
+
+    /* ── RÉSULTATS ── */
+    .results-area{width:100%;max-width:600px;}
+    .results-title{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.2em;color:var(--gold-dim);
+      text-transform:uppercase;margin-bottom:20px;text-align:center;}
+
+    .project-card img{vertical-align:middle;}
+    .project-card{
+      background:linear-gradient(160deg,rgba(0,0,0,0.6),rgba(10,20,10,0.8));
+      border:1px solid rgba(29,185,84,0.25);border-radius:12px;
+      padding:20px;cursor:pointer;transition:all 0.3s;margin-bottom:14px;
+      display:flex;align-items:center;gap:18px;
+      animation:cardSlide 0.5s cubic-bezier(0.175,0.885,0.32,1.275) both;
+    }
+    @keyframes cardSlide{from{opacity:0;transform:translateX(-20px) scale(0.95);}to{opacity:1;transform:translateX(0) scale(1);}}
+    .project-card:hover{border-color:rgba(29,185,84,0.5);transform:translateX(4px);
+      box-shadow:0 8px 24px rgba(0,0,0,0.5),0 0 16px rgba(29,185,84,0.1);}
+    .project-icon{font-size:36px;filter:drop-shadow(0 0 8px rgba(29,185,84,0.3));display:flex;align-items:center;justify-content:center;width:40px;height:40px;flex-shrink:0;}
+    .project-icon img{width:36px;height:36px;object-fit:contain;display:block;}
+    .project-info{flex:1;}
+    .project-name{font-family:'Cinzel',serif;font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px;}
+    .project-desc{font-size:13px;font-style:italic;color:var(--text-dim);}
+    .project-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+    .project-tag{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.08em;color:var(--green);
+      border:1px solid rgba(29,185,84,0.25);padding:2px 8px;border-radius:2px;}
+    .project-arrow{color:var(--gold-dim);font-size:18px;flex-shrink:0;}
+
+    .all-projects-title{font-family:'Cinzel Decorative',serif;font-size:16px;
+      background:linear-gradient(135deg,var(--green-dim),var(--green));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      text-align:center;margin:32px 0 16px;}
+
+    /* Sous-texte ingrédients manquants */
+    .no-match{font-size:14px;font-style:italic;color:var(--text-dim);text-align:center;padding:20px;}
+
+    /* MODALE */
+    .modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.88);
+      backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;
+      opacity:0;pointer-events:none;transition:opacity 0.4s;padding:24px;}
+    .modal-overlay.open{opacity:1;pointer-events:all;}
+    .modal{background:linear-gradient(160deg,#060e08 0%,#081209 50%,#060a06 100%);
+      border:1px solid rgba(29,185,84,0.25);border-radius:16px;max-width:640px;width:100%;
+      max-height:88vh;overflow-y:auto;position:relative;
+      box-shadow:0 24px 80px rgba(0,0,0,0.9),0 0 40px rgba(29,185,84,0.05);
+      transform:scale(0.9) translateY(20px);transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);}
+    .modal-overlay.open .modal{transform:scale(1) translateY(0);}
+    .modal::before,.modal::after{content:'⚗';position:absolute;color:rgba(29,185,84,0.15);font-size:16px;}
+    .modal::before{top:14px;left:18px;} .modal::after{bottom:14px;right:18px;}
+    .modal-header{display:flex;gap:22px;padding:26px 26px 18px;border-bottom:1px solid rgba(29,185,84,0.1);align-items:center;}
+    .modal-proj-icon{font-size:56px;filter:drop-shadow(0 0 12px rgba(29,185,84,0.3));}
+    .modal-meta{flex:1;}
+    .modal-type{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.25em;color:rgba(29,185,84,0.5);text-transform:uppercase;margin-bottom:5px;}
+    .modal-title{font-family:'Cinzel Decorative',serif;font-size:clamp(17px,3vw,24px);font-weight:700;
+      background:linear-gradient(135deg,var(--green-dim),var(--green));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;}
+    .modal-subtitle{font-size:13px;font-style:italic;color:var(--text-dim);}
+    .modal-body{padding:22px 26px 26px;}
+    .modal-recipe{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+    .modal-recipe-label{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;color:rgba(29,185,84,0.5);text-transform:uppercase;}
+    .modal-recipe-ing{background:rgba(29,185,84,0.08);border:1px solid rgba(29,185,84,0.2);
+      border-radius:4px;padding:4px 10px;font-size:13px;display:flex;align-items:center;gap:5px;}
+    .modal-prophecy{font-size:15px;font-style:italic;color:var(--text);line-height:1.8;
+      border-left:2px solid rgba(29,185,84,0.3);padding-left:14px;margin-bottom:18px;}
+    .modal-details{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;}
+    .modal-detail{background:rgba(0,0,0,0.3);border:1px solid rgba(29,185,84,0.08);border-radius:5px;padding:10px;}
+    .modal-detail-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.2em;color:rgba(29,185,84,0.4);text-transform:uppercase;margin-bottom:3px;}
+    .modal-detail-value{font-size:13px;color:var(--text);}
+    .modal-tags{display:flex;flex-wrap:wrap;gap:6px;}
+    .modal-tag{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.08em;color:var(--green);
+      border:1px solid rgba(29,185,84,0.25);padding:3px 10px;border-radius:2px;background:rgba(29,185,84,0.04);}
+    .modal-close{position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.5);
+      border:1px solid rgba(29,185,84,0.2);color:var(--text-dim);width:28px;height:28px;
+      border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+    .modal-close:hover{color:var(--green);border-color:var(--green);}
+    ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:var(--bg);}
+    ::-webkit-scrollbar-thumb{background:var(--green-dim);border-radius:2px;}
+
+    @media(max-width:700px){.brew-layout{grid-template-columns:1fr;}.ingredients-panel{position:static;}}
+
+    /* ══════════════════════════════════════
+       BREW OVERLAY — mixing bowl
+    ══════════════════════════════════════ */
+    .brew-overlay{
+      position:fixed;inset:0;z-index:250;
+      background:rgba(0,0,0,0.9);
+      backdrop-filter:blur(14px);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;
+      opacity:0;pointer-events:none;
+      transition:opacity 0.4s;
+      padding:24px;
+    }
+    .brew-overlay.open{opacity:1;pointer-events:all;}
+
+    .brew-overlay-title{
+      font-family:'Cinzel Decorative',serif;font-size:clamp(16px,3vw,24px);
+      background:linear-gradient(135deg,var(--green-dim),var(--green),#3dda6f);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .brew-overlay-instruction{
+      font-size:14px;font-style:italic;color:var(--text-dim);
+      text-align:center;max-width:320px;
+    }
+
+    .mixing-bowl-wrap{
+      position:relative;width:280px;height:280px;cursor:none;
+    }
+    .mixing-cursor{
+      position:absolute;width:12px;height:12px;border-radius:50%;
+      background:#3dda6f;
+      box-shadow:0 0 10px #1db954,0 0 22px rgba(29,185,84,0.5);
+      pointer-events:none;transform:translate(-50%,-50%);
+      z-index:10;opacity:0;transition:opacity 0.2s;
+    }
+    #brewTrailCanvas{
+      position:absolute;inset:0;border-radius:50%;pointer-events:none;z-index:5;
+    }
+
+    .circle-progress-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;}
+    .circle-progress-label{
+      font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;
+      color:var(--gold-dim);text-transform:uppercase;
+    }
+    .circle-pips{display:flex;gap:12px;}
+    .circle-pip{
+      width:12px;height:12px;border-radius:50%;
+      border:1.5px solid var(--green-dim);background:transparent;
+      transition:all 0.35s;
+    }
+    .circle-pip.done{
+      background:var(--green);border-color:var(--green);
+      box-shadow:0 0 8px rgba(29,185,84,0.6);
+    }
+
+    .brew-success-msg{
+      font-family:'Cinzel Decorative',serif;font-size:18px;
+      background:linear-gradient(135deg,var(--green-dim),var(--green),#3dda6f);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      opacity:0;transform:scale(0.8);
+      transition:all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+    }
+    .brew-success-msg.show{opacity:1;transform:scale(1);}
+
+    .btn-continue-brew{
+      font-family:'Cinzel',serif;font-size:12px;font-weight:600;letter-spacing:0.12em;
+      text-transform:uppercase;color:var(--bg);
+      background:linear-gradient(135deg,var(--green-dim),var(--green));
+      border:none;padding:12px 32px;border-radius:4px;cursor:pointer;
+      box-shadow:0 4px 20px rgba(29,185,84,0.3);
+      opacity:0;pointer-events:none;
+      transition:all 0.35s;
+    }
+    .btn-continue-brew:hover{box-shadow:0 4px 28px rgba(29,185,84,0.5);transform:translateY(-1px);}
+    .btn-continue-brew.show{opacity:1;pointer-events:all;}
+
+    /* vortex spin */
+    @keyframes brewVortexSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+    @keyframes brewBubblePop{0%{transform:scale(0);opacity:0.9;}100%{transform:scale(3);opacity:0;}}
+    @keyframes brewRuneGlow{0%,100%{opacity:0.3;}50%{opacity:0.9;}}
+  
+    /* ══════════════════════════════════════
+       NAV — base tarot, accentuation chaudron
+       ══════════════════════════════════════ */
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:100;height:64px;
+      display:flex;align-items:center;justify-content:space-between;padding:0 48px;
+      background:linear-gradient(to bottom,rgba(8,8,16,0.97),transparent);
+      border-bottom:1px solid rgba(255,255,255,0.06);
+      backdrop-filter:blur(12px);
+    }
+    /* Étoiles animées dans la barre nav */
+    nav::before{
+      content:'';position:absolute;inset:0;pointer-events:none;overflow:hidden;
+      background:
+        radial-gradient(1px 1px at 15% 40%, rgba(255,255,220,0.55) 0%, transparent 100%),
+        radial-gradient(1px 1px at 28% 65%, rgba(255,255,220,0.35) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 42% 30%, rgba(255,255,220,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 55% 70%, rgba(255,255,220,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 68% 45%, rgba(255,255,220,0.3) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 78% 25%, rgba(255,255,220,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 88% 60%, rgba(255,255,220,0.35) 0%, transparent 100%);
+      animation:navStarPulse 4s ease-in-out infinite;
+    }
+    nav::after{
+      content:'';position:absolute;bottom:0;left:5%;right:5%;height:1px;
+      background:linear-gradient(to right,transparent,#1db954,transparent);
+      opacity:0.35;
+    }
+    @keyframes navStarPulse{
+      0%,100%{opacity:0.6;}
+      50%{opacity:1;}
+    }
+    .nav-logo{
+      font-family:'Cinzel Decorative',serif;font-size:18px;font-weight:700;
+      color:#1db954;letter-spacing:0.15em;
+      text-shadow:0 0 20px rgba(29,185,84,0.45);
+      position:relative;z-index:1;
+      animation:logoGlow 3s ease-in-out infinite;
+    }
+    @keyframes logoGlow{
+      0%,100%{text-shadow:0 0 20px rgba(29,185,84,0.15);}
+      50%{text-shadow:0 0 28px rgba(29,185,84,0.45), 0 0 48px rgba(29,185,84,0.15);}
+    }
+    .nav-links{display:flex;gap:36px;list-style:none;position:relative;z-index:1;}
+    .nav-links a{
+      font-family:'Cinzel',serif;font-size:12px;font-weight:600;
+      color:var(--text-dim);text-decoration:none;
+      letter-spacing:0.1em;text-transform:uppercase;
+      transition:color 0.3s;position:relative;
+    }
+    .nav-links a::after{
+      content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;
+      background:#1db954;
+      transform:scaleX(0);transition:transform 0.3s;
+    }
+    .nav-links a:hover,.nav-links a.active{color:#3dda6f;}
+    .nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1);}
+    .nav-back{
+      font-family:'Cinzel',serif;font-size:11px;color:var(--text-dim);
+      text-decoration:none;letter-spacing:0.08em;
+      border:1px solid rgba(255,255,255,0.1);
+      padding:6px 16px;border-radius:20px;
+      transition:all 0.3s;position:relative;z-index:1;
+    }
+    .nav-back:hover{color:#1db954;border-color:#1db954;box-shadow:0 0 12px rgba(29,185,84,0.15);}
+  
+    .nav-links .nav-about-btn{
+      font-family:'Cinzel',serif;font-size:12px;font-weight:600;
+      color:var(--text-dim);background:none;border:none;
+      letter-spacing:0.1em;text-transform:uppercase;
+      cursor:pointer;padding:0;transition:color 0.3s;
+      position:relative;
+    }
+    .nav-links .nav-about-btn::after{
+      content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;
+      background:var(--accent,#c9a84c);transform:scaleX(0);transition:transform 0.3s;
+    }
+    .nav-links .nav-about-btn:hover{color:var(--accent-light,#e8cc7a);}
+    .nav-links .nav-about-btn:hover::after{transform:scaleX(1);}
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">✦ Cauldron ✦</div>
+    <ul class="nav-links">
+    <li><a href="tarot.html">Tarot</a></li>
+    <li><a href="runes.html">Runes</a></li>
+    <li><a href="constellation.html">Constellation</a></li>
+    <li><a href="chaudron.html" class="active">Cauldron</a></li>
+    <li><a href="cristal.html">Cristal</a></li>
+    <li><button id="btn-about" class="nav-about-btn">About</button></li>
+  </ul>
+  <a href="divination.html" class="nav-back">← Divination</a>
+</nav>
+
+<div class="page">
+  <div class="hero">
+    <div class="eyebrow">Grimoire of Projects</div>
+    <h1 class="hero-title">The Cauldron</h1>
+    <p class="hero-sub">Drag skills into the cauldron to brew your potions</p>
+  </div>
+
+  <div class="brew-layout">
+
+    <!-- INGRÉDIENTS -->
+    <div class="ingredients-panel">
+      <div class="panel-title">⚗ Available ingredients</div>
+      <div class="ing-scroll-wrap">
+        <div id="ingredientsList"></div>
+        <div class="ing-scroll-track"></div>
+        <div class="ing-scroll-thumb" id="ingScrollThumb"></div>
+      </div>
+      <div class="scroll-hint" id="scrollHint">
+        <span class="scroll-hint-text">scroll for more</span>
+        <span class="scroll-hint-arrow">⌄</span>
+      </div>
+      <div style="margin-top:8px;font-size:12px;font-style:italic;color:var(--text-dim);flex-shrink:0;">
+        Drag 1 to 2 ingredients into the cauldron, then brew!
+      </div>
+    </div>
+
+    <!-- CHAUDRON + RÉSULTATS -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:32px">
+
+      <div class="cauldron-area">
+        <div class="cauldron-wrap">
+          <div class="brew-hint" id="brewHint">Drag ingredients here</div>
+          <!-- Vapeur -->
+          <div class="steam" id="steam" style="display:none">
+            <div class="steam-line"></div>
+            <div class="steam-line"></div>
+            <div class="steam-line"></div>
+          </div>
+
+          <!-- Chaudron SVG — Option A: Ornate Gothic -->
+          <svg class="cauldron-svg" viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="liquidGrad" cx="50%" cy="45%" r="55%">
+                <stop offset="0%"  id="liqStop1" stop-color="#3dda6f" stop-opacity="0.9"/>
+                <stop offset="100%" id="liqStop2" stop-color="#062010" stop-opacity="0.8"/>
+              </radialGradient>
+              <radialGradient id="cauldronGrad" cx="35%" cy="25%" r="80%">
+                <stop offset="0%"   stop-color="#1e1e22"/>
+                <stop offset="60%"  stop-color="#111115"/>
+                <stop offset="100%" stop-color="#080810"/>
+              </radialGradient>
+              <radialGradient id="cauldronGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%"   stop-color="#1db954" stop-opacity="0.25"/>
+                <stop offset="100%" stop-color="#1db954" stop-opacity="0"/>
+              </radialGradient>
+              <filter id="liquidGlowFilter">
+                <feGaussianBlur stdDeviation="3" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <!-- Pieds ornés -->
+            <path d="M95 218 L82 248" stroke="#222228" stroke-width="14" stroke-linecap="round"/>
+            <path d="M95 218 L82 248" stroke="#c9a84c" stroke-width="2"  stroke-linecap="round" opacity="0.3"/>
+            <path d="M205 218 L218 248" stroke="#222228" stroke-width="14" stroke-linecap="round"/>
+            <path d="M205 218 L218 248" stroke="#c9a84c" stroke-width="2"  stroke-linecap="round" opacity="0.3"/>
+            <path d="M150 222 L150 248" stroke="#222228" stroke-width="12" stroke-linecap="round"/>
+            <!-- Glow beneath -->
+            <ellipse cx="150" cy="242" rx="68" ry="7" fill="url(#cauldronGlow)"/>
+            <!-- Corps principal -->
+            <path d="M38 92 Q32 190 150 212 Q268 190 262 92 Z" fill="url(#cauldronGrad)"/>
+            <!-- Gravures / runes sur le corps -->
+            <path d="M70 130 L80 120 L90 130 L80 140 Z" fill="none" stroke="#c9a84c" stroke-width="1" opacity="0.35"/>
+            <path d="M210 130 L220 120 L230 130 L220 140 Z" fill="none" stroke="#c9a84c" stroke-width="1" opacity="0.35"/>
+            <text x="150" y="176" text-anchor="middle" font-size="11" fill="#c9a84c" opacity="0.22" font-family="serif">ᚠ ᚢ ᚦ ᚨ ᚱ</text>
+            <path d="M68 148 Q150 158 232 148" stroke="#c9a84c" stroke-width="0.8" fill="none" opacity="0.2"/>
+            <!-- Reflet -->
+            <path d="M50 118 Q48 172 88 196" stroke="#2a2a30" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.6"/>
+            <!-- Liquide lumineux -->
+            <ellipse cx="150" cy="98" rx="102" ry="20" fill="url(#liquidGrad)" id="liquidSurface" filter="url(#liquidGlowFilter)"/>
+            <!-- Rim orné -->
+            <ellipse cx="150" cy="92" rx="112" ry="24" fill="none" stroke="#c9a84c" stroke-width="2.5" opacity="0.6"/>
+            <!-- Ornements rim -->
+            <circle cx="75"  cy="90" r="3" fill="#c9a84c" opacity="0.5"/>
+            <circle cx="150" cy="68" r="3" fill="#c9a84c" opacity="0.5"/>
+            <circle cx="225" cy="90" r="3" fill="#c9a84c" opacity="0.5"/>
+            <circle cx="150" cy="116" r="3" fill="#c9a84c" opacity="0.3"/>
+            <path d="M110 70 L114 74 L110 78 L106 74 Z" fill="#c9a84c" opacity="0.4"/>
+            <path d="M190 70 L194 74 L190 78 L186 74 Z" fill="#c9a84c" opacity="0.4"/>
+            <!-- Anses forgées -->
+            <path d="M38 128 Q14 94 38 68"  stroke="#1e1e22" stroke-width="12" fill="none" stroke-linecap="round"/>
+            <path d="M38 128 Q14 94 38 68"  stroke="#c9a84c" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.4"/>
+            <path d="M262 128 Q286 94 262 68" stroke="#1e1e22" stroke-width="12" fill="none" stroke-linecap="round"/>
+            <path d="M262 128 Q286 94 262 68" stroke="#c9a84c" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.4"/>
+            <circle cx="26"  cy="94" r="5" fill="#1a1a20" stroke="#c9a84c" stroke-width="1" opacity="0.5"/>
+            <circle cx="274" cy="94" r="5" fill="#1a1a20" stroke="#c9a84c" stroke-width="1" opacity="0.5"/>
+            <!-- Highlight -->
+            <path d="M62 102 Q90 88 130 93" stroke="#3a3a44" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.5"/>
+          </svg>
+
+          <!-- Zone de drop invisible par-dessus le chaudron -->
+          <div class="cauldron-drop" id="cauldronDrop"
+            ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+            <!-- Ingredients flottants into the cauldron -->
+            <div class="cauldron-contents" id="cauldronContents"></div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;align-items:center">
+          <button class="btn-brew" id="btnBrew" onclick="openBrewOverlay()" disabled>🧪 Brew the potion</button>
+          <button class="btn-clear" onclick="clearCauldron()">↺ Clear</button>
+        </div>
+      </div>
+
+      <!-- RÉSULTATS -->
+      <div class="results-area" id="resultsArea" style="display:none">
+        <div class="results-title" id="resultsTitle"></div>
+        <div id="resultsList"></div>
+      </div>
+
+      <!-- Tous les projets -->
+      <div class="results-area">
+        <div class="all-projects-title">⚗ All Projects</div>
+        <div id="allProjectsList"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- BREW OVERLAY -->
+<div class="brew-overlay" id="brewOverlay">
+
+  <div class="brew-overlay-title">✦ Mix the Brew ✦</div>
+  <p class="brew-overlay-instruction" id="brewInstStr">Hold & drag in circles to stir the cauldron</p>
+
+  <div class="mixing-bowl-wrap" id="mixingBowlWrap">
+    <div class="mixing-cursor" id="mixingCursor"></div>
+    <canvas id="brewTrailCanvas" width="280" height="280"></canvas>
+
+    <svg width="280" height="280" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg"
+         style="position:absolute;inset:0">
+      <defs>
+        <radialGradient id="bowlRimGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="75%" stop-color="#1a1a1e"/>
+          <stop offset="100%" stop-color="#111114"/>
+        </radialGradient>
+        <radialGradient id="bowlLiqGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"   stop-color="#3dda6f" stop-opacity="0.95"/>
+          <stop offset="40%"  stop-color="#1db954" stop-opacity="0.7"/>
+          <stop offset="80%"  stop-color="#0a3018" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#041008" stop-opacity="1"/>
+        </radialGradient>
+        <radialGradient id="bowlCoreGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"   stop-color="#7fffaa" stop-opacity="1"/>
+          <stop offset="50%"  stop-color="#1db954" stop-opacity="0.6"/>
+          <stop offset="100%" stop-color="#1db954" stop-opacity="0"/>
+        </radialGradient>
+        <filter id="bowlGlow">
+          <feGaussianBlur stdDeviation="6" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <!-- Outer rim -->
+      <circle cx="110" cy="110" r="106" fill="url(#bowlRimGrad)"/>
+      <circle cx="110" cy="110" r="106" fill="none" stroke="#c9a84c" stroke-width="3" opacity="0.5"/>
+      <!-- 8 rim ornaments -->
+      <circle cx="110" cy="4"   r="4" fill="#c9a84c" opacity="0.6"/>
+      <circle cx="185" cy="29"  r="3" fill="#c9a84c" opacity="0.45"/>
+      <circle cx="216" cy="110" r="4" fill="#c9a84c" opacity="0.6"/>
+      <circle cx="185" cy="191" r="3" fill="#c9a84c" opacity="0.45"/>
+      <circle cx="110" cy="216" r="4" fill="#c9a84c" opacity="0.6"/>
+      <circle cx="35"  cy="191" r="3" fill="#c9a84c" opacity="0.45"/>
+      <circle cx="4"   cy="110" r="4" fill="#c9a84c" opacity="0.6"/>
+      <circle cx="35"  cy="29"  r="3" fill="#c9a84c" opacity="0.45"/>
+      <!-- Inner wall -->
+      <circle cx="110" cy="110" r="96" fill="#0e0e12"/>
+      <circle cx="110" cy="110" r="96" fill="none" stroke="#222226" stroke-width="4"/>
+      <!-- Liquid -->
+      <circle cx="110" cy="110" r="90" fill="url(#bowlLiqGrad)"/>
+      <!-- Vortex spirals — spin when stirring -->
+      <g id="brewVortex" style="transform-origin:110px 110px">
+        <path d="M110 110 Q135 80 160 110 Q185 140 160 170 Q135 200 110 170 Q85 140 110 80 Q135 20 170 50"
+              fill="none" stroke="#3dda6f" stroke-width="1.5" opacity="0.4" stroke-linecap="round"/>
+        <path d="M110 110 Q90 75 65 95 Q40 115 60 140 Q80 165 110 150 Q140 135 150 110 Q160 85 140 65 Q120 45 90 55"
+              fill="none" stroke="#1db954" stroke-width="1" opacity="0.3" stroke-linecap="round"/>
+      </g>
+      <!-- Concentric rings -->
+      <circle cx="110" cy="110" r="65" fill="none" stroke="#1db954" stroke-width="0.8" opacity="0.2"/>
+      <circle cx="110" cy="110" r="42" fill="none" stroke="#1db954" stroke-width="0.8" opacity="0.25"/>
+      <circle cx="110" cy="110" r="22" fill="none" stroke="#3dda6f" stroke-width="1"   opacity="0.35"/>
+      <!-- Core -->
+      <circle cx="110" cy="110" r="14" fill="url(#bowlCoreGrad)" filter="url(#bowlGlow)"/>
+      <circle cx="110" cy="110" r="6"  fill="#7fffaa" opacity="0.9"/>
+      <!-- Bubbles -->
+      <circle cx="140" cy="82"  r="4" fill="none" stroke="#3dda6f" stroke-width="1" opacity="0" style="animation:brewBubblePop 2.5s ease-out 0.5s infinite"/>
+      <circle cx="80"  cy="130" r="3" fill="none" stroke="#3dda6f" stroke-width="1" opacity="0" style="animation:brewBubblePop 2s ease-out 1.2s infinite"/>
+      <circle cx="120" cy="145" r="5" fill="none" stroke="#1db954" stroke-width="1" opacity="0" style="animation:brewBubblePop 3s ease-out 0s infinite"/>
+      <circle cx="90"  cy="75"  r="3" fill="none" stroke="#3dda6f" stroke-width="1" opacity="0" style="animation:brewBubblePop 2.2s ease-out 1.8s infinite"/>
+      <!-- Runes -->
+      <text x="110" y="18"  text-anchor="middle" font-size="9" fill="#c9a84c" opacity="0.5" font-family="serif">ᚠ</text>
+      <text x="192" y="114" text-anchor="middle" font-size="9" fill="#c9a84c" opacity="0.5" font-family="serif">ᚢ</text>
+      <text x="110" y="208" text-anchor="middle" font-size="9" fill="#c9a84c" opacity="0.5" font-family="serif">ᚦ</text>
+      <text x="28"  y="114" text-anchor="middle" font-size="9" fill="#c9a84c" opacity="0.5" font-family="serif">ᚨ</text>
+    </svg>
+  </div>
+
+  <div class="circle-progress-wrap">
+    <div class="circle-progress-label">Circles stirred</div>
+    <div class="circle-pips">
+      <div class="circle-pip" id="brewPip1"></div>
+      <div class="circle-pip" id="brewPip2"></div>
+    </div>
+  </div>
+
+  <div class="brew-success-msg" id="brewSuccessMsg">✦ Potion Brewed! ✦</div>
+  <button class="btn-continue-brew" id="btnContinueBrew" onclick="finishBrew()">Reveal the potion →</button>
+
+</div>
+
+<!-- MODALE -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-header">
+      <div class="modal-proj-icon" id="mIcon"></div>
+      <div class="modal-meta">
+        <div class="modal-type" id="mType"></div>
+        <div class="modal-title" id="mTitle"></div>
+        <div class="modal-subtitle" id="mSub"></div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-recipe" id="mRecipe"></div>
+      <div class="modal-prophecy" id="mProphecy"></div>
+      <div class="modal-details" id="mDetails"></div>
+      <div class="modal-tags" id="mTags"></div>
+    </div>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script>
+function renderEmoji(val, size) {
+  if(val && (val.startsWith('http') || val.startsWith('/'))) {
+    return `<img src="${val}" style="width:${size}px;height:${size}px;object-fit:contain;" alt="">`;
+  }
+  return val || '';
+}
+
+let cauldronIds = []; // IDs des compétences into the cauldron
+
+// ── RENDU INGRÉDIENTS ──
+function renderIngredients() {
+  const list = document.getElementById('ingredientsList');
+  list.innerHTML = COMPETENCES.map(c => `
+    <div class="ingredient-item ${cauldronIds.includes(c.id) ? 'used' : ''}"
+      id="ing-${c.id}"
+      draggable="true"
+      ondragstart="onDragStart(event,'${c.id}')">
+      <span class="ing-emoji">${renderEmoji(c.emoji, 24)}</span>
+      <div>
+        <div class="ing-name">${c.name}</div>
+        <div class="ing-sub">${c.subtitle}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── DRAG & DROP ──
+let dragId = null;
+
+function onDragStart(e, id) {
+  dragId = id;
+  e.dataTransfer.effectAllowed = 'copy';
+  setTimeout(() => document.getElementById('ing-'+id)?.classList.add('dragging'), 0);
+}
+document.addEventListener('dragend', () => {
+  // Always clean up dragging state, whether dropped on cauldron or anywhere else
+  dragId = null;
+  renderIngredients();
+  if(window._updateIngScrollbar) window._updateIngScrollbar();
+});
+function onDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'copy';
+  document.getElementById('cauldronDrop').classList.add('drag-over');
+}
+function onDragLeave(e) {
+  document.getElementById('cauldronDrop').classList.remove('drag-over');
+}
+function onDrop(e) {
+  e.preventDefault();
+  document.getElementById('cauldronDrop').classList.remove('drag-over');
+  if(dragId && !cauldronIds.includes(dragId) && cauldronIds.length < 3) {
+    cauldronIds.push(dragId);
+    updateCauldron();
+  }
+  // dragend will fire right after and clean up
+}
+
+// ── MISE À JOUR DU CHAUDRON ──
+function updateCauldron() {
+  const contents = document.getElementById('cauldronContents');
+  const steam = document.getElementById('steam');
+  const btnBrew = document.getElementById('btnBrew');
+  const hint = document.getElementById('brewHint');
+
+  contents.innerHTML = cauldronIds.map((id, i) => {
+    const c = COMPETENCES.find(c => c.id === id);
+    return `<div class="cauldron-ing" style="animation-delay:${i*0.4}s">${renderEmoji(c?.emoji||'', 36)}</div>`;
+  }).join('');
+
+  steam.style.display = cauldronIds.length > 0 ? 'flex' : 'none';
+  btnBrew.disabled = cauldronIds.length === 0;
+  hint.textContent = cauldronIds.length === 0 ? 'Drag ingredients here'
+    : cauldronIds.length === 1 ? '✦ Add a 2nd ingredient or brew!'
+    : '✦ Ready to brew!';
+
+  // Changer la couleur du liquide selon les ingrédients
+  if(cauldronIds.length > 0) {
+    const c = COMPETENCES.find(c => c.id === cauldronIds[0]);
+    const col = c?.gradient.match(/#[0-9a-f]{6}/gi)?.[1] || '#1db954';
+    document.getElementById('liqStop1').setAttribute('stop-color', col + '60');
+    document.getElementById('liqStop2').setAttribute('stop-color', col + '20');
+  }
+
+  renderIngredients();
+  if(window._updateIngScrollbar) window._updateIngScrollbar();
+}
+
+function clearCauldron() {
+  cauldronIds = [];
+  document.getElementById('resultsArea').style.display = 'none';
+  updateCauldron();
+}
+
+// ── BRASSAGE : trouver les projets correspondants ──
+// Logique : recette exacte à 2 ou 3 éléments
+// Un match parfait (tous les éléments présents) prime sur un match partiel
+function scoreProject(p) {
+  const s = cauldronIds.slice().sort().join(',');
+  const r2 = (p.ingredients2 || []).slice().sort().join(',');
+  const r3 = (p.ingredients3 || []).slice().sort().join(',');
+
+  // Match parfait 3 éléments
+  if(cauldronIds.length === 3 && s === r3) return { score:3, recipe: p.ingredients3, label:'✦ Perfect 3-ingredient recipe!' };
+  // Perfect 2-ingredient match
+  if(cauldronIds.length === 2 && s === r2) return { score:2, recipe: p.ingredients2, label:'✦ Perfect 2-ingredient recipe!' };
+  // Partial match: at least 2 cauldron ingredients are in a recipe
+  const inR2 = (p.ingredients2||[]).filter(id => cauldronIds.includes(id)).length;
+  const inR3 = (p.ingredients3||[]).filter(id => cauldronIds.includes(id)).length;
+  const best = Math.max(inR2, inR3);
+  if(best >= 2) return { score:best * 0.5, recipe: inR3 > inR2 ? p.ingredients3 : p.ingredients2, label:'Partial match' };
+  if(best === 1) return { score:0.1, recipe: p.ingredients2, label:'Weak match' };
+  return null;
+}
+
+function brew() {
+  if(cauldronIds.length === 0) return;
+
+  const results = PROJETS
+    .map(p => ({ p, match: scoreProject(p) }))
+    .filter(r => r.match && r.match.score >= 1)
+    .sort((a,b) => b.match.score - a.match.score);
+
+  const area  = document.getElementById('resultsArea');
+  const title = document.getElementById('resultsTitle');
+  const list  = document.getElementById('resultsList');
+
+  if(results.length === 0) {
+    title.textContent = '✦ No potion discovered…';
+    list.innerHTML = `<div class="no-match">
+      These ingredients don't match any known recipe.<br>
+      Try other combinations — some potions require precise ingredients.
+    </div>`;
+  } else {
+    const parfait = results.filter(r => r.match.score >= 2).length;
+    title.textContent = parfait
+      ? `✦ ${parfait} potion${parfait>1?'s':''} discovered!`
+      : `✦ ${results.length} match${results.length>1?'es':''} found`;
+
+    list.innerHTML = results.map(({p, match}) => {
+      const recipeStr = (match.recipe||[]).map(id => {
+        const c = COMPETENCES.find(c => c.id === id);
+        return c ? `${renderEmoji(c.emoji, 18)} ${c.name}` : '';
+      }).join(' + ');
+      const isPerfect = match.score >= 2;
+      return `<div class="project-card ${isPerfect?'perfect':''}"
+        onclick='openModal(${JSON.stringify(p).replace(/'/g,"&#39;")})'>
+        <div class="project-icon" style="filter:drop-shadow(0 0 8px ${p.potionColor}88)">${renderEmoji(p.emoji, 36)}</div>
+        <div class="project-info">
+          <div class="project-name">${p.name}</div>
+          <div class="project-desc">${p.subtitle}</div>
+          <div style="font-size:11px;color:${isPerfect?'var(--green)':'var(--text-dim)'};margin-top:4px;font-style:italic">
+            ${match.label} : ${recipeStr}
+          </div>
+          <div class="project-tags">${p.tags.slice(0,3).map(t=>`<span class="project-tag">${t}</span>`).join('')}</div>
+        </div>
+        <div class="project-arrow">${isPerfect?'⭐':'›'}</div>
+      </div>`;
+    }).join('');
+  }
+
+  area.style.display = 'block';
+  area.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+// ── HELPER: ingredient icon with hover tooltip ──
+function renderIngTip(id) {
+  const c = COMPETENCES.find(c => c.id === id);
+  if (!c) return '';
+  const e = c.emoji || '';
+  const icon = (e.startsWith('http') || e.startsWith('/'))
+    ? `<img src="${e}" style="width:16px;height:16px;object-fit:contain;display:block;" alt="${c.name}">`
+    : `<span style="font-size:15px;line-height:1">${e}</span>`;
+  return `<span class="ing-tip" data-tooltip="${c.name}">${icon}</span>`;
+}
+
+// ── TOUS LES PROJETS ──
+function renderAllProjects() {
+  document.getElementById('allProjectsList').innerHTML = PROJETS.map(p => {
+    const sep = '<span style="color:var(--text-dim);margin:0 3px">+</span>';
+    const r2 = (p.ingredients2||[]).map(id => renderIngTip(id)).join(sep);
+    const r3 = (p.ingredients3||[]).map(id => renderIngTip(id)).join(sep);
+    return `
+    <div class="project-card" onclick='openModal(${JSON.stringify(p).replace(/'/g,"&#39;")})'>
+      <div class="project-icon">${renderEmoji(p.emoji, 36)}</div>
+      <div class="project-info">
+        <div class="project-name">${p.name}</div>
+        <div class="project-desc">${p.subtitle}</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:5px">
+          ${r2 ? `<span style="margin-right:10px">2: ${r2}</span>` : ''}
+          ${r3 ? `<span>3: ${r3}</span>` : ''}
+        </div>
+        <div class="project-tags">${p.tags.slice(0,4).map(t=>`<span class="project-tag">${t}</span>`).join('')}</div>
+      </div>
+      <div class="project-arrow">›</div>
+    </div>`;
+  }).join('');
+}
+
+// ── MODALE ──
+function openModal(p) {
+  document.getElementById('mIcon').innerHTML = renderEmoji(p.emoji, 56);
+  document.getElementById('mType').textContent = p.type;
+  document.getElementById('mTitle').textContent = p.name;
+  document.getElementById('mSub').textContent = p.subtitle;
+  document.getElementById('mProphecy').textContent = p.prophecy;
+
+  // Recette
+  const ings = (p.ingredients || []).map(id => {
+    const c = COMPETENCES.find(c => c.id === id);
+    return c ? `<span class="modal-recipe-ing">${renderEmoji(c.emoji, 48)} ${c.name}</span>` : '';
+  }).join('<span style="color:var(--gold-dim);padding:0 4px">+</span>');
+  document.getElementById('mRecipe').innerHTML = ings
+    ? `<span class="modal-recipe-label">Recette :</span>${ings}` : '';
+
+  document.getElementById('mDetails').innerHTML = Object.entries(p.details).map(([k,v])=>
+    `<div class="modal-detail"><div class="modal-detail-label">${k}</div><div class="modal-detail-value">${v}</div></div>`).join('');
+  document.getElementById('mTags').innerHTML = p.tags.map(t=>`<span class="modal-tag">${t}</span>`).join('');
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(e) {
+  if(e && e.target !== document.getElementById('modalOverlay') && !e.target.classList.contains('modal-close')) return;
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape') {
+    if(document.getElementById('brewOverlay').classList.contains('open')) {
+      closeBrewOverlay();
+    } else {
+      closeModal({target:document.getElementById('modalOverlay')});
+    }
+  }
+});
+
+// Init
+renderIngredients();
+renderAllProjects();
+
+// Custom scrollbar + scroll hint
+(function() {
+  const list  = document.getElementById('ingredientsList');
+  const thumb = document.getElementById('ingScrollThumb');
+  const hint  = document.getElementById('scrollHint');
+
+  function updateScrollbar() {
+    const ratio    = list.clientHeight / list.scrollHeight;
+    const thumbH   = Math.max(ratio * list.clientHeight, 28);
+    const maxScroll = list.scrollHeight - list.clientHeight;
+    const thumbTop  = maxScroll > 0 ? (list.scrollTop / maxScroll) * (list.clientHeight - thumbH) : 0;
+    thumb.style.height = thumbH + 'px';
+    thumb.style.top    = thumbTop + 'px';
+    // hide hint when at bottom
+    const atBottom = list.scrollHeight - list.scrollTop <= list.clientHeight + 8;
+    hint.style.opacity = atBottom ? '0' : '1';
+  }
+
+  list.addEventListener('scroll', updateScrollbar);
+  // re-run after ingredients render
+  window._updateIngScrollbar = updateScrollbar;
+  setTimeout(updateScrollbar, 50);
+})();
+
+/* ═══════════════════════════════════════════
+   BREW OVERLAY — circle gesture detection
+═══════════════════════════════════════════ */
+const REQUIRED_CIRCLES = 2;
+const TWO_PI = Math.PI * 2;
+
+let _isStirring  = false;
+let _totalAngle  = 0;
+let _lastAngle   = null;
+let _circlesDone = 0;
+let _vortexDeg   = 0;
+let _trailPts    = [];
+
+const _canvas    = document.getElementById('brewTrailCanvas');
+const _ctx       = _canvas.getContext('2d');
+const _bowlWrap  = document.getElementById('mixingBowlWrap');
+const _cursor    = document.getElementById('mixingCursor');
+const _vortex    = document.getElementById('brewVortex');
+
+function _getBowlCenter() {
+  const r = _bowlWrap.getBoundingClientRect();
+  return { x: r.left + r.width / 2, y: r.top + r.height / 2, radius: r.width / 2 };
+}
+function _getAngle(cx, cy, mx, my) { return Math.atan2(my - cy, mx - cx); }
+function _angleDelta(prev, curr) {
+  let d = curr - prev;
+  while (d >  Math.PI) d -= TWO_PI;
+  while (d < -Math.PI) d += TWO_PI;
+  return d;
+}
+
+function openBrewOverlay() {
+  _resetMixing();
+  document.getElementById('brewOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeBrewOverlay() {
+  document.getElementById('brewOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function finishBrew() {
+  closeBrewOverlay();
+  brew();
+  setTimeout(() => {
+    const area = document.getElementById('resultsArea');
+    if(area) area.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 300);
+}
+
+function _resetMixing() {
+  _isStirring = false; _totalAngle = 0; _lastAngle = null;
+  _circlesDone = 0; _vortexDeg = 0; _trailPts = [];
+  _ctx.clearRect(0, 0, _canvas.width, _canvas.height);
+  document.getElementById('brewPip1').classList.remove('done');
+  document.getElementById('brewPip2').classList.remove('done');
+  document.getElementById('brewSuccessMsg').classList.remove('show');
+  document.getElementById('btnContinueBrew').classList.remove('show');
+  document.getElementById('brewInstStr').textContent = 'Hold & drag in circles to stir the cauldron';
+  _vortex.style.transform = 'rotate(0deg)';
+  _cursor.style.opacity = '0';
+}
+
+function _drawTrail() {
+  _ctx.clearRect(0, 0, _canvas.width, _canvas.height);
+  if (_trailPts.length < 2) return;
+  const rect = _bowlWrap.getBoundingClientRect();
+  _ctx.save();
+  _ctx.lineCap = 'round'; _ctx.lineJoin = 'round';
+  for (let i = 1; i < _trailPts.length; i++) {
+    const t = i / _trailPts.length;
+    _ctx.beginPath();
+    _ctx.strokeStyle = `hsla(${140 + t * 40}, 80%, 55%, ${t * 0.7})`;
+    _ctx.lineWidth = 2 + t * 4;
+    _ctx.moveTo(_trailPts[i-1].x - rect.left, _trailPts[i-1].y - rect.top);
+    _ctx.lineTo(_trailPts[i].x   - rect.left, _trailPts[i].y   - rect.top);
+    _ctx.stroke();
+  }
+  _ctx.restore();
+}
+
+function _fadeTrail() {
+  let alpha = 1;
+  (function step() {
+    alpha -= 0.07;
+    if (alpha <= 0) { _ctx.clearRect(0,0,_canvas.width,_canvas.height); _trailPts=[]; return; }
+    _ctx.globalAlpha = alpha; _drawTrail(); _ctx.globalAlpha = 1;
+    requestAnimationFrame(step);
+  })();
+}
+
+function _onBrewComplete() {
+  _isStirring = false;
+  _ctx.clearRect(0,0,_canvas.width,_canvas.height); _trailPts = [];
+  _cursor.style.opacity = '0';
+  document.getElementById('brewSuccessMsg').classList.add('show');
+  document.getElementById('btnContinueBrew').classList.add('show');
+  document.getElementById('brewInstStr').textContent = '✦ The potion is ready ✦';
+}
+
+// Mouse events
+document.getElementById('mixingBowlWrap').addEventListener('mousedown', e => {
+  const { x, y, radius } = _getBowlCenter();
+  if (Math.hypot(e.clientX - x, e.clientY - y) > radius * 0.92) return;
+  _isStirring = true;
+  _lastAngle = _getAngle(x, y, e.clientX, e.clientY);
+  _trailPts = [];
+  document.getElementById('brewInstStr').textContent = 'Keep stirring…';
+});
+
+document.addEventListener('mousemove', e => {
+  if (!document.getElementById('brewOverlay').classList.contains('open')) return;
+  const { x: cx, y: cy, radius } = _getBowlCenter();
+  const dist = Math.hypot(e.clientX - cx, e.clientY - cy);
+  const rect = _bowlWrap.getBoundingClientRect();
+
+  if (dist < radius * 0.92) {
+    _cursor.style.left = (e.clientX - rect.left) + 'px';
+    _cursor.style.top  = (e.clientY - rect.top)  + 'px';
+    _cursor.style.opacity = '1';
+  } else {
+    _cursor.style.opacity = '0';
+  }
+
+  if (!_isStirring || _circlesDone >= REQUIRED_CIRCLES) return;
+
+  const angle = _getAngle(cx, cy, e.clientX, e.clientY);
+  if (_lastAngle !== null) {
+    const delta = _angleDelta(_lastAngle, angle);
+    _totalAngle += delta;
+    _vortexDeg += delta * (180 / Math.PI);
+    _vortex.style.transform = `rotate(${_vortexDeg}deg)`;
+
+    const newDone = Math.floor(Math.abs(_totalAngle) / TWO_PI);
+    if (newDone > _circlesDone) {
+      _circlesDone = newDone;
+      if (_circlesDone >= 1) document.getElementById('brewPip1').classList.add('done');
+      if (_circlesDone >= 2) document.getElementById('brewPip2').classList.add('done');
+      if (_circlesDone >= REQUIRED_CIRCLES) { _onBrewComplete(); return; }
+    }
+  }
+  _lastAngle = angle;
+  _trailPts.push({ x: e.clientX, y: e.clientY });
+  if (_trailPts.length > 80) _trailPts.shift();
+  _drawTrail();
+});
+
+document.addEventListener('mouseup', () => {
+  if (!_isStirring) return;
+  _isStirring = false;
+  if (_circlesDone < REQUIRED_CIRCLES) _fadeTrail();
+});
+</script>
+<!-- ══════════════════════════════════════════════════
+     PANNEAU À PROPOS — Arcana style
+     ══════════════════════════════════════════════════ -->
+<div id="about-overlay" style="
+  position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,0);
+  pointer-events:none;
+  transition:background 0.5s;
+"></div>
+
+<div id="about-panel" style="
+  position:fixed;top:0;right:-520px;bottom:0;width:min(520px,100vw);z-index:201;
+  background:linear-gradient(170deg,#06040f 0%,#0a0618 40%,#060410 100%);
+  border-left:1px solid rgba(201,168,76,0.18);
+  overflow-y:auto;
+  transition:right 0.45s cubic-bezier(0.4,0,0.2,1);
+  padding:0 0 64px;
+  box-shadow:-16px 0 60px rgba(0,0,0,0.8), -2px 0 0 rgba(201,168,76,0.06);
+">
+
+  <!-- Starfield canvas inside panel -->
+  <canvas id="about-stars" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.6;"></canvas>
+
+  <!-- Sticky header -->
+  <div style="
+    position:sticky;top:0;z-index:2;
+    background:linear-gradient(to bottom,rgba(6,4,15,0.98) 70%,transparent);
+    padding:22px 32px 14px;
+    display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid rgba(201,168,76,0.1);
+  ">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="color:rgba(201,168,76,0.5);font-size:10px;">✦</span>
+      <span style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:rgba(201,168,76,0.6);">About</span>
+      <span style="color:rgba(201,168,76,0.5);font-size:10px;">✦</span>
+    </div>
+    <button id="about-close" style="
+      width:30px;height:30px;border-radius:50%;
+      border:1px solid rgba(201,168,76,0.2);
+      background:rgba(201,168,76,0.04);
+      color:rgba(201,168,76,0.5);cursor:pointer;
+      font-size:14px;display:flex;align-items:center;justify-content:center;
+      transition:all 0.3s;font-family:'Cinzel',serif;
+    " onmouseover="this.style.borderColor='rgba(201,168,76,0.6)';this.style.color='#c9a84c';this.style.background='rgba(201,168,76,0.1)'"
+       onmouseout="this.style.borderColor='rgba(201,168,76,0.2)';this.style.color='rgba(201,168,76,0.5)';this.style.background='rgba(201,168,76,0.04)'">✕</button>
+  </div>
+
+  <div style="position:relative;z-index:1;">
+
+    <!-- Avatar + name -->
+    <div style="padding:32px 32px 28px;text-align:center;border-bottom:1px solid rgba(201,168,76,0.1);">
+
+      <!-- Ornamental ring around avatar -->
+      <div style="position:relative;width:110px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;">
+        <div style="
+          width:110px;height:110px;border-radius:50%;
+          border:1px solid rgba(201,168,76,0.3);
+          display:flex;align-items:center;justify-content:center;
+          position:relative;
+          box-shadow:0 0 30px rgba(201,168,76,0.08), inset 0 0 20px rgba(0,0,0,0.5);
+          background:radial-gradient(circle at 35% 30%,rgba(201,168,76,0.08),rgba(0,0,0,0.6));
+        ">
+          <!-- Corner ornaments -->
+          <span style="position:absolute;top:-6px;left:50%;transform:translateX(-50%);color:rgba(201,168,76,0.6);font-size:10px;">✦</span>
+          <span style="position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);color:rgba(201,168,76,0.6);font-size:10px;">✦</span>
+          <div id="about-avatar" style="font-size:3rem;filter:drop-shadow(0 0 12px rgba(201,168,76,0.4));">🧠</div>
+        </div>
+      </div>
+
+      <div id="about-name" style="
+        font-family:'Cinzel Decorative',serif;font-size:20px;font-weight:700;
+        background:linear-gradient(135deg,#7a6330,#e8cc7a,#c9a84c);
+        -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+        margin-bottom:8px;line-height:1.2;
+      ">First Last</div>
+
+      <div id="about-titre" style="
+        font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.18em;
+        color:rgba(201,168,76,0.7);text-transform:uppercase;margin-bottom:6px;
+      "></div>
+      <div id="about-institution" style="font-size:13px;font-style:italic;color:rgba(154,138,106,0.7);"></div>
+
+      <!-- Ornament -->
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-top:18px;">
+        <div style="width:40px;height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,0.3));"></div>
+        <span style="color:rgba(201,168,76,0.4);font-size:10px;">✦</span>
+        <div style="width:40px;height:1px;background:linear-gradient(to left,transparent,rgba(201,168,76,0.3));"></div>
+      </div>
+    </div>
+
+    <!-- Bio -->
+    <div style="padding:28px 32px;border-bottom:1px solid rgba(201,168,76,0.08);">
+      <div style="
+        font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;
+        color:rgba(201,168,76,0.45);text-transform:uppercase;margin-bottom:14px;
+        display:flex;align-items:center;gap:10px;
+      ">
+        <span>Biography</span>
+        <div style="flex:1;height:1px;background:linear-gradient(to right,rgba(201,168,76,0.2),transparent);"></div>
+      </div>
+      <div id="about-bio" style="
+        font-family:'EB Garamond',Georgia,serif;
+        font-size:15px;font-style:italic;color:rgba(232,220,200,0.85);
+        line-height:1.85;white-space:pre-line;
+        border-left:2px solid rgba(201,168,76,0.2);
+        padding-left:16px;
+      "></div>
+    </div>
+
+    <!-- Stats -->
+    <div style="padding:28px 32px;border-bottom:1px solid rgba(201,168,76,0.08);">
+      <div style="
+        font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;
+        color:rgba(201,168,76,0.45);text-transform:uppercase;margin-bottom:16px;
+        display:flex;align-items:center;gap:10px;
+      ">
+        <span>By the Numbers</span>
+        <div style="flex:1;height:1px;background:linear-gradient(to right,rgba(201,168,76,0.2),transparent);"></div>
+      </div>
+      <div id="about-stats" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"></div>
+    </div>
+
+    <!-- Contact -->
+    <div style="padding:28px 32px;">
+      <div style="
+        font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;
+        color:rgba(201,168,76,0.45);text-transform:uppercase;margin-bottom:16px;
+        display:flex;align-items:center;gap:10px;
+      ">
+        <span>Contact & Links</span>
+        <div style="flex:1;height:1px;background:linear-gradient(to right,rgba(201,168,76,0.2),transparent);"></div>
+      </div>
+      <div id="about-links" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  #about-panel::-webkit-scrollbar{width:3px;}
+  #about-panel::-webkit-scrollbar-track{background:transparent;}
+  #about-panel::-webkit-scrollbar-thumb{background:rgba(201,168,76,0.2);border-radius:2px;}
+  #about-panel::-webkit-scrollbar-thumb:hover{background:rgba(201,168,76,0.4);}
+</style>
+
+<script>
+(function() {
+  const panel   = document.getElementById('about-panel');
+  const overlay = document.getElementById('about-overlay');
+  const btnOpen = document.getElementById('btn-about');
+  const btnClose= document.getElementById('about-close');
+
+  // ── Starfield inside panel ──
+  const sc  = document.getElementById('about-stars');
+  const sctx = sc.getContext('2d');
+  let sW, sH, sStars = [], sT = 0;
+  function resizeStars() {
+    sW = sc.width  = panel.offsetWidth;
+    sH = sc.height = Math.max(panel.scrollHeight, window.innerHeight);
+    sStars = [];
+    for(let i=0;i<80;i++) sStars.push({
+      x:Math.random()*sW, y:Math.random()*sH,
+      r:Math.random()*0.9+0.1, a:Math.random()*0.35+0.05,
+      sp:Math.random()*0.003+0.001, ph:Math.random()*Math.PI*2,
+    });
+  }
+  function drawStars() {
+    sT += 0.016;
+    sctx.clearRect(0,0,sW,sH);
+    for(const s of sStars) {
+      const al = s.a*(0.4+0.6*Math.sin(sT*s.sp*60+s.ph));
+      sctx.beginPath(); sctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      sctx.fillStyle = `rgba(255,255,220,${al})`; sctx.fill();
+    }
+    requestAnimationFrame(drawStars);
+  }
+  resizeStars(); drawStars();
+
+  function openAbout() {
+    resizeStars();
+    panel.style.right   = '0';
+    overlay.style.background = 'rgba(0,0,0,0.65)';
+    overlay.style.pointerEvents = 'all';
+  }
+  function closeAbout() {
+    panel.style.right   = '-520px';
+    overlay.style.background = 'rgba(0,0,0,0)';
+    overlay.style.pointerEvents = 'none';
+  }
+  window.closeAbout = closeAbout;
+
+  if(btnOpen)  btnOpen.addEventListener('click', openAbout);
+  if(btnClose) btnClose.addEventListener('click', closeAbout);
+  if(overlay)  overlay.addEventListener('click', closeAbout);
+  document.addEventListener('keydown', e => { if(e.key==='Escape') closeAbout(); });
+
+  // ── Populate from PROFIL ──
+  if(typeof PROFIL === 'undefined') return;
+  const P = PROFIL;
+  const setT = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+
+  setT('about-name', P.prenom + ' ' + P.nom);
+  setT('about-titre', P.titre);
+  setT('about-institution', P.institution);
+  setT('about-bio', P.bio_longue);
+
+  const avatarEl = document.getElementById('about-avatar');
+  if(avatarEl) avatarEl.textContent = P.avatar_emoji;
+
+  // Stats
+  const statsEl = document.getElementById('about-stats');
+  if(statsEl && P.stats) {
+    const labels = {
+      // publications: '📄 Publications',
+      projets:      '🚀 Projects',
+      // competences:  '⭐ Skills',
+      annees_these: '🎓 Years of PhD',
+      langues: '🗣 Languages',
+    };
+    statsEl.innerHTML = Object.entries(P.stats).map(([k,v]) => `
+      <div style="
+        background:linear-gradient(160deg,rgba(201,168,76,0.06),rgba(0,0,0,0.3));
+        border:1px solid rgba(201,168,76,0.15);border-radius:8px;
+        padding:16px 12px;text-align:center;
+        position:relative;overflow:hidden;
+      ">
+        <div style="position:absolute;top:6px;right:8px;font-size:8px;color:rgba(201,168,76,0.2);">✦</div>
+        <div style="
+          font-family:'Cinzel Decorative',serif;font-size:26px;font-weight:700;
+          background:linear-gradient(135deg,#c9a84c,#e8cc7a);
+          -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+          line-height:1;margin-bottom:6px;
+        ">${v}</div>
+        <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.12em;color:rgba(154,138,106,0.7);text-transform:uppercase;">${labels[k]||k}</div>
+      </div>`).join('');
+  }
+
+  // Links
+  const linksEl = document.getElementById('about-links');
+  if(linksEl && P.contact) {
+    const icons = {
+      email:    { icon:'✉', label:'Email' },
+      linkedin: { icon:'in', label:'LinkedIn' },
+      github:   { icon:'⌥', label:'GitHub' },
+      twitter:  { icon:'✗', label:'Twitter / X' },
+      scholar:  { icon:'✦', label:'Google Scholar' },
+      cv:       { icon:'↓', label:'Download CV' },
+    };
+    linksEl.innerHTML = Object.entries(P.contact)
+      .filter(([,v]) => v && v !== '#')
+      .map(([k,v]) => {
+        const {icon,label} = icons[k]||{icon:'→',label:k};
+        const href = k==='email' ? 'mailto:'+v : v;
+        const display = k==='email' ? v : v.replace('https://','').replace('http://','');
+        return `<a href="${href}" target="_blank" rel="noopener" style="
+          display:flex;align-items:center;gap:14px;
+          padding:12px 16px;border-radius:8px;
+          background:linear-gradient(160deg,rgba(201,168,76,0.04),rgba(0,0,0,0.2));
+          border:1px solid rgba(201,168,76,0.12);
+          color:rgba(232,220,200,0.8);text-decoration:none;
+          transition:all 0.3s;
+        "
+        onmouseover="this.style.borderColor='rgba(201,168,76,0.4)';this.style.background='linear-gradient(160deg,rgba(201,168,76,0.1),rgba(0,0,0,0.2))';this.style.color='#e8cc7a'"
+        onmouseout="this.style.borderColor='rgba(201,168,76,0.12)';this.style.background='linear-gradient(160deg,rgba(201,168,76,0.04),rgba(0,0,0,0.2))';this.style.color='rgba(232,220,200,0.8)'">
+          <div style="
+            width:32px;height:32px;border-radius:50%;flex-shrink:0;
+            border:1px solid rgba(201,168,76,0.25);
+            background:rgba(201,168,76,0.06);
+            display:flex;align-items:center;justify-content:center;
+            font-family:'Cinzel',serif;font-size:11px;color:rgba(201,168,76,0.7);
+          ">${icon}</div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(201,168,76,0.6);margin-bottom:2px;">${label}</div>
+            <div style="font-size:12px;font-style:italic;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:0.7;">${display}</div>
+          </div>
+          <span style="color:rgba(201,168,76,0.3);font-size:12px;">→</span>
+        </a>`;
+      }).join('');
+  }
+
+  // Hero name injection (index.html only)
+  const nameEl = document.getElementById('hero-name');
+  const bioEl  = document.getElementById('hero-bio');
+  const avatarInitials = document.getElementById('avatar-initials');
+  if(nameEl) nameEl.textContent = P.prenom + ' ' + P.nom;
+  if(bioEl)  bioEl.textContent  = P.bio_courte;
+  if(avatarInitials) avatarInitials.textContent = (P.prenom[0]||'') + (P.nom[0]||'');
+})();
+</script>
+
+</html>
+  <script src="js/effects.js"></script>
+</body>
+</html>

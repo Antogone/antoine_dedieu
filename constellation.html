@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🔮</text></svg>"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mystical Portfolio — Antoine Dedieu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#03040d;--gold:#c9a84c;--gold-light:#e8cc7a;--gold-dim:#7a6330;
+      --blue:#0070f3;--blue-dim:#003a80;
+      --text:#e8dcc8;--text-dim:#9a8a6a;--border:rgba(201,168,76,0.2);
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{background:var(--bg);color:var(--text);font-family:'EB Garamond',Georgia,serif;
+      min-height:100vh;overflow-x:hidden;}
+
+    /* Hero */
+    .hero{padding:88px 40px 32px;text-align:center;position:relative;z-index:1;}
+    .eyebrow{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;color:var(--gold-dim);text-transform:uppercase;margin-bottom:10px;}
+    .hero-title{font-family:'Cinzel Decorative',serif;font-size:clamp(28px,5vw,52px);font-weight:900;
+      background:linear-gradient(135deg,#0a2a4a 0%,#4a9eff 35%,#7bbcff 55%,#1a5fa0 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      filter:drop-shadow(0 0 24px rgba(96,165,250,0.2));}
+    .hero-sub{font-size:15px;font-style:italic;color:var(--text-dim);margin-top:8px;}
+
+    /* Ciel étoilé canvas — fondu dans le décor */
+    .sky-wrap{
+      position:relative;
+      width:100%;
+      max-width:1200px;
+      margin:24px auto 0;
+      /* No mask — sharp canvas */
+    }
+    #skyCanvas{
+      display:block;
+      width:100%;
+      cursor:crosshair;
+      position:relative;z-index:1;
+    }
+
+    /* Constellation legend */
+    .legend{
+      display:flex;flex-wrap:wrap;justify-content:center;gap:16px;
+      padding:24px 40px 48px;position:relative;z-index:1;
+    }
+    .legend-item{
+      display:flex;align-items:center;gap:8px;
+      font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.08em;
+      color:var(--text-dim);
+    }
+    .legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+
+    /* Tooltip */
+    #tooltip{
+      position:fixed;z-index:300;
+      background:rgba(3,4,13,0.96);
+      border:1px solid var(--border);
+      border-radius:8px;padding:12px 16px;
+      pointer-events:none;opacity:0;transition:opacity 0.2s;
+      max-width:220px;
+    }
+    #tooltip .tt-emoji{font-size:28px;margin-bottom:6px;}
+    .tt-emoji img{width:28px;height:28px;object-fit:contain;display:block;}
+    #tooltip .tt-name{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);font-weight:600;}
+    #tooltip .tt-sub{font-size:12px;font-style:italic;color:var(--text-dim);margin-top:2px;}
+    #tooltip .tt-hint{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;color:var(--gold-dim);text-transform:uppercase;margin-top:8px;}
+
+    /* MODALE */
+    .modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.88);
+      backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;
+      opacity:0;pointer-events:none;transition:opacity 0.4s;padding:24px;}
+    .modal-overlay.open{opacity:1;pointer-events:all;}
+    .modal{background:linear-gradient(160deg,#030410 0%,#060820 50%,#03040d 100%);
+      border:1px solid rgba(96,165,250,0.25);border-radius:16px;max-width:640px;width:100%;
+      max-height:88vh;overflow-y:auto;position:relative;
+      box-shadow:0 24px 80px rgba(0,0,0,0.9),0 0 50px rgba(0,112,243,0.06);
+      transform:scale(0.9) translateY(20px);transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);}
+    .modal-overlay.open .modal{transform:scale(1) translateY(0);}
+    .modal::before,.modal::after{content:'★';position:absolute;color:rgba(96,165,250,0.2);font-size:14px;}
+    .modal::before{top:14px;left:18px;} .modal::after{bottom:14px;right:18px;}
+    .modal-header{display:flex;gap:22px;padding:26px 26px 18px;border-bottom:1px solid rgba(96,165,250,0.12);align-items:center;}
+    .modal-star-icon{font-size:52px;filter:drop-shadow(0 0 12px rgba(96,165,250,0.4));}
+    .modal-meta{flex:1;}
+    .modal-type{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.25em;color:var(--gold-dim);text-transform:uppercase;margin-bottom:5px;}
+    .modal-title{font-family:'Cinzel Decorative',serif;font-size:clamp(17px,3vw,24px);font-weight:700;
+      background:linear-gradient(135deg,#60a5fa,var(--gold-light));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;}
+    .modal-subtitle{font-size:13px;font-style:italic;color:var(--text-dim);}
+    .modal-body{padding:22px 26px 26px;}
+    .modal-prophecy{font-size:15px;font-style:italic;color:var(--text);line-height:1.8;
+      border-left:2px solid rgba(96,165,250,0.3);padding-left:14px;margin-bottom:18px;}
+    .modal-details{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;}
+    .modal-detail{background:rgba(0,0,0,0.3);border:1px solid rgba(96,165,250,0.08);border-radius:5px;padding:10px;}
+    .modal-detail-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.2em;color:rgba(96,165,250,0.5);text-transform:uppercase;margin-bottom:3px;}
+    .modal-detail-value{font-size:13px;color:var(--text);}
+    .modal-tags{display:flex;flex-wrap:wrap;gap:6px;}
+    .modal-tag{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.08em;color:#60a5fa;
+      border:1px solid rgba(96,165,250,0.25);padding:3px 10px;border-radius:2px;background:rgba(96,165,250,0.04);}
+    .modal-close{position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.5);
+      border:1px solid rgba(96,165,250,0.2);color:var(--text-dim);width:28px;height:28px;
+      border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+    .modal-close:hover{color:#60a5fa;border-color:#60a5fa;}
+    ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:var(--bg);}
+    ::-webkit-scrollbar-thumb{background:var(--blue-dim);border-radius:2px;}
+  
+    /* ══════════════════════════════════════
+       NAV — base tarot, accentuation constellation
+       ══════════════════════════════════════ */
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:100;height:64px;
+      display:flex;align-items:center;justify-content:space-between;padding:0 48px;
+      background:linear-gradient(to bottom,rgba(8,8,16,0.97),transparent);
+      border-bottom:1px solid rgba(255,255,255,0.06);
+      backdrop-filter:blur(12px);
+    }
+    /* Étoiles animées dans la barre nav */
+    nav::before{
+      content:'';position:absolute;inset:0;pointer-events:none;overflow:hidden;
+      background:
+        radial-gradient(1px 1px at 15% 40%, rgba(255,255,220,0.55) 0%, transparent 100%),
+        radial-gradient(1px 1px at 28% 65%, rgba(255,255,220,0.35) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 42% 30%, rgba(255,255,220,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 55% 70%, rgba(255,255,220,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 68% 45%, rgba(255,255,220,0.3) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 78% 25%, rgba(255,255,220,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 88% 60%, rgba(255,255,220,0.35) 0%, transparent 100%);
+      animation:navStarPulse 4s ease-in-out infinite;
+    }
+    nav::after{
+      content:'';position:absolute;bottom:0;left:5%;right:5%;height:1px;
+      background:linear-gradient(to right,transparent,#4a9eff,transparent);
+      opacity:0.35;
+    }
+    @keyframes navStarPulse{
+      0%,100%{opacity:0.6;}
+      50%{opacity:1;}
+    }
+    .nav-logo{
+      font-family:'Cinzel Decorative',serif;font-size:18px;font-weight:700;
+      color:#4a9eff;letter-spacing:0.15em;
+      text-shadow:0 0 20px rgba(74,158,255,0.45);
+      position:relative;z-index:1;
+      animation:logoGlow 3s ease-in-out infinite;
+    }
+    @keyframes logoGlow{
+      0%,100%{text-shadow:0 0 20px rgba(74,158,255,0.15);}
+      50%{text-shadow:0 0 28px rgba(74,158,255,0.45), 0 0 48px rgba(74,158,255,0.15);}
+    }
+    .nav-links{display:flex;gap:36px;list-style:none;position:relative;z-index:1;}
+    .nav-links a{
+      font-family:'Cinzel',serif;font-size:12px;font-weight:600;
+      color:var(--text-dim);text-decoration:none;
+      letter-spacing:0.1em;text-transform:uppercase;
+      transition:color 0.3s;position:relative;
+    }
+    .nav-links a::after{
+      content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;
+      background:#4a9eff;
+      transform:scaleX(0);transition:transform 0.3s;
+    }
+    .nav-links a:hover,.nav-links a.active{color:#7bbcff;}
+    .nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1);}
+    .nav-back{
+      font-family:'Cinzel',serif;font-size:11px;color:var(--text-dim);
+      text-decoration:none;letter-spacing:0.08em;
+      border:1px solid rgba(255,255,255,0.1);
+      padding:6px 16px;border-radius:20px;
+      transition:all 0.3s;position:relative;z-index:1;
+    }
+    .nav-back:hover{color:#4a9eff;border-color:#4a9eff;box-shadow:0 0 12px rgba(74,158,255,0.15);}
+  
+    .nav-links .nav-about-btn{
+      font-family:'Cinzel',serif;font-size:12px;font-weight:600;
+      color:var(--text-dim);background:none;border:none;
+      letter-spacing:0.1em;text-transform:uppercase;
+      cursor:pointer;padding:0;transition:color 0.3s;
+      position:relative;
+    }
+    .nav-links .nav-about-btn::after{
+      content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;
+      background:#4a9eff;transform:scaleX(0);transition:transform 0.3s;
+    }
+    .nav-links .nav-about-btn:hover{color:#7bbcff;}
+    .nav-links .nav-about-btn:hover::after{transform:scaleX(1);}
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">✦ Constellation ✦</div>
+    <ul class="nav-links">
+    <li><a href="tarot.html">Tarot</a></li>
+    <li><a href="runes.html">Runes</a></li>
+    <li><a href="constellation.html" class="active">Constellation</a></li>
+    <li><a href="chaudron.html">Cauldron</a></li>
+    <li><a href="cristal.html">Cristal</a></li>
+    <li><button id="btn-about" class="nav-about-btn">About</button></li>
+  </ul>
+  <a href="divination.html" class="nav-back">← Divination</a>
+</nav>
+
+<div class="hero">
+  <div class="eyebrow">Skills Map</div>
+  <h1 class="hero-title">The Constellations</h1>
+  <p class="hero-sub">Each star a mastery · hover to explore</p>
+</div>
+
+<div class="sky-wrap">
+  <canvas id="skyCanvas" height="580"></canvas>
+</div>
+
+<div class="legend" id="legend"></div>
+
+<div id="tooltip">
+  <div class="tt-emoji" id="ttEmoji"></div>
+  <div class="tt-name" id="ttName"></div>
+  <div class="tt-sub" id="ttSub"></div>
+</div>
+
+<!-- MODALE -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-header">
+      <div class="modal-star-icon" id="mIcon"></div>
+      <div class="modal-meta">
+        <div class="modal-type" id="mType"></div>
+        <div class="modal-title" id="mTitle"></div>
+        <div class="modal-subtitle" id="mSub"></div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-prophecy" id="mProphecy"></div>
+      <div class="modal-details" id="mDetails"></div>
+      <div class="modal-tags" id="mTags"></div>
+    </div>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script>
+
+function renderEmoji(val, size) {
+  if(val && (val.startsWith('http') || val.startsWith('/'))) {
+    return `<img src="${val}" style="width:${size}px;height:${size}px;object-fit:contain;display:block;" alt="">`;
+  }
+  return val || '';
+}
+
+const CONSTELLATIONS = {
+  core_ai:        { name:'Ignis',      color:'#ee4b28', label:'Core AI & ML' },
+  specialized_ai: { name:'Arcanum',    color:'#a855f7', label:'Specialized AI' },
+  maths:          { name:'Mathesis',   color:'#3b82f6', label:'Mathematics & Theory' },
+  programming:    { name:'Serpentis',  color:'#f59e0b', label:'Programming' },
+  frameworks:     { name:'Machina',    color:'#f97316', label:'ML Frameworks & Tools' },
+  data_eng:       { name:'Aqua',       color:'#0ea5e9', label:'Data Engineering' },
+  bio:            { name:'Vita',       color:'#16a34a', label:'Bioinformatics' },
+  research:       { name:'Sophia',     color:'#c9a84c', label:'Research & Teaching' },
+};
+
+// Fixed positions sur le canvas (en %) — plus réparties
+const POSITIONS = [
+  // core_ai (c1–c5) — left cluster
+  { x:0.08, y:0.18 },  // c1  Machine Learning
+  { x:0.16, y:0.38 },  // c2  Deep Learning
+  { x:0.08, y:0.56 },  // c3  Transfer Learning
+  { x:0.20, y:0.70 },  // c4  Probabilistic / Bayesian
+  { x:0.12, y:0.84 },  // c5  Reinforcement Learning
+
+  // specialized_ai (c6–c8) — centre-left
+  { x:0.30, y:0.24 },  // c6  NLP
+  { x:0.28, y:0.50 },  // c7  Computer Vision
+  { x:0.34, y:0.72 },  // c8  Time Series & Survival
+
+  // maths (c9–c10) — top centre
+  { x:0.46, y:0.10 },  // c9  Mathematics for AI
+  { x:0.54, y:0.24 },  // c10 Statistics & Inference
+
+  // programming (c11–c14) — centre
+  { x:0.44, y:0.42 },  // c11 Python
+  { x:0.54, y:0.56 },  // c12 R
+  { x:0.44, y:0.68 },  // c13 C++ / Java
+  { x:0.50, y:0.82 },  // c14 Software Engineering
+
+  // frameworks (c15–c16) — centre-right top
+  { x:0.66, y:0.16 },  // c15 PyTorch / TensorFlow
+  { x:0.72, y:0.32 },  // c16 ML Ecosystem
+
+  // data_eng (c17–c19) — right cluster
+  { x:0.76, y:0.50 },  // c17 Data Engineering
+  { x:0.84, y:0.66 },  // c18 Data Science & Analytics
+  { x:0.76, y:0.80 },  // c19 Spatial Analysis & GIS
+
+  // bio (c20–c21) — far right
+  { x:0.90, y:0.34 },  // c20 Bioinformatics
+  { x:0.90, y:0.52 },  // c21 Epidemiology & Biostatistics
+
+  // research (c22–c23) — bottom right
+  { x:0.86, y:0.82 },  // c22 Research Skills
+  { x:0.92, y:0.70 },  // c23 Teaching & Communication
+
+  // specialized_ai extra (c24) — centre-left, above NLP
+  { x:0.24, y:0.12 },  // c24 Spiking Neural Network
+];
+
+const canvas  = document.getElementById('skyCanvas');
+const ctx     = canvas.getContext('2d');
+const tooltip = document.getElementById('tooltip');
+let W, H, stars_bg = [], hovered = null;
+
+// Assign positions et couleurs aux compétences
+const skillNodes = COMPETENCES.map((c, i) => ({
+  ...c,
+  px: POSITIONS[i % POSITIONS.length].x,
+  py: POSITIONS[i % POSITIONS.length].y,
+  color: CONSTELLATIONS[c.constellation]?.color || '#c9a84c',
+  constName: CONSTELLATIONS[c.constellation]?.name || '',
+  pulse: Math.random() * Math.PI * 2,
+}));
+
+
+// Image cache for logo URLs
+const _imgCache = {};
+
+// Preload all logo images so they're ready when canvas draws
+skillNodes.forEach(n => {
+  if(n.emoji && (n.emoji.startsWith('http') || n.emoji.startsWith('/'))) {
+    if(!_imgCache[n.emoji]) {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.src = n.emoji;
+      _imgCache[n.emoji] = img;
+    }
+  }
+});
+
+function resize() {
+  const wrap = canvas.parentElement;
+  const dpr = window.devicePixelRatio || 1;
+  const cssW = wrap.getBoundingClientRect().width || window.innerWidth;
+  const cssH = 580;
+  W = cssW; H = cssH;
+  canvas.width  = Math.round(W * dpr);
+  canvas.height = Math.round(H * dpr);
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  // Étoiles de fond — plus nombreuses, plus variées
+  stars_bg = [];
+  for(let i=0;i<320;i++) stars_bg.push({
+    x:Math.random()*W, y:Math.random()*H,
+    r:Math.random()*1.4+0.15,
+    a:Math.random()*0.55+0.08,
+    sp:Math.random()*0.0025+0.0006,
+    ph:Math.random()*Math.PI*2,
+    // légère teinte bleutée ou chaude aléatoire
+    warm: Math.random() > 0.7,
+  });
+}
+
+let t = 0;
+function draw() {
+  t += 0.016;
+  ctx.clearRect(0,0,W,H);
+
+  // Background: transparent sur les bords, très légèrement teinté au centre
+  // pour se fondre dans le bg de la page via le masque CSS
+  const bgGrad = ctx.createRadialGradient(W/2,H/2,0, W/2,H/2,Math.max(W,H)*0.6);
+  bgGrad.addColorStop(0,  'rgba(4, 6, 26, 0.92)');
+  bgGrad.addColorStop(0.6,'rgba(3, 4, 16, 0.80)');
+  bgGrad.addColorStop(1,  'rgba(2, 3, 10, 0)');
+  ctx.fillStyle = bgGrad;
+  ctx.fillRect(0,0,W,H);
+
+  // Background nebulae (halos colorés diffus derrière les constellations)
+  const groups = {};
+  for(const n of skillNodes) {
+    if(!groups[n.constellation]) groups[n.constellation] = [];
+    groups[n.constellation].push(n);
+  }
+  for(const [key, nodes] of Object.entries(groups)) {
+    const col = CONSTELLATIONS[key]?.color || '#c9a84c';
+    // Group centroid
+    const cx = nodes.reduce((s,n)=>s+n.px,0)/nodes.length * W;
+    const cy = nodes.reduce((s,n)=>s+n.py,0)/nodes.length * H;
+    const nebula = ctx.createRadialGradient(cx,cy,0, cx,cy,W*0.18);
+    nebula.addColorStop(0, hexWithAlpha(col, 0.045));
+    nebula.addColorStop(1, hexWithAlpha(col, 0));
+    ctx.beginPath();
+    ctx.arc(cx, cy, W*0.18, 0, Math.PI*2);
+    ctx.fillStyle = nebula;
+    ctx.fill();
+  }
+
+  // Background stars — crisp
+  for(const s of stars_bg) {
+    const alpha = s.a * (0.45 + 0.55 * Math.sin(t * s.sp * 60 + s.ph));
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+    ctx.fillStyle = s.warm
+      ? `rgba(255,240,200,${alpha})`
+      : `rgba(200,220,255,${alpha})`;
+    ctx.fill();
+  }
+
+
+  // ── Liens inter-constellations (entre centroïdes des groupes) ──
+  const groupKeys = Object.keys(groups);
+  const centroids = {};
+  for(const [key, nodes] of Object.entries(groups)) {
+    centroids[key] = {
+      x: nodes.reduce((s,n)=>s+n.px,0)/nodes.length * W,
+      y: nodes.reduce((s,n)=>s+n.py,0)/nodes.length * H,
+    };
+  }
+  // Connect each pair de groupes
+  for(let i=0; i<groupKeys.length; i++) {
+    for(let j=i+1; j<groupKeys.length; j++) {
+      const ka = groupKeys[i], kb = groupKeys[j];
+      const ca = centroids[ka], cb = centroids[kb];
+      const colA = CONSTELLATIONS[ka]?.color || '#c9a84c';
+      const colB = CONSTELLATIONS[kb]?.color || '#c9a84c';
+      // Gradient between both colours de constellation
+      const grad = ctx.createLinearGradient(ca.x, ca.y, cb.x, cb.y);
+      grad.addColorStop(0,   hexWithAlpha(colA, 0.07));
+      grad.addColorStop(0.5, 'rgba(255,255,255,0.04)');
+      grad.addColorStop(1,   hexWithAlpha(colB, 0.07));
+      ctx.beginPath();
+      ctx.moveTo(ca.x, ca.y);
+      ctx.lineTo(cb.x, cb.y);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 0.5;
+      ctx.setLineDash([2, 18]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+  }
+
+  // Constellation lines — plus visibles, slightly animated
+  for(const [key, nodes] of Object.entries(groups)) {
+    if(nodes.length < 2) continue;
+    const col = CONSTELLATIONS[key]?.color || '#c9a84c';
+    const pulse = 0.5 + 0.5 * Math.sin(t * 0.4 + key.charCodeAt(0));
+
+    ctx.beginPath();
+    ctx.moveTo(nodes[0].px*W, nodes[0].py*H);
+    for(let i=1;i<nodes.length;i++) ctx.lineTo(nodes[i].px*W, nodes[i].py*H);
+    ctx.strokeStyle = hexWithAlpha(col, 0.7 + 0.06 * pulse);
+    ctx.lineWidth = 1;
+    ctx.setLineDash([5, 10]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Small interstitial dots sur la ligne
+    for(let i=0;i<nodes.length-1;i++){
+      const mx = (nodes[i].px + nodes[i+1].px)/2 * W;
+      const my = (nodes[i].py + nodes[i+1].py)/2 * H;
+      ctx.beginPath();
+      ctx.arc(mx, my, 1.5, 0, Math.PI*2);
+      ctx.fillStyle = hexWithAlpha(col, 0.2 * pulse);
+      ctx.fill();
+    }
+  }
+
+  // Nodes — étoiles compétences (plus nets, plus grands)
+  for(const n of skillNodes) {
+    const x = n.px * W, y = n.py * H;
+    const isHov = hovered === n.id;
+    const pulse = 0.5 + 0.5 * Math.sin(t * 1.2 + n.pulse);
+
+    // Diffuse halo
+    const haloR = isHov ? 52 : 28 + pulse * 10;
+    const halo = ctx.createRadialGradient(x,y,0, x,y,haloR);
+    halo.addColorStop(0, hexWithAlpha(n.color, isHov ? 0.28 : 0.10 * pulse));
+    halo.addColorStop(1, hexWithAlpha(n.color, 0));
+    ctx.beginPath(); ctx.arc(x, y, haloR, 0, Math.PI*2);
+    ctx.fillStyle = halo; ctx.fill();
+
+    // Intermediate ring
+    if(isHov) {
+      const ring = ctx.createRadialGradient(x,y,4, x,y,16);
+      ring.addColorStop(0, hexWithAlpha(n.color, 0.5));
+      ring.addColorStop(1, hexWithAlpha(n.color, 0));
+      ctx.beginPath(); ctx.arc(x, y, 16, 0, Math.PI*2);
+      ctx.fillStyle = ring; ctx.fill();
+    }
+
+    // Main point — net et bright
+    const r = isHov ? 8 : 4 + pulse * 1.8;
+    // Lueur interne
+    const starGrad = ctx.createRadialGradient(x-r*0.3,y-r*0.3,0, x,y,r);
+    starGrad.addColorStop(0, '#fff');
+    starGrad.addColorStop(0.35, n.color);
+    starGrad.addColorStop(1, hexWithAlpha(n.color, 0.6));
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2);
+    ctx.fillStyle = starGrad; ctx.fill();
+
+    // Cross rays on hover
+    if(isHov) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.strokeStyle = hexWithAlpha(n.color, 0.45);
+      ctx.lineWidth = 1;
+      for(let a=0;a<4;a++){
+        ctx.save(); ctx.rotate(a * Math.PI/4);
+        ctx.beginPath(); ctx.moveTo(0, r+3); ctx.lineTo(0, r+10);
+        ctx.stroke(); ctx.restore();
+      }
+      ctx.restore();
+    }
+
+    // Floating emoji — ombre portée pour lisibilité
+    const ey = y - r - 20 + Math.sin(t * 0.8 + n.pulse) * 3;
+    const sz = isHov ? 32 : 26;
+    ctx.save();
+    ctx.shadowColor = 'rgba(0,0,0,0.8)';
+    ctx.shadowBlur = 6;
+    if(n.emoji && (n.emoji.startsWith('http') || n.emoji.startsWith('/'))) {
+      // Draw image logo
+      const img = _imgCache[n.emoji];
+      if(img && img.complete && img.naturalWidth > 0) {
+        ctx.drawImage(img, x - sz/2, ey - sz, sz, sz);
+      }
+      // If not loaded yet, trigger load and skip this frame
+      else if(!img) {
+        const newImg = new Image();
+        newImg.crossOrigin = 'anonymous';
+        newImg.src = n.emoji;
+        _imgCache[n.emoji] = newImg;
+      }
+    } else {
+      ctx.font = `${sz}px serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText(n.emoji, x, ey);
+    }
+    ctx.restore();
+
+    // Name on hover — texte net avec fond
+    if(isHov) {
+      const label = n.name;
+      ctx.font = '600 11px Cinzel, serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      const tw = ctx.measureText(label).width;
+      // Fond pill
+      ctx.fillStyle = 'rgba(3,4,16,0.82)';
+      ctx.beginPath();
+      ctx.roundRect(x - tw/2 - 8, y + r + 8, tw + 16, 20, 4);
+      ctx.fill();
+      // Texte
+      ctx.fillStyle = '#e8dcc8';
+      ctx.fillText(label, x, y + r + 12);
+    }
+  }
+
+  requestAnimationFrame(draw);
+}
+
+
+function hexWithAlpha(hex, alpha) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+// Interactions
+function getNodeAt(mx, my) {
+  for(const n of skillNodes) {
+    const x = n.px * W, y = n.py * H;
+    const dx = mx - x, dy = my - y;
+    if(dx*dx + dy*dy < 900) return n;
+  }
+  return null;
+}
+
+canvas.addEventListener('mousemove', e => {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = W / rect.width, scaleY = H / rect.height;
+  const mx = (e.clientX - rect.left) * scaleX;
+  const my = (e.clientY - rect.top)  * scaleY;
+  const node = getNodeAt(mx, my);
+  hovered = node ? node.id : null;
+  canvas.style.cursor = 'crosshair';
+
+  if(node) {
+    document.getElementById('ttEmoji').innerHTML = renderEmoji(node.emoji, 28);
+    document.getElementById('ttName').textContent  = node.name;
+    document.getElementById('ttSub').textContent   = node.subtitle;
+    tooltip.style.opacity = '1';
+    tooltip.style.left = (e.clientX + 16) + 'px';
+    tooltip.style.top  = (e.clientY - 20) + 'px';
+  } else {
+    tooltip.style.opacity = '0';
+  }
+});
+
+
+// Legend
+function buildLegend() {
+  const leg = document.getElementById('legend');
+  leg.innerHTML = Object.entries(CONSTELLATIONS).map(([k,v]) =>
+    `<div class="legend-item">
+      <div class="legend-dot" style="background:${v.color};box-shadow:0 0 6px ${v.color}44"></div>
+      <span>${v.label}</span>
+    </div>`
+  ).join('');
+}
+
+// Modal
+function openModal(c) {
+  // Récupérer la couleur de la constellation (ou celle du gradient)
+  const constColor = CONSTELLATIONS[c.constellation]?.color || '#c9a84c';
+
+  // Vérifier si la compétence appartient à plusieurs constellations
+  // (en cherchant si d'autres compétences du même groupe existent)
+  const constGroup = CONSTELLATIONS[c.constellation] || {};
+  const color1 = constColor;
+  // Couleur secondaire : prendre la 2e couleur du gradient si disponible
+  const gradColors = (c.gradient.match(/#[0-9a-f]{6}/gi) || [constColor, constColor]);
+  const color2 = gradColors[1] || color1;
+
+  // Appliquer dynamiquement les couleurs CSS sur la modale
+  const modal = document.querySelector('.modal');
+  const r1 = parseInt(color1.slice(1,3),16), g1 = parseInt(color1.slice(3,5),16), b1 = parseInt(color1.slice(5,7),16);
+  const r2 = parseInt(color2.slice(1,3),16), g2 = parseInt(color2.slice(3,5),16), b2 = parseInt(color2.slice(5,7),16);
+
+  modal.style.setProperty('--mc1', color1);
+  modal.style.setProperty('--mc2', color2);
+  modal.style.setProperty('--mc1-rgb', `${r1},${g1},${b1}`);
+  modal.style.setProperty('--mc2-rgb', `${r2},${g2},${b2}`);
+  modal.style.background = `linear-gradient(160deg, rgba(${r1},${g1},${b1},0.12) 0%, #030410 40%, rgba(${r2},${g2},${b2},0.08) 100%)`;
+  modal.style.borderColor = `rgba(${r1},${g1},${b1},0.35)`;
+  modal.style.boxShadow   = `0 24px 80px rgba(0,0,0,0.9), 0 0 50px rgba(${r1},${g1},${b1},0.1)`;
+
+  // Header border
+  document.querySelector('.modal-header').style.borderBottomColor = `rgba(${r1},${g1},${b1},0.15)`;
+
+  // Titre dégradé avec les couleurs de la constellation
+  const titleEl = document.getElementById('mTitle');
+  titleEl.style.background = `linear-gradient(135deg, ${color1}, ${color2})`;
+  titleEl.style.webkitBackgroundClip = 'text';
+  titleEl.style.webkitTextFillColor = 'transparent';
+  titleEl.style.backgroundClip = 'text';
+
+  // Prophétie border
+  document.getElementById('mProphecy').style.borderLeftColor = `rgba(${r1},${g1},${b1},0.4)`;
+
+  // Icône glow
+  document.getElementById('mIcon').style.filter = `drop-shadow(0 0 14px rgba(${r1},${g1},${b1},0.6))`;
+
+  // Tags couleur
+  document.getElementById('mTags').dataset.color = color1;
+  document.getElementById('mTags').dataset.colorRgb = `${r1},${g1},${b1}`;
+
+  document.getElementById('mIcon').innerHTML = renderEmoji(c.emoji, 56);
+  document.getElementById('mType').textContent = c.type;
+  document.getElementById('mTitle').textContent = c.name;
+  // Re-appliquer le style après textContent (réinitialise le gradient webkit)
+  titleEl.style.background = `linear-gradient(135deg, ${color1}, ${color2})`;
+  titleEl.style.webkitBackgroundClip = 'text';
+  titleEl.style.webkitTextFillColor = 'transparent';
+  titleEl.style.backgroundClip = 'text';
+  document.getElementById('mSub').textContent = c.subtitle;
+  document.getElementById('mProphecy').textContent = c.prophecy;
+
+  document.getElementById('mDetails').innerHTML = Object.entries(c.details).map(([k,v])=>
+    `<div class="modal-detail" style="border-color:rgba(${r1},${g1},${b1},0.12)">
+      <div class="modal-detail-label" style="color:rgba(${r1},${g1},${b1},0.6)">${k}</div>
+      <div class="modal-detail-value">${v}</div>
+    </div>`).join('');
+
+  document.getElementById('mTags').innerHTML = c.tags.map(t=>
+    `<span class="modal-tag" style="color:${color1};border-color:rgba(${r1},${g1},${b1},0.3);background:rgba(${r1},${g1},${b1},0.06)">${t}</span>`
+  ).join('');
+
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(e) {
+  if(e && e.target !== document.getElementById('modalOverlay') && !e.target.classList.contains('modal-close')) return;
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal({target:document.getElementById('modalOverlay')}); });
+
+window.addEventListener('DOMContentLoaded', () => {
+  resize();
+  buildLegend();
+  draw();
+});
+window.addEventListener('resize', resize);
+</script>
+<!-- ══════════════════════════════════════════════════
+     PANNEAU À PROPOS — Arcana style
+     ══════════════════════════════════════════════════ -->
+<div id="about-overlay" style="
+  position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,0);
+  pointer-events:none;
+  transition:background 0.5s;
+"></div>
+
+<div id="about-panel" style="
+  position:fixed;top:0;right:-520px;bottom:0;width:min(520px,100vw);z-index:201;
+  background:linear-gradient(170deg,#06040f 0%,#0a0618 40%,#060410 100%);
+  border-left:1px solid rgba(201,168,76,0.18);
+  overflow-y:auto;
+  transition:right 0.45s cubic-bezier(0.4,0,0.2,1);
+  padding:0 0 64px;
+  box-shadow:-16px 0 60px rgba(0,0,0,0.8), -2px 0 0 rgba(201,168,76,0.06);
+">
+
+  <!-- Starfield canvas inside panel -->
+  <canvas id="about-stars" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.6;"></canvas>
+
+  <!-- Sticky header -->
+  <div style="
+    position:sticky;top:0;z-index:2;
+    background:linear-gradient(to bottom,rgba(6,4,15,0.98) 70%,transparent);
+    padding:22px 32px 14px;
+    display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid rgba(201,168,76,0.1);
+  ">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="color:rgba(201,168,76,0.5);font-size:10px;">✦</span>
+      <span style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:rgba(201,168,76,0.6);">About</span>
+      <span style="color:rgba(201,168,76,0.5);font-size:10px;">✦</span>
+    </div>
+    <button id="about-close" style="
+      width:30px;height:30px;border-radius:50%;
+      border:1px solid rgba(201,168,76,0.2);
+      background:rgba(201,168,76,0.04);
+      color:rgba(201,168,76,0.5);cursor:pointer;
+      font-size:14px;display:flex;align-items:center;justify-content:center;
+      transition:all 0.3s;font-family:'Cinzel',serif;
+    " onmouseover="this.style.borderColor='rgba(201,168,76,0.6)';this.style.color='#c9a84c';this.style.background='rgba(201,168,76,0.1)'"
+       onmouseout="this.style.borderColor='rgba(201,168,76,0.2)';this.style.color='rgba(201,168,76,0.5)';this.style.background='rgba(201,168,76,0.04)'">✕</button>
+  </div>
+
+  <div style="position:relative;z-index:1;">
+
+    <!-- Avatar + name -->
+    <div style="padding:32px 32px 28px;text-align:center;border-bottom:1px solid rgba(201,168,76,0.1);">
+
+      <!-- Ornamental ring around avatar -->
+      <div style="position:relative;width:110px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;">
+        <div style="
+          width:110px;height:110px;border-radius:50%;
+          border:1px solid rgba(201,168,76,0.3);
+          display:flex;align-items:center;justify-content:center;
+          position:relative;
+          box-shadow:0 0 30px rgba(201,168,76,0.08), inset 0 0 20px rgba(0,0,0,0.5);
+          background:radial-gradient(circle at 35% 30%,rgba(201,168,76,0.08),rgba(0,0,0,0.6));
+        ">
+          <!-- Corner ornaments -->
+          <span style="position:absolute;top:-6px;left:50%;transform:translateX(-50%);color:rgba(201,168,76,0.6);font-size:10px;">✦</span>
+          <span style="position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);color:rgba(201,168,76,0.6);font-size:10px;">✦</span>
+          <div id="about-avatar" style="font-size:3rem;filter:drop-shadow(0 0 12px rgba(201,168,76,0.4));">🧠</div>
+        </div>
+      </div>
+
+      <div id="about-name" style="
+        font-family:'Cinzel Decorative',serif;font-size:20px;font-weight:700;
+        background:linear-gradient(135deg,#7a6330,#e8cc7a,#c9a84c);
+        -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+        margin-bottom:8px;line-height:1.2;
+      ">First Last</div>
+
+      <div id="about-titre" style="
+        font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.18em;
+        color:rgba(201,168,76,0.7);text-transform:uppercase;margin-bottom:6px;
+      "></div>
+      <div id="about-institution" style="font-size:13px;font-style:italic;color:rgba(154,138,106,0.7);"></div>
+
+      <!-- Ornament -->
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-top:18px;">
+        <div style="width:40px;height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,0.3));"></div>
+        <span style="color:rgba(201,168,76,0.4);font-size:10px;">✦</span>
+        <div style="width:40px;height:1px;background:linear-gradient(to left,transparent,rgba(201,168,76,0.3));"></div>
+      </div>
+    </div>
+
+    <!-- Bio -->
+    <div style="padding:28px 32px;border-bottom:1px solid rgba(201,168,76,0.08);">
+      <div style="
+        font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;
+        color:rgba(201,168,76,0.45);text-transform:uppercase;margin-bottom:14px;
+        display:flex;align-items:center;gap:10px;
+      ">
+        <span>Biography</span>
+        <div style="flex:1;height:1px;background:linear-gradient(to right,rgba(201,168,76,0.2),transparent);"></div>
+      </div>
+      <div id="about-bio" style="
+        font-family:'EB Garamond',Georgia,serif;
+        font-size:15px;font-style:italic;color:rgba(232,220,200,0.85);
+        line-height:1.85;white-space:pre-line;
+        border-left:2px solid rgba(201,168,76,0.2);
+        padding-left:16px;
+      "></div>
+    </div>
+
+    <!-- Stats -->
+    <div style="padding:28px 32px;border-bottom:1px solid rgba(201,168,76,0.08);">
+      <div style="
+        font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;
+        color:rgba(201,168,76,0.45);text-transform:uppercase;margin-bottom:16px;
+        display:flex;align-items:center;gap:10px;
+      ">
+        <span>By the Numbers</span>
+        <div style="flex:1;height:1px;background:linear-gradient(to right,rgba(201,168,76,0.2),transparent);"></div>
+      </div>
+      <div id="about-stats" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"></div>
+    </div>
+
+    <!-- Contact -->
+    <div style="padding:28px 32px;">
+      <div style="
+        font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;
+        color:rgba(201,168,76,0.45);text-transform:uppercase;margin-bottom:16px;
+        display:flex;align-items:center;gap:10px;
+      ">
+        <span>Contact & Links</span>
+        <div style="flex:1;height:1px;background:linear-gradient(to right,rgba(201,168,76,0.2),transparent);"></div>
+      </div>
+      <div id="about-links" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  #about-panel::-webkit-scrollbar{width:3px;}
+  #about-panel::-webkit-scrollbar-track{background:transparent;}
+  #about-panel::-webkit-scrollbar-thumb{background:rgba(201,168,76,0.2);border-radius:2px;}
+  #about-panel::-webkit-scrollbar-thumb:hover{background:rgba(201,168,76,0.4);}
+</style>
+
+<script>
+(function() {
+  const panel   = document.getElementById('about-panel');
+  const overlay = document.getElementById('about-overlay');
+  const btnOpen = document.getElementById('btn-about');
+  const btnClose= document.getElementById('about-close');
+
+  // ── Starfield inside panel ──
+  const sc  = document.getElementById('about-stars');
+  const sctx = sc.getContext('2d');
+  let sW, sH, sStars = [], sT = 0;
+  function resizeStars() {
+    sW = sc.width  = panel.offsetWidth;
+    sH = sc.height = Math.max(panel.scrollHeight, window.innerHeight);
+    sStars = [];
+    for(let i=0;i<80;i++) sStars.push({
+      x:Math.random()*sW, y:Math.random()*sH,
+      r:Math.random()*0.9+0.1, a:Math.random()*0.35+0.05,
+      sp:Math.random()*0.003+0.001, ph:Math.random()*Math.PI*2,
+    });
+  }
+  function drawStars() {
+    sT += 0.016;
+    sctx.clearRect(0,0,sW,sH);
+    for(const s of sStars) {
+      const al = s.a*(0.4+0.6*Math.sin(sT*s.sp*60+s.ph));
+      sctx.beginPath(); sctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      sctx.fillStyle = `rgba(255,255,220,${al})`; sctx.fill();
+    }
+    requestAnimationFrame(drawStars);
+  }
+  resizeStars(); drawStars();
+
+  function openAbout() {
+    resizeStars();
+    panel.style.right   = '0';
+    overlay.style.background = 'rgba(0,0,0,0.65)';
+    overlay.style.pointerEvents = 'all';
+  }
+  function closeAbout() {
+    panel.style.right   = '-520px';
+    overlay.style.background = 'rgba(0,0,0,0)';
+    overlay.style.pointerEvents = 'none';
+  }
+  window.closeAbout = closeAbout;
+
+  if(btnOpen)  btnOpen.addEventListener('click', openAbout);
+  if(btnClose) btnClose.addEventListener('click', closeAbout);
+  if(overlay)  overlay.addEventListener('click', closeAbout);
+  document.addEventListener('keydown', e => { if(e.key==='Escape') closeAbout(); });
+
+  // ── Populate from PROFIL ──
+  if(typeof PROFIL === 'undefined') return;
+  const P = PROFIL;
+  const setT = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+
+  setT('about-name', P.prenom + ' ' + P.nom);
+  setT('about-titre', P.titre);
+  setT('about-institution', P.institution);
+  setT('about-bio', P.bio_longue);
+
+  const avatarEl = document.getElementById('about-avatar');
+  if(avatarEl) avatarEl.textContent = P.avatar_emoji;
+
+  // Stats
+  const statsEl = document.getElementById('about-stats');
+  if(statsEl && P.stats) {
+    const labels = {
+      projets:      '🚀 Projects',
+      langues:      '🗣 Languages',
+      annees_these: '🎓 Years of PhD',
+    };
+    statsEl.innerHTML = Object.entries(P.stats).map(([k,v]) => `
+      <div style="
+        background:linear-gradient(160deg,rgba(201,168,76,0.06),rgba(0,0,0,0.3));
+        border:1px solid rgba(201,168,76,0.15);border-radius:8px;
+        padding:16px 12px;text-align:center;
+        position:relative;overflow:hidden;
+      ">
+        <div style="position:absolute;top:6px;right:8px;font-size:8px;color:rgba(201,168,76,0.2);">✦</div>
+        <div style="
+          font-family:'Cinzel Decorative',serif;font-size:26px;font-weight:700;
+          background:linear-gradient(135deg,#c9a84c,#e8cc7a);
+          -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+          line-height:1;margin-bottom:6px;
+        ">${v}</div>
+        <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.12em;color:rgba(154,138,106,0.7);text-transform:uppercase;">${labels[k]||k}</div>
+      </div>`).join('');
+  }
+
+  // Links
+  const linksEl = document.getElementById('about-links');
+  if(linksEl && P.contact) {
+    const icons = {
+      email:    { icon:'✉', label:'Email' },
+      linkedin: { icon:'in', label:'LinkedIn' },
+      github:   { icon:'⌥', label:'GitHub' },
+      twitter:  { icon:'✗', label:'Twitter / X' },
+      scholar:  { icon:'✦', label:'Google Scholar' },
+      cv:       { icon:'↓', label:'Download CV' },
+    };
+    linksEl.innerHTML = Object.entries(P.contact)
+      .filter(([,v]) => v && v !== '#')
+      .map(([k,v]) => {
+        const {icon,label} = icons[k]||{icon:'→',label:k};
+        const href = k==='email' ? 'mailto:'+v : v;
+        const display = k==='email' ? v : v.replace('https://','').replace('http://','');
+        return `<a href="${href}" target="_blank" rel="noopener" style="
+          display:flex;align-items:center;gap:14px;
+          padding:12px 16px;border-radius:8px;
+          background:linear-gradient(160deg,rgba(201,168,76,0.04),rgba(0,0,0,0.2));
+          border:1px solid rgba(201,168,76,0.12);
+          color:rgba(232,220,200,0.8);text-decoration:none;
+          transition:all 0.3s;
+        "
+        onmouseover="this.style.borderColor='rgba(201,168,76,0.4)';this.style.background='linear-gradient(160deg,rgba(201,168,76,0.1),rgba(0,0,0,0.2))';this.style.color='#e8cc7a'"
+        onmouseout="this.style.borderColor='rgba(201,168,76,0.12)';this.style.background='linear-gradient(160deg,rgba(201,168,76,0.04),rgba(0,0,0,0.2))';this.style.color='rgba(232,220,200,0.8)'">
+          <div style="
+            width:32px;height:32px;border-radius:50%;flex-shrink:0;
+            border:1px solid rgba(201,168,76,0.25);
+            background:rgba(201,168,76,0.06);
+            display:flex;align-items:center;justify-content:center;
+            font-family:'Cinzel',serif;font-size:11px;color:rgba(201,168,76,0.7);
+          ">${icon}</div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(201,168,76,0.6);margin-bottom:2px;">${label}</div>
+            <div style="font-size:12px;font-style:italic;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:0.7;">${display}</div>
+          </div>
+          <span style="color:rgba(201,168,76,0.3);font-size:12px;">→</span>
+        </a>`;
+      }).join('');
+  }
+
+  // Hero name injection (index.html only)
+  const nameEl = document.getElementById('hero-name');
+  const bioEl  = document.getElementById('hero-bio');
+  const avatarInitials = document.getElementById('avatar-initials');
+  if(nameEl) nameEl.textContent = P.prenom + ' ' + P.nom;
+  if(bioEl)  bioEl.textContent  = P.bio_courte;
+  if(avatarInitials) avatarInitials.textContent = (P.prenom[0]||'') + (P.nom[0]||'');
+})();
+</script>
+
+</html>
+  <script src="js/effects.js"></script>
+</body>
+</html>

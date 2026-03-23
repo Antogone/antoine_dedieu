@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🔮</text></svg>">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mystical Portfolio — Antoine Dedieu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#080810;--bg2:#0d0d1a;--bg3:#12122a;
+      --gold:#c9a84c;--gold-light:#e8cc7a;--gold-dim:#7a6330;
+      --purple:#c0392b;--purple-light:#e74c3c;
+      --text:#e8dcc8;--text-dim:#9a8a6a;
+      --border:rgba(201,168,76,0.25);--glow:rgba(201,168,76,0.15);
+      --card-w:150px;--card-h:265px;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{background:var(--bg);color:var(--text);font-family:'EB Garamond',Georgia,serif;min-height:100vh;overflow-x:hidden;}
+    body::before{content:'';position:fixed;inset:0;z-index:0;
+      background:radial-gradient(ellipse at 20% 20%,rgba(160,40,30,0.15) 0%,transparent 50%),
+        radial-gradient(ellipse at 80% 80%,rgba(160,40,30,0.1) 0%,transparent 50%),
+        radial-gradient(ellipse at 50% 0%,rgba(201,168,76,0.08) 0%,transparent 40%);
+      pointer-events:none;}
+
+    /* NAV */
+
+    /* HERO */
+    .hero{padding:110px 48px 48px;text-align:center;position:relative;z-index:1;}
+    .hero-eyebrow{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.3em;color:var(--gold-dim);text-transform:uppercase;margin-bottom:14px;}
+    .hero-title{font-family:'Cinzel Decorative',serif;font-size:clamp(34px,6vw,68px);font-weight:900;
+    background:linear-gradient(135deg,#8b1a1a 0%,#e74c3c 35%,#ff6b5b 55%,#c0392b 100%);
+filter:drop-shadow(0 0 30px rgba(231,76,60,0.4));      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      line-height:1.1;margin-bottom:14px;filter:drop-shadow(0 0 30px rgba(201,168,76,0.3));}
+    .hero-sub{font-size:17px;font-style:italic;color:var(--text-dim);letter-spacing:0.05em;}
+    .ornament{display:flex;align-items:center;justify-content:center;gap:14px;margin:28px 0;}
+    .ornament::before,.ornament::after{content:'';width:80px;height:1px;background:linear-gradient(to right,transparent,var(--gold-dim));}
+    .ornament::after{background:linear-gradient(to left,transparent,var(--gold-dim));}
+
+    /* TIRAGE */
+    .draw-section{position:relative;z-index:1;padding:0 48px 72px;text-align:center;}
+    .section-title{font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.25em;color:var(--gold-dim);text-transform:uppercase;margin-bottom:44px;}
+    .draw-layout{display:flex;align-items:flex-start;justify-content:center;gap:56px;flex-wrap:wrap;}
+
+    /* Deck */
+    .deck-pile{position:relative;width:var(--card-w);height:var(--card-h);cursor:pointer;flex-shrink:0;}
+    .deck-pile .sc{position:absolute;inset:0;border-radius:12px;background:linear-gradient(135deg,#1a0a2e,#2d1256);border:1px solid var(--gold-dim);transition:transform 0.3s;}
+    .deck-pile .sc:nth-child(1){transform:translate(-6px,-6px) rotate(-3deg);}
+    .deck-pile .sc:nth-child(2){transform:translate(-3px,-3px) rotate(-1.5deg);}
+    .deck-pile:hover .sc:nth-child(1){transform:translate(-10px,-9px) rotate(-5deg);}
+    .deck-pile:hover .sc:nth-child(2){transform:translate(-5px,-4px) rotate(-2.5deg);}
+    .deck-face{position:absolute;inset:0;border-radius:12px;
+      background:linear-gradient(160deg,#1a0a2e 0%,#2d1256 50%,#1a0a2e 100%);
+      border:2px solid var(--gold-dim);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+      box-shadow:0 8px 32px rgba(0,0,0,0.6),inset 0 0 40px rgba(160,40,30,0.1);z-index:3;transition:box-shadow 0.3s,border-color 0.3s;}
+    .deck-face::before{content:'';position:absolute;inset:8px;border:1px solid rgba(201,168,76,0.2);border-radius:8px;}
+    .deck-face::after{content:'✦';position:absolute;font-size:80px;color:rgba(201,168,76,0.05);}
+    .deck-pile:hover .deck-face{border-color:var(--gold);box-shadow:0 8px 32px rgba(0,0,0,0.6),0 0 30px rgba(201,168,76,0.2);}
+    .deck-icon{font-size:34px;position:relative;z-index:1;}
+    .deck-label{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.2em;color:var(--gold-dim);text-transform:uppercase;position:relative;z-index:1;}
+    .draw-count{font-size:12px;color:var(--text-dim);font-style:italic;position:relative;z-index:1;}
+    .deck-controls{margin-top:20px;display:flex;gap:8px;justify-content:center;}
+    .btn-draw{font-family:'Cinzel',serif;font-size:12px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;
+      color:var(--bg);background:linear-gradient(135deg,var(--gold-dim),var(--gold),var(--gold-light));
+      border:none;padding:12px 28px;border-radius:4px;cursor:pointer;transition:all 0.3s;box-shadow:0 4px 20px rgba(201,168,76,0.3);}
+    .btn-draw:hover{box-shadow:0 4px 30px rgba(201,168,76,0.5);transform:translateY(-1px);}
+    .btn-draw:disabled{opacity:0.35;cursor:not-allowed;transform:none;}
+    .btn-reset{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.1em;color:var(--text-dim);
+      background:none;border:1px solid var(--border);padding:10px 20px;border-radius:4px;cursor:pointer;transition:all 0.3s;}
+    .btn-reset:hover{color:var(--gold);border-color:var(--gold);}
+
+    /* Cartes tirées */
+    .drawn-area{flex:1;min-width:280px;max-width:700px;}
+    .drawn-cards{display:flex;gap:14px;justify-content:flex-start;align-items:flex-end;min-height:285px;flex-wrap:wrap;}
+
+    /* Carte tarot */
+    .tarot-card{width:var(--card-w);height:var(--card-h);border-radius:12px;cursor:pointer;
+      position:relative;flex-shrink:0;transform-origin:bottom center;
+      animation:cardAppear 0.6s cubic-bezier(0.175,0.885,0.32,1.275) both;
+      transition:transform 0.3s,box-shadow 0.3s;}
+    .tarot-card:nth-child(1){animation-delay:0s;}
+    .tarot-card:nth-child(2){animation-delay:0.1s;}
+    .tarot-card:nth-child(3){animation-delay:0.2s;}
+    .tarot-card:nth-child(4){animation-delay:0.3s;}
+    .tarot-card:nth-child(5){animation-delay:0.4s;}
+    @keyframes cardAppear{
+      0%{opacity:0;transform:translateY(60px) rotate(15deg) scale(0.7);}
+      100%{opacity:1;transform:translateY(0) rotate(var(--rot,0deg)) scale(1);}
+    }
+    .tarot-card:hover{transform:translateY(-18px) rotate(0deg) scale(1.05) !important;
+      box-shadow:0 24px 48px rgba(0,0,0,0.7),0 0 30px rgba(201,168,76,0.3);z-index:10;}
+    .card-inner{width:100%;height:100%;border-radius:12px;border:2px solid var(--gold-dim);
+      display:flex;flex-direction:column;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.5);}
+    .card-inner::before{content:'';position:absolute;inset:6px;border:1px solid rgba(201,168,76,0.15);
+      border-radius:8px;pointer-events:none;z-index:1;}
+    .card-art{flex:1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+    .card-roman{position:absolute;top:10px;left:0;right:0;text-align:center;
+      font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.15em;color:rgba(201,168,76,0.5);}
+    .card-emoji{font-size:46px;position:relative;z-index:1;filter:drop-shadow(0 0 10px rgba(201,168,76,0.3));display:flex;align-items:center;justify-content:center;}
+    .card-emoji img{width:52px;height:52px;object-fit:contain;display:block;}
+    .card-footer{padding:9px 10px 11px;text-align:center;border-top:1px solid rgba(201,168,76,0.2);background:rgba(0,0,0,0.35);}
+    .card-name{font-family:'Cinzel',serif;font-size:10px;font-weight:600;letter-spacing:0.08em;
+      color:var(--gold);text-transform:uppercase;margin-bottom:2px;line-height:1.3;}
+    .card-cat{font-size:10px;font-style:italic;color:var(--text-dim);}
+
+    /* BOULE */
+    .crystal-section{padding:48px 48px 64px;text-align:center;position:relative;z-index:1;}
+    .crystal-ball{width:180px;height:180px;border-radius:50%;margin:0 auto 28px;position:relative;cursor:default;}
+    .crystal-ball-inner{width:100%;height:100%;border-radius:50%;
+      background:radial-gradient(circle at 35% 30%,rgba(180,140,255,0.8) 0%,rgba(100,60,200,0.6) 25%,rgba(40,20,100,0.9) 60%,rgba(10,5,30,1) 100%);
+      box-shadow:0 0 40px rgba(192,57,43,0.4),0 0 80px rgba(160,40,30,0.2),inset 0 0 40px rgba(0,0,0,0.5);
+      position:relative;transition:box-shadow 0.4s;}
+    .crystal-ball:hover .crystal-ball-inner{box-shadow:0 0 60px rgba(192,57,43,0.7),0 0 120px rgba(160,40,30,0.4);}
+    .crystal-ball-inner::before{content:'';position:absolute;top:15%;left:20%;width:35%;height:25%;
+      background:radial-gradient(ellipse,rgba(255,255,255,0.5),transparent);border-radius:50%;transform:rotate(-30deg);}
+    .crystal-stars{position:absolute;inset:0;border-radius:50%;overflow:hidden;}
+    .crystal-star{position:absolute;width:2px;height:2px;background:white;border-radius:50%;animation:twinkle 2s infinite;}
+    @keyframes twinkle{0%,100%{opacity:0.3;}50%{opacity:1;transform:scale(1.5);}}
+    .crystal-emojis{position:absolute;inset:-44px;border-radius:50%;pointer-events:none;opacity:0;transition:opacity 0.4s;}
+    .crystal-ball:hover .crystal-emojis{opacity:1;}
+    .crystal-emoji-item{position:absolute;font-size:20px;animation:orbitFloat 3s ease-in-out infinite;
+      filter:drop-shadow(0 0 8px rgba(201,168,76,0.6));}
+    @keyframes orbitFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px) scale(1.1);}}
+    .crystal-emoji-item:nth-child(1){top:0;left:50%;transform:translateX(-50%);}
+    .crystal-emoji-item:nth-child(2){top:13%;right:2%;animation-delay:0.2s;}
+    .crystal-emoji-item:nth-child(3){top:50%;right:-8px;transform:translateY(-50%);animation-delay:0.4s;}
+    .crystal-emoji-item:nth-child(4){bottom:13%;right:2%;animation-delay:0.6s;}
+    .crystal-emoji-item:nth-child(5){bottom:0;left:50%;transform:translateX(-50%);animation-delay:0.8s;}
+    .crystal-emoji-item:nth-child(6){bottom:13%;left:2%;animation-delay:1s;}
+    .crystal-emoji-item:nth-child(7){top:50%;left:-8px;transform:translateY(-50%);animation-delay:1.2s;}
+    .crystal-emoji-item:nth-child(8){top:13%;left:2%;animation-delay:1.4s;}
+
+    /* CTA */
+    .btn-gold{font-family:'Cinzel',serif;font-size:12px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;
+      color:var(--bg);background:linear-gradient(135deg,var(--gold-dim),var(--gold));
+      padding:12px 32px;border-radius:4px;text-decoration:none;display:inline-block;
+      box-shadow:0 4px 20px rgba(201,168,76,0.3);transition:all 0.3s;margin-top:20px;}
+    .btn-gold:hover{box-shadow:0 4px 30px rgba(201,168,76,0.5);transform:translateY(-1px);}
+
+    .section-divider{margin:0 48px 56px;height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);position:relative;z-index:1;}
+
+    /* MODALE */
+    .modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);
+      display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.4s;padding:24px;}
+    .modal-overlay.open{opacity:1;pointer-events:all;}
+    .modal{background:linear-gradient(160deg,#12082a 0%,#1a0a2e 50%,#0d0d1a 100%);
+      border:1px solid var(--gold-dim);border-radius:16px;max-width:660px;width:100%;
+      max-height:88vh;overflow-y:auto;position:relative;
+      box-shadow:0 24px 80px rgba(0,0,0,0.8),0 0 60px rgba(201,168,76,0.1);
+      transform:scale(0.9) translateY(20px);transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);}
+    .modal-overlay.open .modal{transform:scale(1) translateY(0);}
+    .modal::before,.modal::after{content:'✦';position:absolute;color:var(--gold-dim);font-size:12px;}
+    .modal::before{top:16px;left:20px;}.modal::after{bottom:16px;right:20px;}
+    .modal-header{display:flex;gap:24px;padding:28px 28px 20px;border-bottom:1px solid var(--border);align-items:flex-end;}
+    .modal-thumb{width:90px;height:155px;border-radius:8px;flex-shrink:0;
+      display:flex;align-items:center;justify-content:center;font-size:40px;
+      border:2px solid var(--gold-dim);position:relative;}
+    .modal-thumb::before{content:'';position:absolute;inset:4px;border:1px solid rgba(201,168,76,0.1);border-radius:4px;}
+    .modal-meta{flex:1;}
+    .modal-type{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.25em;color:var(--gold-dim);text-transform:uppercase;margin-bottom:6px;}
+    .modal-title{font-family:'Cinzel Decorative',serif;font-size:clamp(18px,3vw,26px);font-weight:700;
+      background:linear-gradient(135deg,var(--gold-dim),var(--gold-light));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;margin-bottom:8px;}
+    .modal-subtitle{font-size:14px;font-style:italic;color:var(--text-dim);}
+    .modal-body{padding:24px 28px 28px;}
+    .modal-prophecy{font-size:15px;font-style:italic;color:var(--text);line-height:1.8;
+      border-left:2px solid var(--gold-dim);padding-left:16px;margin-bottom:20px;}
+    .modal-details{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+    .modal-detail{background:rgba(0,0,0,0.3);border:1px solid rgba(201,168,76,0.1);border-radius:6px;padding:12px;}
+    .modal-detail-label{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;color:var(--gold-dim);text-transform:uppercase;margin-bottom:4px;}
+    .modal-detail-value{font-size:14px;color:var(--text);}
+    .modal-tags{display:flex;flex-wrap:wrap;gap:7px;}
+    .modal-tag{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.08em;color:var(--gold);
+      border:1px solid rgba(201,168,76,0.3);padding:4px 12px;border-radius:20px;background:rgba(201,168,76,0.05);}
+    .modal-close{position:absolute;top:14px;right:14px;background:rgba(0,0,0,0.5);
+      border:1px solid var(--border);color:var(--text-dim);width:30px;height:30px;
+      border-radius:50%;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+    .modal-close:hover{color:var(--gold);border-color:var(--gold);}
+    ::-webkit-scrollbar{width:4px;}
+    ::-webkit-scrollbar-track{background:var(--bg);}
+    ::-webkit-scrollbar-thumb{background:var(--gold-dim);border-radius:2px;}
+  
+    /* ══════════════════════════════════════
+       NAV — base tarot, accentuation tarot
+       ══════════════════════════════════════ */
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:100;height:64px;
+      display:flex;align-items:center;justify-content:space-between;padding:0 48px;
+      background:linear-gradient(to bottom,rgba(8,8,16,0.97),transparent);
+      border-bottom:1px solid rgba(255,255,255,0.06);
+      backdrop-filter:blur(12px);
+    }
+    /* Étoiles animées dans la barre nav */
+    nav::before{
+      content:'';position:absolute;inset:0;pointer-events:none;overflow:hidden;
+      background:
+        radial-gradient(1px 1px at 15% 40%, rgba(255,255,220,0.55) 0%, transparent 100%),
+        radial-gradient(1px 1px at 28% 65%, rgba(255,255,220,0.35) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 42% 30%, rgba(255,255,220,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 55% 70%, rgba(255,255,220,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 68% 45%, rgba(255,255,220,0.3) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 78% 25%, rgba(255,255,220,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 88% 60%, rgba(255,255,220,0.35) 0%, transparent 100%);
+      animation:navStarPulse 4s ease-in-out infinite;
+    }
+    nav::after{
+      content:'';position:absolute;bottom:0;left:5%;right:5%;height:1px;
+      background:linear-gradient(to right,transparent,#e74c3c,transparent);
+      opacity:0.35;
+    }
+    @keyframes navStarPulse{
+      0%,100%{opacity:0.6;}
+      50%{opacity:1;}
+    }
+    .nav-logo{
+      font-family:'Cinzel Decorative',serif;font-size:18px;font-weight:700;
+      color:#e74c3c;letter-spacing:0.15em;
+      text-shadow:0 0 20px rgba(201,168,76,0.4);
+      position:relative;z-index:1;
+      animation:logoGlow 3s ease-in-out infinite;
+    }
+    @keyframes logoGlow{
+      0%,100%{text-shadow:0 0 20px rgba(231,76,60,0.15);}
+      50%{text-shadow:0 0 28px rgba(231,76,60,0.5), 0 0 48px rgba(201,168,76,0.15);}
+    }
+    .nav-links{display:flex;gap:36px;list-style:none;position:relative;z-index:1;}
+    .nav-links a{
+      font-family:'Cinzel',serif;font-size:12px;font-weight:600;
+      color:var(--text-dim);text-decoration:none;
+      letter-spacing:0.1em;text-transform:uppercase;
+      transition:color 0.3s;position:relative;
+    }
+    .nav-links a::after{
+      content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;
+      background:#e74c3c;
+      transform:scaleX(0);transition:transform 0.3s;
+    }
+    .nav-links a:hover,.nav-links a.active{color:#ff6b5b;}
+    .nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1);}
+    .nav-back{
+      font-family:'Cinzel',serif;font-size:11px;color:var(--text-dim);
+      text-decoration:none;letter-spacing:0.08em;
+      border:1px solid rgba(255,255,255,0.1);
+      padding:6px 16px;border-radius:20px;
+      transition:all 0.3s;position:relative;z-index:1;
+    }
+    .nav-back:hover{color:#e74c3c;border-color:#e74c3c;box-shadow:0 0 12px rgba(231,76,60,0.2);}
+  
+    .nav-links .nav-about-btn{
+      font-family:'Cinzel',serif;font-size:12px;font-weight:600;
+      color:var(--text-dim);background:none;border:none;
+      letter-spacing:0.1em;text-transform:uppercase;
+      cursor:pointer;padding:0;transition:color 0.3s;
+      position:relative;
+    }
+    .nav-links .nav-about-btn::after{
+      content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;
+      background:var(--accent,#c9a84c);transform:scaleX(0);transition:transform 0.3s;
+    }
+    .nav-links .nav-about-btn:hover{color:var(--accent-light,#e8cc7a);}
+    .nav-links .nav-about-btn:hover::after{transform:scaleX(1);}
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">✦ Tarot ✦</div>
+    <ul class="nav-links">
+    <li><a href="tarot.html" class="active">Tarot</a></li>
+    <li><a href="runes.html">Runes</a></li>
+    <li><a href="constellation.html">Constellation</a></li>
+    <li><a href="chaudron.html">Cauldron</a></li>
+    <li><a href="cristal.html">Cristal</a></li>
+    <li><a href="arcanes.html">Card List</a></li>
+    <li><button id="btn-about" class="nav-about-btn">About</button></li>
+  </ul>
+  <a href="divination.html" class="nav-back">← Divination</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-eyebrow">Divination · All arcana</div>
+  <h1 class="hero-title">The Tarot</h1>
+  <p class="hero-sub">Draw cards from your entire journey — education, skills, projects, experiences</p>
+  <div class="ornament">
+    <span style="color:var(--gold)">✦</span>
+    <span style="color:var(--gold-dim);font-size:10px">✦</span>
+    <span style="color:var(--gold)">✦</span>
+  </div>
+</section>
+
+<section class="draw-section">
+  <p class="section-title">✦ &nbsp; Draw your cards &nbsp; ✦</p>
+
+  <!-- Deck centré -->
+  <div style="display:flex;flex-direction:column;align-items:center;gap:0">
+    <div class="deck-pile" onclick="drawCard()">
+      <div class="sc"></div>
+      <div class="sc"></div>
+      <div class="deck-face">
+        <div class="deck-icon">🎴</div>
+        <div class="deck-label">Arcanas</div>
+        <div class="draw-count" id="drawCount">0 / 3 cards</div>
+      </div>
+    </div>
+    <div class="deck-controls" style="margin-top:20px">
+      <button class="btn-draw" id="btnDraw" onclick="drawCard()">Draw a card</button>
+      <button class="btn-reset" onclick="resetDraw()">↺ Shuffle</button>
+    </div>
+    <p style="font-family:'Cinzel',serif;font-size:10px;color:var(--gold-dim);letter-spacing:0.1em;margin-top:12px;text-transform:uppercase;">
+      Click the cards to reveal them
+    </p>
+
+    <!-- Cartes tirées — centrées sous le deck -->
+    <div class="drawn-cards" id="drawnCards" style="margin-top:36px;justify-content:center;width:100%;max-width:560px;min-height:265px;"></div>
+
+    <!-- Bouton Explore the Arcana ici -->
+    <div style="margin-top:40px;text-align:center">
+      <a href="arcanes.html" class="btn-gold">✦ Explore the Arcana</a>
+    </div>
+  </div>
+</section>
+
+<!-- MODALE -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-header">
+      <div class="modal-thumb" id="mThumb"></div>
+      <div class="modal-meta">
+        <div class="modal-type" id="mType"></div>
+        <div class="modal-title" id="mTitle"></div>
+        <div class="modal-subtitle" id="mSub"></div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-prophecy" id="mProphecy"></div>
+      <div class="modal-details" id="mDetails"></div>
+      <div class="modal-tags" id="mTags"></div>
+    </div>
+  </div>
+</div>
+
+
+<script src="js/data.js"></script>
+<script>
+// ── TIRAGE — utilise ALL_ARCANES depuis arcane-data.js ──
+
+// Render emoji OR image if emoji field is a URL
+function renderEmoji(val, size) {
+  if(val && (val.startsWith('http') || val.startsWith('/'))) {
+    return `<img src="${val}" style="width:${size}px;height:${size}px;object-fit:contain;filter:drop-shadow(0 0 6px rgba(255,255,255,0.2));" alt="">`;
+  }
+  return val || '';
+}
+
+const MAX = 3;
+let drawn = new Set(), count = 0;
+let deck = [...ALL_ARCANES].sort(() => Math.random() - 0.5);
+
+// Labels courts pour le type de carte
+function shortType(type) {
+  return type.replace("Arcane de ","").replace("Arcane d'","");
+}
+
+// Couleur de catégorie
+function catColor(type) {
+  if(type.includes('Expérience')) return '#e74c3c';
+  if(type.includes('Formation'))  return '#c9a84c';
+  if(type.includes('Compétence')) return '#ee4b28';
+  if(type.includes('Projet'))     return '#1db954';
+  return '#c9a84c';
+}
+
+function drawCard() {
+  if(count >= MAX) return;
+  const rem = deck.filter(c => !drawn.has(c.id));
+  if(!rem.length) return;
+  const card = rem[0];
+  drawn.add(card.id);
+  count++;
+  document.getElementById('drawCount').textContent = count + ' / ' + MAX + ' cards';
+  if(count >= MAX) document.getElementById('btnDraw').disabled = true;
+
+  const rot = (Math.random() * 10 - 5).toFixed(1);
+  const el  = document.createElement('div');
+  el.className = 'tarot-card';
+  el.style.setProperty('--rot', rot + 'deg');
+  const col = catColor(card.type);
+  el.innerHTML = `<div class="card-inner" style="background:${card.gradient}">
+    <div style="position:absolute;top:8px;left:8px;font-family:'Cinzel',serif;font-size:8px;
+      letter-spacing:0.1em;color:${col};opacity:0.9;text-transform:uppercase;">
+      ${shortType(card.type)}
+    </div>
+    <div class="card-art">
+      <div class="card-roman">${card.roman}</div>
+      <div class="card-emoji">${renderEmoji(card.emoji, 52)}</div>
+    </div>
+    <div class="card-footer">
+      <div class="card-name">${card.name}</div>
+      <div class="card-cat" style="color:${col}">${shortType(card.type)}</div>
+    </div>
+  </div>`;
+  el.onclick = () => openModal(card);
+  document.getElementById('drawnCards').appendChild(el);
+
+  // Mise à jour du compteur dans le deck
+  document.querySelector('.draw-count').textContent = count + ' / ' + MAX;
+}
+
+function resetDraw() {
+  count = 0; drawn.clear();
+  deck = [...ALL_ARCANES].sort(() => Math.random() - 0.5);
+  document.getElementById('drawnCards').innerHTML = '';
+  document.getElementById('drawCount').textContent = '0 / ' + MAX + ' cards';
+  document.querySelector('.draw-count').textContent = '0 / ' + MAX;
+  document.getElementById('btnDraw').disabled = false;
+}
+
+// ── MODALE ──
+function openModal(c) {
+  document.getElementById('mThumb').innerHTML = renderEmoji(c.emoji, 64);
+  document.getElementById('mThumb').style.background = c.gradient;
+  document.getElementById('mType').textContent     = c.type;
+  document.getElementById('mTitle').textContent    = c.name;
+  document.getElementById('mSub').textContent      = c.subtitle;
+  document.getElementById('mProphecy').textContent = c.prophecy;
+  document.getElementById('mDetails').innerHTML = Object.entries(c.details)
+    .map(([k,v])=>`<div class="modal-detail"><div class="modal-detail-label">${k}</div><div class="modal-detail-value">${v}</div></div>`).join('');
+  document.getElementById('mTags').innerHTML = c.tags.map(t=>`<span class="modal-tag">${t}</span>`).join('');
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(e) {
+  if(e && e.target !== document.getElementById('modalOverlay') && !e.target.classList.contains('modal-close')) return;
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape') closeModal({ target: document.getElementById('modalOverlay') });
+});
+
+// Init compteur
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('drawCount').textContent = '0 / ' + MAX + ' cards';
+  document.querySelector('.draw-count').textContent = '0 / ' + MAX;
+});
+</script>
+
+
+<!-- ══════════════════════════════════════════════════
+     PANNEAU À PROPOS — Arcana style
+     ══════════════════════════════════════════════════ -->
+<div id="about-overlay" style="
+  position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,0);
+  pointer-events:none;
+  transition:background 0.5s;
+"></div>
+
+<div id="about-panel" style="
+  position:fixed;top:0;right:-520px;bottom:0;width:min(520px,100vw);z-index:201;
+  background:linear-gradient(170deg,#06040f 0%,#0a0618 40%,#060410 100%);
+  border-left:1px solid rgba(201,168,76,0.18);
+  overflow-y:auto;
+  transition:right 0.45s cubic-bezier(0.4,0,0.2,1);
+  padding:0 0 64px;
+  box-shadow:-16px 0 60px rgba(0,0,0,0.8), -2px 0 0 rgba(201,168,76,0.06);
+">
+
+  <!-- Starfield canvas inside panel -->
+  <canvas id="about-stars" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.6;"></canvas>
+
+  <!-- Sticky header -->
+  <div style="
+    position:sticky;top:0;z-index:2;
+    background:linear-gradient(to bottom,rgba(6,4,15,0.98) 70%,transparent);
+    padding:22px 32px 14px;
+    display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid rgba(201,168,76,0.1);
+  ">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="color:rgba(201,168,76,0.5);font-size:10px;">✦</span>
+      <span style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:rgba(201,168,76,0.6);">About</span>
+      <span style="color:rgba(201,168,76,0.5);font-size:10px;">✦</span>
+    </div>
+    <button id="about-close" style="
+      width:30px;height:30px;border-radius:50%;
+      border:1px solid rgba(201,168,76,0.2);
+      background:rgba(201,168,76,0.04);
+      color:rgba(201,168,76,0.5);cursor:pointer;
+      font-size:14px;display:flex;align-items:center;justify-content:center;
+      transition:all 0.3s;font-family:'Cinzel',serif;
+    " onmouseover="this.style.borderColor='rgba(201,168,76,0.6)';this.style.color='#c9a84c';this.style.background='rgba(201,168,76,0.1)'"
+       onmouseout="this.style.borderColor='rgba(201,168,76,0.2)';this.style.color='rgba(201,168,76,0.5)';this.style.background='rgba(201,168,76,0.04)'">✕</button>
+  </div>
+
+  <div style="position:relative;z-index:1;">
+
+    <!-- Avatar + name -->
+    <div style="padding:32px 32px 28px;text-align:center;border-bottom:1px solid rgba(201,168,76,0.1);">
+
+      <!-- Ornamental ring around avatar -->
+      <div style="position:relative;width:110px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;">
+        <div style="
+          width:110px;height:110px;border-radius:50%;
+          border:1px solid rgba(201,168,76,0.3);
+          display:flex;align-items:center;justify-content:center;
+          position:relative;
+          box-shadow:0 0 30px rgba(201,168,76,0.08), inset 0 0 20px rgba(0,0,0,0.5);
+          background:radial-gradient(circle at 35% 30%,rgba(201,168,76,0.08),rgba(0,0,0,0.6));
+        ">
+          <!-- Corner ornaments -->
+          <span style="position:absolute;top:-6px;left:50%;transform:translateX(-50%);color:rgba(201,168,76,0.6);font-size:10px;">✦</span>
+          <span style="position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);color:rgba(201,168,76,0.6);font-size:10px;">✦</span>
+          <div id="about-avatar" style="font-size:3rem;filter:drop-shadow(0 0 12px rgba(201,168,76,0.4));">🧠</div>
+        </div>
+      </div>
+
+      <div id="about-name" style="
+        font-family:'Cinzel Decorative',serif;font-size:20px;font-weight:700;
+        background:linear-gradient(135deg,#7a6330,#e8cc7a,#c9a84c);
+        -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+        margin-bottom:8px;line-height:1.2;
+      ">First Last</div>
+
+      <div id="about-titre" style="
+        font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.18em;
+        color:rgba(201,168,76,0.7);text-transform:uppercase;margin-bottom:6px;
+      "></div>
+      <div id="about-institution" style="font-size:13px;font-style:italic;color:rgba(154,138,106,0.7);"></div>
+
+      <!-- Ornament -->
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-top:18px;">
+        <div style="width:40px;height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,0.3));"></div>
+        <span style="color:rgba(201,168,76,0.4);font-size:10px;">✦</span>
+        <div style="width:40px;height:1px;background:linear-gradient(to left,transparent,rgba(201,168,76,0.3));"></div>
+      </div>
+    </div>
+
+    <!-- Bio -->
+    <div style="padding:28px 32px;border-bottom:1px solid rgba(201,168,76,0.08);">
+      <div style="
+        font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;
+        color:rgba(201,168,76,0.45);text-transform:uppercase;margin-bottom:14px;
+        display:flex;align-items:center;gap:10px;
+      ">
+        <span>Biography</span>
+        <div style="flex:1;height:1px;background:linear-gradient(to right,rgba(201,168,76,0.2),transparent);"></div>
+      </div>
+      <div id="about-bio" style="
+        font-family:'EB Garamond',Georgia,serif;
+        font-size:15px;font-style:italic;color:rgba(232,220,200,0.85);
+        line-height:1.85;white-space:pre-line;
+        border-left:2px solid rgba(201,168,76,0.2);
+        padding-left:16px;
+      "></div>
+    </div>
+
+    <!-- Stats -->
+    <div style="padding:28px 32px;border-bottom:1px solid rgba(201,168,76,0.08);">
+      <div style="
+        font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;
+        color:rgba(201,168,76,0.45);text-transform:uppercase;margin-bottom:16px;
+        display:flex;align-items:center;gap:10px;
+      ">
+        <span>By the Numbers</span>
+        <div style="flex:1;height:1px;background:linear-gradient(to right,rgba(201,168,76,0.2),transparent);"></div>
+      </div>
+      <div id="about-stats" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"></div>
+    </div>
+
+    <!-- Contact -->
+    <div style="padding:28px 32px;">
+      <div style="
+        font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;
+        color:rgba(201,168,76,0.45);text-transform:uppercase;margin-bottom:16px;
+        display:flex;align-items:center;gap:10px;
+      ">
+        <span>Contact & Links</span>
+        <div style="flex:1;height:1px;background:linear-gradient(to right,rgba(201,168,76,0.2),transparent);"></div>
+      </div>
+      <div id="about-links" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  #about-panel::-webkit-scrollbar{width:3px;}
+  #about-panel::-webkit-scrollbar-track{background:transparent;}
+  #about-panel::-webkit-scrollbar-thumb{background:rgba(201,168,76,0.2);border-radius:2px;}
+  #about-panel::-webkit-scrollbar-thumb:hover{background:rgba(201,168,76,0.4);}
+</style>
+
+<script>
+(function() {
+  const panel   = document.getElementById('about-panel');
+  const overlay = document.getElementById('about-overlay');
+  const btnOpen = document.getElementById('btn-about');
+  const btnClose= document.getElementById('about-close');
+
+  // ── Starfield inside panel ──
+  const sc  = document.getElementById('about-stars');
+  const sctx = sc.getContext('2d');
+  let sW, sH, sStars = [], sT = 0;
+  function resizeStars() {
+    sW = sc.width  = panel.offsetWidth;
+    sH = sc.height = Math.max(panel.scrollHeight, window.innerHeight);
+    sStars = [];
+    for(let i=0;i<80;i++) sStars.push({
+      x:Math.random()*sW, y:Math.random()*sH,
+      r:Math.random()*0.9+0.1, a:Math.random()*0.35+0.05,
+      sp:Math.random()*0.003+0.001, ph:Math.random()*Math.PI*2,
+    });
+  }
+  function drawStars() {
+    sT += 0.016;
+    sctx.clearRect(0,0,sW,sH);
+    for(const s of sStars) {
+      const al = s.a*(0.4+0.6*Math.sin(sT*s.sp*60+s.ph));
+      sctx.beginPath(); sctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      sctx.fillStyle = `rgba(255,255,220,${al})`; sctx.fill();
+    }
+    requestAnimationFrame(drawStars);
+  }
+  resizeStars(); drawStars();
+
+  function openAbout() {
+    resizeStars();
+    panel.style.right   = '0';
+    overlay.style.background = 'rgba(0,0,0,0.65)';
+    overlay.style.pointerEvents = 'all';
+  }
+  function closeAbout() {
+    panel.style.right   = '-520px';
+    overlay.style.background = 'rgba(0,0,0,0)';
+    overlay.style.pointerEvents = 'none';
+  }
+  window.closeAbout = closeAbout;
+
+  if(btnOpen)  btnOpen.addEventListener('click', openAbout);
+  if(btnClose) btnClose.addEventListener('click', closeAbout);
+  if(overlay)  overlay.addEventListener('click', closeAbout);
+  document.addEventListener('keydown', e => { if(e.key==='Escape') closeAbout(); });
+
+  // ── Populate from PROFIL ──
+  if(typeof PROFIL === 'undefined') return;
+  const P = PROFIL;
+  const setT = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+
+  setT('about-name', P.prenom + ' ' + P.nom);
+  setT('about-titre', P.titre);
+  setT('about-institution', P.institution);
+  setT('about-bio', P.bio_longue);
+
+  const avatarEl = document.getElementById('about-avatar');
+  if(avatarEl) avatarEl.textContent = P.avatar_emoji;
+
+  // Stats
+  const statsEl = document.getElementById('about-stats');
+  if(statsEl && P.stats) {
+    const labels = {
+      // publications: '📄 Publications',
+      projets:      '🚀 Projects',
+      // competences:  '⭐ Skills',
+      annees_these: '🎓 Years of PhD',
+      langues: '🗣 Languages',
+    };
+    statsEl.innerHTML = Object.entries(P.stats).map(([k,v]) => `
+      <div style="
+        background:linear-gradient(160deg,rgba(201,168,76,0.06),rgba(0,0,0,0.3));
+        border:1px solid rgba(201,168,76,0.15);border-radius:8px;
+        padding:16px 12px;text-align:center;
+        position:relative;overflow:hidden;
+      ">
+        <div style="position:absolute;top:6px;right:8px;font-size:8px;color:rgba(201,168,76,0.2);">✦</div>
+        <div style="
+          font-family:'Cinzel Decorative',serif;font-size:26px;font-weight:700;
+          background:linear-gradient(135deg,#c9a84c,#e8cc7a);
+          -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+          line-height:1;margin-bottom:6px;
+        ">${v}</div>
+        <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.12em;color:rgba(154,138,106,0.7);text-transform:uppercase;">${labels[k]||k}</div>
+      </div>`).join('');
+  }
+
+  // Links
+  const linksEl = document.getElementById('about-links');
+  if(linksEl && P.contact) {
+    const icons = {
+      email:    { icon:'✉', label:'Email' },
+      linkedin: { icon:'in', label:'LinkedIn' },
+      github:   { icon:'⌥', label:'GitHub' },
+      twitter:  { icon:'✗', label:'Twitter / X' },
+      scholar:  { icon:'✦', label:'Google Scholar' },
+      cv:       { icon:'↓', label:'Download CV' },
+    };
+    linksEl.innerHTML = Object.entries(P.contact)
+      .filter(([,v]) => v && v !== '#')
+      .map(([k,v]) => {
+        const {icon,label} = icons[k]||{icon:'→',label:k};
+        const href = k==='email' ? 'mailto:'+v : v;
+        const display = k==='email' ? v : v.replace('https://','').replace('http://','');
+        return `<a href="${href}" target="_blank" rel="noopener" style="
+          display:flex;align-items:center;gap:14px;
+          padding:12px 16px;border-radius:8px;
+          background:linear-gradient(160deg,rgba(201,168,76,0.04),rgba(0,0,0,0.2));
+          border:1px solid rgba(201,168,76,0.12);
+          color:rgba(232,220,200,0.8);text-decoration:none;
+          transition:all 0.3s;
+        "
+        onmouseover="this.style.borderColor='rgba(201,168,76,0.4)';this.style.background='linear-gradient(160deg,rgba(201,168,76,0.1),rgba(0,0,0,0.2))';this.style.color='#e8cc7a'"
+        onmouseout="this.style.borderColor='rgba(201,168,76,0.12)';this.style.background='linear-gradient(160deg,rgba(201,168,76,0.04),rgba(0,0,0,0.2))';this.style.color='rgba(232,220,200,0.8)'">
+          <div style="
+            width:32px;height:32px;border-radius:50%;flex-shrink:0;
+            border:1px solid rgba(201,168,76,0.25);
+            background:rgba(201,168,76,0.06);
+            display:flex;align-items:center;justify-content:center;
+            font-family:'Cinzel',serif;font-size:11px;color:rgba(201,168,76,0.7);
+          ">${icon}</div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(201,168,76,0.6);margin-bottom:2px;">${label}</div>
+            <div style="font-size:12px;font-style:italic;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:0.7;">${display}</div>
+          </div>
+          <span style="color:rgba(201,168,76,0.3);font-size:12px;">→</span>
+        </a>`;
+      }).join('');
+  }
+
+  // Hero name injection (index.html only)
+  const nameEl = document.getElementById('hero-name');
+  const bioEl  = document.getElementById('hero-bio');
+  const avatarInitials = document.getElementById('avatar-initials');
+  if(nameEl) nameEl.textContent = P.prenom + ' ' + P.nom;
+  if(bioEl)  bioEl.textContent  = P.bio_courte;
+  if(avatarInitials) avatarInitials.textContent = (P.prenom[0]||'') + (P.nom[0]||'');
+})();
+</script>
+
+</html>
+  <script src="js/effects.js"></script>
+</body>
+</html>
