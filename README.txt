@@ -11,7 +11,7 @@
 ► STRUCTURE DES FICHIERS
    loading.html       ← Page d'entrée (choix Spotify / Arcanes)
    index.html         ← Portfolio style Spotify
-   divination.html    ← Portail des 5 arcanes
+   index.html    ← Portail des 5 arcanes
    tarot.html         ← Toutes les arcanes (tirage)
    arcanes.html       ← Liste complète des cartes
    runes.html         ← Formations
