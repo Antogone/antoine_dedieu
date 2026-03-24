@@ -291,19 +291,58 @@ filter:drop-shadow(0 0 30px rgba(168,85,247,0.4));      -webkit-background-clip:
     }
     .nav-links .nav-about-btn:hover{color:var(--accent-light,#e8cc7a);}
     .nav-links .nav-about-btn:hover::after{transform:scaleX(1);}
+
+    /* ── HAMBURGER ── */
+    .nav-hamburger{
+      display:none;flex-direction:column;justify-content:center;align-items:center;
+      gap:5px;width:36px;height:36px;background:none;
+      border:1px solid rgba(255,255,255,0.1);border-radius:6px;
+      cursor:pointer;position:relative;z-index:101;padding:6px;flex-shrink:0;
+    }
+    .nav-hamburger span{
+      display:block;width:18px;height:1.5px;
+      background:var(--text-dim);border-radius:2px;
+      transition:transform 0.3s,opacity 0.3s;transform-origin:center;
+    }
+    .nav-hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+    .nav-hamburger.open span:nth-child(2){opacity:0;}
+    .nav-hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+    .nav-divination-li{display:none;}
+    @media(max-width:768px){
+      nav{padding:0 20px;}
+      .nav-hamburger{display:flex;}
+      .nav-back{display:none;}
+      .nav-divination-li{display:block;}
+      .nav-links{
+        display:none;position:fixed;top:64px;left:0;right:0;
+        background:rgba(6,8,10,0.97);backdrop-filter:blur(16px);
+        border-bottom:1px solid rgba(168,85,247,0.2);
+        flex-direction:column;gap:0;padding:8px 0 16px;z-index:99;list-style:none;
+      }
+      .nav-links.open{display:flex;}
+      .nav-links li{width:100%;}
+      .nav-links a,.nav-links .nav-about-btn{
+        display:block;width:100%;padding:13px 24px;font-size:14px;text-align:left;
+      }
+      .nav-links a::after,.nav-links .nav-about-btn::after{display:none;}
+    }
   </style>
 </head>
 <body>
 
 <nav>
   <div class="nav-logo">✦ Crystal ✦</div>
-    <ul class="nav-links">
+  <button class="nav-hamburger" id="navHamburger" aria-label="Menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
     <li><a href="tarot.html">Tarot</a></li>
     <li><a href="runes.html">Runes</a></li>
     <li><a href="constellation.html">Constellation</a></li>
     <li><a href="chaudron.html">Cauldron</a></li>
     <li><a href="cristal.html" class="active">Cristal</a></li>
     <li><button id="btn-about" class="nav-about-btn">About</button></li>
+    <li class="nav-divination-li"><a href="index.html">← Divination</a></li>
   </ul>
   <a href="index.html" class="nav-back">← Divination</a>
 </nav>
@@ -771,6 +810,21 @@ document.addEventListener('keydown', e => {
   if(nameEl) nameEl.textContent = P.prenom + ' ' + P.nom;
   if(bioEl)  bioEl.textContent  = P.bio_courte;
   if(avatarInitials) avatarInitials.textContent = (P.prenom[0]||'') + (P.nom[0]||'');
+})();
+
+// ── HAMBURGER NAV ──
+(function(){
+  const hamburger = document.getElementById('navHamburger');
+  const navLinks  = document.getElementById('navLinks');
+  if(!hamburger || !navLinks) return;
+  function toggleMenu(open) {
+    hamburger.classList.toggle('open', open);
+    navLinks.classList.toggle('open', open);
+    hamburger.setAttribute('aria-expanded', String(open));
+  }
+  hamburger.addEventListener('click', () => toggleMenu(!navLinks.classList.contains('open')));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
+  document.addEventListener('keydown', e => { if(e.key==='Escape') toggleMenu(false); });
 })();
 </script>
 

@@ -125,7 +125,7 @@ const COMPETENCES = [
 
   // ── SPECIALIZED AI ───────────────────────────────
   {
-    id:'c6', emoji:'https://cdn.simpleicons.org/openai',
+    id:'c6', emoji:'💬',
     roman:'VI', name:'Natural Language Processing',
     type:'Arcana of Skill', subtitle:'From tokens to meaning',
     gradient:'linear-gradient(160deg,#0a0a1a,#4f46e5)',
@@ -151,7 +151,7 @@ const COMPETENCES = [
 
   // ── MATHEMATICS & THEORY ─────────────────────────
   {
-    id:'c9', emoji:'https://cdn.simpleicons.org/latex',
+    id:'c9', emoji:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/matlab/matlab-original.svg',
     roman:'IX', name:'Mathematics for AI',
     type:'Arcana of Skill', subtitle:'The language of intelligence',
     gradient:'linear-gradient(160deg,#0a0a1a,#1e3a8a)',

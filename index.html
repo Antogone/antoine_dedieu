@@ -361,16 +361,18 @@
     .portal-card:hover .portal-arrow{opacity:1;transform:translateY(0);}
 
     /* Responsive */
-    @media(max-width:520px){
+    @media(max-width:640px){
       .circle-container{display:none;}
       .mobile-grid{display:grid !important;}
+      .page-wrap{padding:40px 16px 64px;}
+      .portal-header{margin-bottom:32px;}
     }
     .mobile-grid{
       display:none;
       grid-template-columns:1fr 1fr;
-      gap:16px;
+      gap:14px;
       width:100%;
-      max-width:400px;
+      max-width:420px;
     }
     .mobile-grid .portal-card{
       position:static;
@@ -379,6 +381,12 @@
       opacity:1;
       pointer-events:all;
       scale:1;
+    }
+    /* Centre the 5th card when it's alone on its row */
+    .mobile-grid .portal-card:last-child:nth-child(odd){
+      grid-column:1 / -1;
+      max-width:calc(50% - 7px);
+      margin:0 auto;
     }
   </style>
 </head>
