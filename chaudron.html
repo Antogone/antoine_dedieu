@@ -87,6 +87,11 @@ filter:drop-shadow(0 0 30px rgba(29,185,84,0.4));      -webkit-background-clip:t
     .ingredient-item:hover{border-color:rgba(201,168,76,0.4);background:rgba(30,20,5,0.5);}
     .ingredient-item.dragging{opacity:0.4;cursor:grabbing;}
     .ingredient-item.used{opacity:0.35;filter:grayscale(0.5);}
+    .ingredient-item.selected{
+      border-color:var(--green);background:rgba(29,185,84,0.12);
+      box-shadow:0 0 12px rgba(29,185,84,0.25);
+    }
+    .ingredient-item.selected .ing-name{color:var(--green);}
 
 
     /* ── Ingredient icon tooltip in project cards ── */
@@ -534,7 +539,7 @@ filter:drop-shadow(0 0 30px rgba(29,185,84,0.4));      -webkit-background-clip:t
         <span class="scroll-hint-text">scroll for more</span>
         <span class="scroll-hint-arrow">⌄</span>
       </div>
-      <div style="margin-top:8px;font-size:12px;font-style:italic;color:var(--text-dim);flex-shrink:0;">
+      <div id="ingHint" style="margin-top:8px;font-size:12px;font-style:italic;color:var(--text-dim);flex-shrink:0;">
         Drag 1 to 2 ingredients into the cauldron, then brew!
       </div>
     </div>
@@ -614,7 +619,8 @@ filter:drop-shadow(0 0 30px rgba(29,185,84,0.4));      -webkit-background-clip:t
 
           <!-- Zone de drop invisible par-dessus le chaudron -->
           <div class="cauldron-drop" id="cauldronDrop"
-            ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+            ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)"
+            onclick="onCauldronTap()">
             <!-- Ingredients flottants into the cauldron -->
             <div class="cauldron-contents" id="cauldronContents"></div>
           </div>
@@ -763,22 +769,28 @@ function renderEmoji(val, size) {
 }
 
 let cauldronIds = []; // IDs des compétences into the cauldron
+const isMobile = navigator.maxTouchPoints > 0;
+let selectedIngId = null;
 
 // ── RENDU INGRÉDIENTS ──
 function renderIngredients() {
   const list = document.getElementById('ingredientsList');
-  list.innerHTML = COMPETENCES.map(c => `
-    <div class="ingredient-item ${cauldronIds.includes(c.id) ? 'used' : ''}"
-      id="ing-${c.id}"
-      draggable="true"
-      ondragstart="onDragStart(event,'${c.id}')">
+  list.innerHTML = COMPETENCES.map(c => {
+    const isUsed = cauldronIds.includes(c.id);
+    const isSel  = isMobile && c.id === selectedIngId;
+    const interactAttr = isMobile
+      ? `onclick="onIngTap('${c.id}')"`
+      : `draggable="true" ondragstart="onDragStart(event,'${c.id}')"`;
+    return `
+    <div class="ingredient-item ${isUsed ? 'used' : ''} ${isSel ? 'selected' : ''}"
+      id="ing-${c.id}" ${interactAttr}>
       <span class="ing-emoji">${renderEmoji(c.emoji, 24)}</span>
       <div>
         <div class="ing-name">${c.name}</div>
         <div class="ing-sub">${c.subtitle}</div>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
 // ── DRAG & DROP ──
@@ -827,7 +839,8 @@ function updateCauldron() {
 
   steam.style.display = cauldronIds.length > 0 ? 'flex' : 'none';
   btnBrew.disabled = cauldronIds.length === 0;
-  hint.textContent = cauldronIds.length === 0 ? 'Drag ingredients here'
+  hint.textContent = cauldronIds.length === 0
+    ? (isMobile ? 'Tap an ingredient to select it' : 'Drag ingredients here')
     : cauldronIds.length === 1 ? '✦ Add a 2nd ingredient or brew!'
     : '✦ Ready to brew!';
 
@@ -845,7 +858,31 @@ function updateCauldron() {
 
 function clearCauldron() {
   cauldronIds = [];
+  selectedIngId = null;
   document.getElementById('resultsArea').style.display = 'none';
+  updateCauldron();
+}
+
+// ── MOBILE TAP-TO-SELECT ──
+function onIngTap(id) {
+  if(cauldronIds.includes(id)) return;
+  selectedIngId = (selectedIngId === id) ? null : id;
+  renderIngredients();
+  if(window._updateIngScrollbar) window._updateIngScrollbar();
+  const hint = document.getElementById('brewHint');
+  hint.textContent = selectedIngId
+    ? '✦ Tap the cauldron to add!'
+    : (cauldronIds.length === 0 ? 'Tap an ingredient to select it'
+      : cauldronIds.length === 1 ? '✦ Add a 2nd ingredient or brew!'
+      : '✦ Ready to brew!');
+}
+
+function onCauldronTap() {
+  if(!isMobile || !selectedIngId) return;
+  if(!cauldronIds.includes(selectedIngId) && cauldronIds.length < 3) {
+    cauldronIds.push(selectedIngId);
+  }
+  selectedIngId = null;
   updateCauldron();
 }
 
@@ -994,6 +1031,9 @@ document.addEventListener('keydown', e => {
 // Init
 renderIngredients();
 renderAllProjects();
+if(isMobile) {
+  document.getElementById('ingHint').textContent = 'Tap 1 to 2 ingredients, then tap the cauldron!';
+}
 
 // Custom scrollbar + scroll hint
 (function() {
@@ -1076,7 +1116,9 @@ function _resetMixing() {
   document.getElementById('brewPip2').classList.remove('done');
   document.getElementById('brewSuccessMsg').classList.remove('show');
   document.getElementById('btnContinueBrew').classList.remove('show');
-  document.getElementById('brewInstStr').textContent = 'Hold & drag in circles to stir the cauldron';
+  document.getElementById('brewInstStr').textContent = isMobile
+    ? 'Draw circles with your finger to stir'
+    : 'Hold & drag in circles to stir the cauldron';
   _vortex.style.transform = 'rotate(0deg)';
   _cursor.style.opacity = '0';
 }
@@ -1169,6 +1211,56 @@ document.addEventListener('mouseup', () => {
   if (!_isStirring) return;
   _isStirring = false;
   if (_circlesDone < REQUIRED_CIRCLES) _fadeTrail();
+});
+
+// Touch events for brew overlay
+_bowlWrap.addEventListener('touchstart', e => {
+  const touch = e.touches[0];
+  const { x, y, radius } = _getBowlCenter();
+  if(Math.hypot(touch.clientX - x, touch.clientY - y) > radius * 0.92) return;
+  e.preventDefault();
+  _isStirring = true;
+  _lastAngle = _getAngle(x, y, touch.clientX, touch.clientY);
+  _trailPts = [];
+  document.getElementById('brewInstStr').textContent = 'Keep stirring…';
+}, { passive: false });
+
+document.addEventListener('touchmove', e => {
+  if(!document.getElementById('brewOverlay').classList.contains('open') || !_isStirring) return;
+  e.preventDefault();
+  const touch = e.touches[0];
+  const { x: cx, y: cy } = _getBowlCenter();
+  const rect = _bowlWrap.getBoundingClientRect();
+  _cursor.style.left = (touch.clientX - rect.left) + 'px';
+  _cursor.style.top  = (touch.clientY - rect.top)  + 'px';
+  _cursor.style.opacity = '1';
+  if(_circlesDone >= REQUIRED_CIRCLES) return;
+  const angle = _getAngle(cx, cy, touch.clientX, touch.clientY);
+  if(_lastAngle !== null) {
+    const delta = _angleDelta(_lastAngle, angle);
+    _totalAngle += delta;
+    _vortexDeg  += delta * (180 / Math.PI);
+    _vortex.style.transform = `rotate(${_vortexDeg}deg)`;
+    const newDone = Math.floor(Math.abs(_totalAngle) / TWO_PI);
+    if(newDone > _circlesDone) {
+      _circlesDone = newDone;
+      if(_circlesDone >= 1) document.getElementById('brewPip1').classList.add('done');
+      if(_circlesDone >= 2) document.getElementById('brewPip2').classList.add('done');
+      if(_circlesDone >= REQUIRED_CIRCLES) { _onBrewComplete(); return; }
+    }
+  }
+  _lastAngle = angle;
+  _trailPts.push({ x: touch.clientX, y: touch.clientY });
+  if(_trailPts.length > 80) _trailPts.shift();
+  _drawTrail();
+}, { passive: false });
+
+document.addEventListener('touchend', () => {
+  if(!_isStirring) return;
+  _isStirring = false;
+  _lastAngle = null;
+  _cursor.style.opacity = '0';
+  if(_circlesDone < REQUIRED_CIRCLES) _fadeTrail();
 });
 </script>
 <!-- ══════════════════════════════════════════════════
