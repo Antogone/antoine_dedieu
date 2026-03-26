@@ -360,6 +360,15 @@
     }
     .portal-card:hover .portal-arrow{opacity:1;transform:translateY(0);}
 
+    /* Onboarding card — scrollable on small screens */
+    #onboarding-card{
+      max-height:calc(100svh - 32px);
+      overflow-y:auto;
+    }
+    @media(max-width:640px){
+      #onboarding-card{padding:24px 20px 20px !important;}
+    }
+
     /* Responsive */
     @media(max-width:640px){
       .circle-container{display:none;}
