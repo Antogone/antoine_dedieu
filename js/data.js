@@ -83,7 +83,7 @@ const COMPETENCES = [
 
   // ── CORE AI / MACHINE LEARNING ──────────────────
   {
-    id:'c1', emoji:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg',
+    id:'c1', emoji:'🧠',
     roman:'I', name:'Machine Learning',
     type:'Arcana of Skill', subtitle:'Classification · Clustering · Prediction',
     gradient:'linear-gradient(160deg,#1a0a0a,#c0392b)',
@@ -91,7 +91,7 @@ const COMPETENCES = [
     tags:['Supervised Learning','Unsupervised Learning','Scikit-learn','Model Evaluation','Cross-validation']
   },
   {
-    id:'c2', emoji:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg',
+    id:'c2', emoji:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/keras/keras-original.svg',
     roman:'II', name:'Deep Learning',
     type:'Arcana of Skill', subtitle:'Neural architectures & representations',
     gradient:'linear-gradient(160deg,#1a0a0a,#ee4b28)',
@@ -99,16 +99,8 @@ const COMPETENCES = [
     tags:['Neural Networks','CNN','RNN','Transformers','PyTorch','TensorFlow']
   },
   {
-    id:'c3', emoji:'https://huggingface.co/front/assets/huggingface_logo-noborder.svg',
-    roman:'III', name:'Transfer Learning & Fine-tuning',
-    type:'Arcana of Skill', subtitle:'Adapting pre-trained models',
-    gradient:'linear-gradient(160deg,#0a0a1a,#5851db)',
-    constellation:'core_ai',
-    tags:['Fine-tuning','PEFT','LoRA','HuggingFace','Pre-trained Models']
-  },
-  {
     id:'c4', emoji:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg',
-    roman:'IV', name:'Probabilistic Modeling & Bayesian Methods',
+    roman:'III', name:'Probabilistic Modeling & Bayesian Methods',
     type:'Arcana of Skill', subtitle:'Inference under uncertainty',
     gradient:'linear-gradient(160deg,#0a0a1a,#6d28d9)',
     constellation:'core_ai',
@@ -116,11 +108,21 @@ const COMPETENCES = [
   },
   {
     id:'c5', emoji:'🕹️',
-    roman:'V', name:'Reinforcement Learning',
+    roman:'IV', name:'Reinforcement Learning',
     type:'Arcana of Skill', subtitle:'Learning through interaction',
     gradient:'linear-gradient(160deg,#1a0f00,#b45309)',
     constellation:'core_ai',
     tags:['Policy Gradient','Q-Learning','OpenAI Gym','Stable-Baselines3']
+  },
+
+  // c3 moved back to core_ai (tail of kite)
+  {
+    id:'c3', emoji:'https://huggingface.co/front/assets/huggingface_logo-noborder.svg',
+    roman:'V', name:'Transfer Learning & Fine-tuning',
+    type:'Arcana of Skill', subtitle:'Adapting pre-trained models',
+    gradient:'linear-gradient(160deg,#0a0a1a,#5851db)',
+    constellation:'core_ai',
+    tags:['Fine-tuning','PEFT','LoRA','HuggingFace','Pre-trained Models','Adapters']
   },
 
   // ── SPECIALIZED AI ───────────────────────────────
@@ -142,17 +144,33 @@ const COMPETENCES = [
   },
   {
     id:'c8', emoji:'📈',
-    roman:'VIII', name:'Time Series & Survival Analysis',
-    type:'Arcana of Skill', subtitle:'Temporal & event-time modelling',
+    roman:'VIII', name:'Time Series',
+    type:'Arcana of Skill', subtitle:'Temporal forecasting & sequential models',
     gradient:'linear-gradient(160deg,#1a0a1a,#b02897)',
     constellation:'specialized_ai',
-    tags:['Forecasting','Survival Analysis','Cox Model','Causal Inference','Recurrent Events']
+    tags:['Forecasting','ARIMA','LSTM Time Series','Sequential Models','Temporal Data']
+  },
+  {
+    id:'c27', emoji:'⏱️',
+    roman:'IX', name:'Survival Analysis',
+    type:'Arcana of Skill', subtitle:'Event-time modelling & censored data',
+    gradient:'linear-gradient(160deg,#1a0a1a,#9d174d)',
+    constellation:'specialized_ai',
+    tags:['Cox Model','Kaplan-Meier','Censored Data','Time-to-Event','lifelines']
+  },
+  {
+    id:'c24', emoji:'⚡',
+    roman:'IX', name:'Spiking Neural Networks',
+    type:'Arcana of Skill', subtitle:'Brian2 · Neural dynamics simulation',
+    gradient:'linear-gradient(160deg,#0a1218,#0e7490)',
+    constellation:'specialized_ai',
+    tags:['Brian2','Computational Neuroscience','Neural Dynamics','Biologically Plausible AI']
   },
 
   // ── MATHEMATICS & THEORY ─────────────────────────
   {
     id:'c9', emoji:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/matlab/matlab-original.svg',
-    roman:'IX', name:'Mathematics for AI',
+    roman:'X', name:'Mathematics for AI',
     type:'Arcana of Skill', subtitle:'The language of intelligence',
     gradient:'linear-gradient(160deg,#0a0a1a,#1e3a8a)',
     constellation:'maths',
@@ -160,7 +178,7 @@ const COMPETENCES = [
   },
   {
     id:'c10', emoji:'📊',
-    roman:'X', name:'Statistics & Statistical Inference',
+    roman:'XI', name:'Statistics & Statistical Inference',
     type:'Arcana of Skill', subtitle:'Estimation, testing & inference',
     gradient:'linear-gradient(160deg,#0a1218,#155e75)',
     constellation:'maths',
@@ -170,7 +188,7 @@ const COMPETENCES = [
   // ── PROGRAMMING ──────────────────────────────────
   {
     id:'c11', emoji:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
-    roman:'XI', name:'Python',
+    roman:'XII', name:'Python',
     type:'Arcana of Skill', subtitle:'Primary AI & data language',
     gradient:'linear-gradient(160deg,#1a0e0a,#c0392b)',
     constellation:'programming',
@@ -178,7 +196,7 @@ const COMPETENCES = [
   },
   {
     id:'c12', emoji:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/r/r-original.svg',
-    roman:'XII', name:'R',
+    roman:'XIII', name:'R',
     type:'Arcana of Skill', subtitle:'Statistical computing & visualisation',
     gradient:'linear-gradient(160deg,#0a0a1a,#2779bd)',
     constellation:'programming',
@@ -186,43 +204,58 @@ const COMPETENCES = [
   },
   {
     id:'c13', emoji:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg',
-    roman:'XIII', name:'C++ / Java',
-    type:'Arcana of Skill', subtitle:'Systems & object-oriented programming',
+    roman:'XIV', name:'C++',
+    type:'Arcana of Skill', subtitle:'Systems programming & performance computing',
     gradient:'linear-gradient(160deg,#1a0f00,#92400e)',
     constellation:'programming',
-    tags:['C++','Java','OOP','Software Design Patterns','Systems Programming']
+    tags:['C++','STL','OOP','Memory Management','Performance','Systems Programming']
   },
   {
-    id:'c14', emoji:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg',
-    roman:'XIV', name:'Software Engineering',
-    type:'Arcana of Skill', subtitle:'Robust & collaborative development',
-    gradient:'linear-gradient(160deg,#0a1a0a,#166534)',
+    id:'c28', emoji:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
+    roman:'XV', name:'Java',
+    type:'Arcana of Skill', subtitle:'Object-oriented application development',
+    gradient:'linear-gradient(160deg,#1a0a00,#b45309)',
     constellation:'programming',
-    tags:['Git','Version Control','Testing','Debugging','Clean Code','Design Patterns']
+    tags:['Java','OOP','Spring','Design Patterns','JVM','Software Architecture']
   },
-
   // ── ML FRAMEWORKS & TOOLS ────────────────────────
   {
-    id:'c15', emoji:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/keras/keras-original.svg',
-    roman:'XV', name:'PyTorch / TensorFlow',
-    type:'Arcana of Skill', subtitle:'Deep learning framework mastery',
+    id:'c15', emoji:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg',
+    roman:'XVI', name:'PyTorch',
+    type:'Arcana of Skill', subtitle:'Dynamic computation graphs & research',
     gradient:'linear-gradient(160deg,#1a0a0a,#ee4b28)',
     constellation:'frameworks',
-    tags:['PyTorch','TensorFlow','Keras','Lightning','ONNX','Model Deployment']
+    tags:['PyTorch','Lightning','TorchScript','ONNX','Custom Layers','Autograd']
   },
   {
     id:'c16', emoji:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/scikitlearn/scikitlearn-original.svg',
-    roman:'XVI', name:'ML Ecosystem',
-    type:'Arcana of Skill', subtitle:'End-to-end ML tooling',
+    roman:'XVII', name:'Scikit-learn & ML Tooling',
+    type:'Arcana of Skill', subtitle:'Classical ML & model pipeline tooling',
     gradient:'linear-gradient(160deg,#0a0a1a,#0369a1)',
     constellation:'frameworks',
-    tags:['Scikit-learn','XGBoost','MLflow','Weights & Biases','Optuna','Spark']
+    tags:['Scikit-learn','XGBoost','LightGBM','Optuna','Pipelines','Feature Engineering']
+  },
+  {
+    id:'c25', emoji:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg',
+    roman:'XVIII', name:'TensorFlow / Keras',
+    type:'Arcana of Skill', subtitle:'Production-grade deep learning',
+    gradient:'linear-gradient(160deg,#1a0808,#ff6d00)',
+    constellation:'frameworks',
+    tags:['TensorFlow','Keras','TFLite','TF Serving','SavedModel','tf.data']
+  },
+  {
+    id:'c26', emoji:'📊',
+    roman:'XIX', name:'MLflow & Experiment Tracking',
+    type:'Arcana of Skill', subtitle:'Reproducible ML · lifecycle management',
+    gradient:'linear-gradient(160deg,#0a0e1a,#0284c7)',
+    constellation:'frameworks',
+    tags:['MLflow','Weights & Biases','Optuna','Experiment Tracking','Model Registry','Reproducibility']
   },
 
   // ── DATA ENGINEERING ─────────────────────────────
   {
     id:'c17', emoji:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
-    roman:'XVII', name:'Data Engineering',
+    roman:'XX', name:'Data Engineering',
     type:'Arcana of Skill', subtitle:'Pipelines from raw data to insight',
     gradient:'linear-gradient(160deg,#0a1218,#0e7490)',
     constellation:'data_eng',
@@ -230,7 +263,7 @@ const COMPETENCES = [
   },
   {
     id:'c18', emoji:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg',
-    roman:'XVIII', name:'Data Science & Analytics',
+    roman:'XXI', name:'Data Science & Analytics',
     type:'Arcana of Skill', subtitle:'Exploration, analysis & storytelling',
     gradient:'linear-gradient(160deg,#0a0a1a,#6d28d9)',
     constellation:'data_eng',
@@ -238,35 +271,59 @@ const COMPETENCES = [
   },
   {
     id:'c19', emoji:'https://cdn.simpleicons.org/qgis',
-    roman:'XIX', name:'Spatial Analysis & GIS',
+    roman:'XXII', name:'Spatial Analysis & GIS',
     type:'Arcana of Skill', subtitle:'Maps, patterns & spatial models',
     gradient:'linear-gradient(160deg,#0a1a0e,#16a34a)',
     constellation:'data_eng',
     tags:['GIS','Cartography','Spatial Stats','Bayesian Spatial','R Spatial']
   },
+  {
+    id:'c14', emoji:'https://seaborn.pydata.org/_static/logo-mark-lightbg.svg',
+    roman:'XXIII', name:'Data Visualisation',
+    type:'Arcana of Skill', subtitle:'Turning data into insight & story',
+    gradient:'linear-gradient(160deg,#0a1a0a,#0369a1)',
+    constellation:'data_eng',
+    tags:['Seaborn','Matplotlib','Plotly','ggplot2','Tableau','Interactive Dashboards']
+  },
 
   // ── BIOINFORMATICS ───────────────────────────────
   {
     id:'c20', emoji:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/anaconda/anaconda-original.svg',
-    roman:'XX', name:'Bioinformatics & Computational Biology',
-    type:'Arcana of Skill', subtitle:'Genomics, structures & simulation',
+    roman:'XXIII', name:'Bioinformatics',
+    type:'Arcana of Skill', subtitle:'OMICS · sequencing · analysis pipelines',
     gradient:'linear-gradient(160deg,#0a1a10,#15803d)',
     constellation:'bio',
-    tags:['OMICS','Biopython','PyMol','Molecular Biology','Genetics','Computational Neuroscience']
+    tags:['OMICS','Biopython','Sequence Analysis','Genomics','Genetics','NGS']
+  },
+  {
+    id:'c29', emoji:'🧬',
+    roman:'XXIV', name:'Computational Biology',
+    type:'Arcana of Skill', subtitle:'Molecular simulation & structural analysis',
+    gradient:'linear-gradient(160deg,#0a1a10,#16a34a)',
+    constellation:'bio',
+    tags:['PyMol','Agent-Based Modelling','Molecular Biology','Structural Biology','Computational Neuroscience']
   },
   {
     id:'c21', emoji:'🏥',
-    roman:'XXI', name:'Epidemiology & Biostatistics',
-    type:'Arcana of Skill', subtitle:'Population health & risk modelling',
+    roman:'XXV', name:'Epidemiology',
+    type:'Arcana of Skill', subtitle:'Disease dynamics & population risk',
     gradient:'linear-gradient(160deg,#0a1808,#166534)',
     constellation:'bio',
-    tags:['Epidemiology','Biostatistics','Public Health','Environmental Risk','Health Data']
+    tags:['Epidemiology','Public Health','Environmental Risk','Disease Modelling','Agent-Based Modelling']
+  },
+  {
+    id:'c30', emoji:'⚕️',
+    roman:'XXVI', name:'Biostatistics',
+    type:'Arcana of Skill', subtitle:'Clinical data · statistical inference',
+    gradient:'linear-gradient(160deg,#0a1808,#14532d)',
+    constellation:'bio',
+    tags:['Biostatistics','GLM','Mixed Models','Clinical Trials','Health Data','Survival Models']
   },
 
   // ── RESEARCH & SOFT SKILLS ───────────────────────
   {
     id:'c22', emoji:'https://cdn.simpleicons.org/overleaf',
-    roman:'XXII', name:'Research Skills',
+    roman:'XXV', name:'Research Skills',
     type:'Arcana of Skill', subtitle:'Rigorous inquiry & scientific writing',
     gradient:'linear-gradient(160deg,#1a1a0a,#856a00)',
     constellation:'research',
@@ -274,19 +331,11 @@ const COMPETENCES = [
   },
   {
     id:'c23', emoji:'📚',
-    roman:'XXIII', name:'Teaching & Communication',
+    roman:'XXVI', name:'Teaching & Communication',
     type:'Arcana of Skill', subtitle:'From lecture halls to research',
     gradient:'linear-gradient(160deg,#0a1a0f,#216a4c)',
     constellation:'research',
     tags:['Teaching','Lecturing','Technical Communication','Leadership','Mentoring','Domain: Health']
-  },
-  {
-    id:'c24', emoji:'⚡',
-    roman:'XXIV', name:'Spiking Neural Network',
-    type:'Arcana of Skill', subtitle:'Brian2 · Neural dynamics simulation',
-    gradient:'linear-gradient(160deg,#0a1218,#0e7490)',
-    constellation:'specialized_ai',
-    tags:['Brian2','Computational Neuroscience']
   },
 ];
 

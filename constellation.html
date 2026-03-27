@@ -297,50 +297,72 @@ const CONSTELLATIONS = {
   research:       { name:'Sophia',     color:'#c9a84c', label:'Research & Teaching' },
 };
 
-// Fixed positions sur le canvas (en %) — plus réparties
+// Fixed positions on canvas (%) — organic scatter
 const POSITIONS = [
-  // core_ai (c1–c5) — left cluster
-  { x:0.08, y:0.18 },  // c1  Machine Learning
-  { x:0.16, y:0.38 },  // c2  Deep Learning
-  { x:0.08, y:0.56 },  // c3  Transfer Learning
-  { x:0.20, y:0.70 },  // c4  Probabilistic / Bayesian
-  { x:0.12, y:0.84 },  // c5  Reinforcement Learning
+  // core_ai (0–4: c1, c2, c4, c5, c3) — left-side cluster, chained by y
+  { x:0.08, y:0.18 },  // 0  c1  Machine Learning
+  { x:0.16, y:0.38 },  // 1  c2  Deep Learning
+  { x:0.20, y:0.70 },  // 2  c4  Probabilistic / Bayesian
+  { x:0.12, y:0.84 },  // 3  c5  Reinforcement Learning
+  { x:0.08, y:0.56 },  // 4  c3  Transfer Learning
 
-  // specialized_ai (c6–c8) — centre-left
-  { x:0.30, y:0.24 },  // c6  NLP
-  { x:0.28, y:0.50 },  // c7  Computer Vision
-  { x:0.34, y:0.72 },  // c8  Time Series & Survival
+  // specialized_ai (5–9: c6, c7, c8, c27, c24) — centre-left cluster
+  { x:0.30, y:0.24 },  // 5  c6  NLP
+  { x:0.28, y:0.50 },  // 6  c7  Computer Vision
+  { x:0.32, y:0.68 },  // 7  c8  Time Series
+  { x:0.40, y:0.76 },  // 8  c27 Survival Analysis
+  { x:0.40, y:0.54 },  // 9  c24 Spiking Neural Networks
 
-  // maths (c9–c10) — top centre
-  { x:0.46, y:0.10 },  // c9  Mathematics for AI
-  { x:0.54, y:0.24 },  // c10 Statistics & Inference
+  // maths (10–11: c9, c10) — top centre
+  { x:0.46, y:0.10 },  // 10 c9  Mathematics for AI
+  { x:0.54, y:0.24 },  // 11 c10 Statistics & Inference
 
-  // programming (c11–c14) — centre
-  { x:0.44, y:0.42 },  // c11 Python
-  { x:0.54, y:0.56 },  // c12 R
-  { x:0.44, y:0.68 },  // c13 C++ / Java
-  { x:0.50, y:0.82 },  // c14 Software Engineering
+  // programming (12–15: c11, c12, c13, c28) — centre
+  { x:0.50, y:0.42 },  // 12 c11 Python
+  { x:0.60, y:0.56 },  // 13 c12 R
+  { x:0.48, y:0.68 },  // 14 c13 C++
+  { x:0.58, y:0.74 },  // 15 c28 Java
 
-  // frameworks (c15–c16) — centre-right top
-  { x:0.66, y:0.16 },  // c15 PyTorch / TensorFlow
-  { x:0.72, y:0.32 },  // c16 ML Ecosystem
+  // frameworks (16–19: c15, c16, c25, c26) — centre-right cluster
+  { x:0.66, y:0.16 },  // 16 c15 PyTorch
+  { x:0.72, y:0.32 },  // 17 c16 ML Tooling
+  { x:0.76, y:0.16 },  // 18 c25 TensorFlow / Keras
+  { x:0.78, y:0.36 },  // 19 c26 MLflow
 
-  // data_eng (c17–c19) — right cluster
-  { x:0.76, y:0.50 },  // c17 Data Engineering
-  { x:0.84, y:0.66 },  // c18 Data Science & Analytics
-  { x:0.76, y:0.80 },  // c19 Spatial Analysis & GIS
+  // data_eng (20–23: c17, c18, c19, c14) — right cluster
+  { x:0.76, y:0.50 },  // 20 c17 Data Engineering
+  { x:0.84, y:0.66 },  // 21 c18 Data Science & Analytics
+  { x:0.76, y:0.80 },  // 22 c19 Spatial Analysis & GIS
+  { x:0.80, y:0.44 },  // 23 c14 Data Visualisation
 
-  // bio (c20–c21) — far right
-  { x:0.90, y:0.34 },  // c20 Bioinformatics
-  { x:0.90, y:0.52 },  // c21 Epidemiology & Biostatistics
+  // bio (24–27: c20, c29, c21, c30) — far right, 2×2 grid
+  { x:0.88, y:0.30 },  // 24 c20 Bioinformatics
+  { x:0.96, y:0.38 },  // 25 c29 Computational Biology
+  { x:0.88, y:0.50 },  // 26 c21 Epidemiology
+  { x:0.96, y:0.58 },  // 27 c30 Biostatistics
 
-  // research (c22–c23) — bottom right
-  { x:0.86, y:0.82 },  // c22 Research Skills
-  { x:0.92, y:0.70 },  // c23 Teaching & Communication
-
-  // specialized_ai extra (c24) — centre-left, above NLP
-  { x:0.4, y:0.56 },  // c24 Spiking Neural Network
+  // research (28–29: c22, c23) — bottom right
+  { x:0.86, y:0.82 },  // 28 c22 Research Skills
+  { x:0.92, y:0.70 },  // 29 c23 Teaching & Communication
 ];
+
+// Explicit edge definitions per constellation (indices within each group's node array)
+const CONSTELLATION_EDGES = {
+  // core_ai: c1(0), c2(1), c4(2), c5(3), c3(4) — chain by y
+  core_ai:        [[0,1],[1,4],[4,2],[2,3]],
+  // specialized_ai: c6(0), c7(1), c8(2), c27(3), c24(4) — pentagon ring
+  specialized_ai: [[0,1],[1,2],[2,3],[3,4],[4,0]],
+  maths:          [[0,1]],
+  // programming: c11(0), c12(1), c13(2), c28(3) — square
+  programming:    [[0,1],[1,2],[2,3],[3,0]],
+  // frameworks: c15(0), c16(1), c25(2), c26(3) — rhombus
+  frameworks:     [[0,2],[0,1],[2,3],[1,3]],
+  // data_eng: c17(0), c18(1), c19(2), c14 DataViz(3) — ring
+  data_eng:       [[0,3],[3,1],[1,2],[2,0]],
+  // bio: c20(0), c29(1), c21(2), c30(3) — rectangle: bio pairs + vertical links
+  bio:            [[0,1],[2,3],[0,2],[1,3]],
+  research:       [[0,1]],
+};
 
 const canvas  = document.getElementById('skyCanvas');
 const ctx     = canvas.getContext('2d');
@@ -475,28 +497,29 @@ function draw() {
     }
   }
 
-  // Constellation lines — plus visibles, slightly animated
+  // Constellation lines — intentional shapes via explicit edges
   for(const [key, nodes] of Object.entries(groups)) {
     if(nodes.length < 2) continue;
     const col = CONSTELLATIONS[key]?.color || '#c9a84c';
     const pulse = 0.5 + 0.5 * Math.sin(t * 0.4 + key.charCodeAt(0));
+    const edges = CONSTELLATION_EDGES[key] || nodes.map((_,i) => i < nodes.length-1 ? [i,i+1] : null).filter(Boolean);
 
-    ctx.beginPath();
-    ctx.moveTo(nodes[0].px*W, nodes[0].py*H);
-    for(let i=1;i<nodes.length;i++) ctx.lineTo(nodes[i].px*W, nodes[i].py*H);
-    ctx.strokeStyle = hexWithAlpha(col, 0.7 + 0.06 * pulse);
-    ctx.lineWidth = 1;
-    ctx.setLineDash([5, 10]);
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    // Small interstitial dots sur la ligne
-    for(let i=0;i<nodes.length-1;i++){
-      const mx = (nodes[i].px + nodes[i+1].px)/2 * W;
-      const my = (nodes[i].py + nodes[i+1].py)/2 * H;
+    for(const [ai, bi] of edges) {
+      if(!nodes[ai] || !nodes[bi]) continue;
+      const x1 = nodes[ai].px*W, y1 = nodes[ai].py*H;
+      const x2 = nodes[bi].px*W, y2 = nodes[bi].py*H;
       ctx.beginPath();
-      ctx.arc(mx, my, 1.5, 0, Math.PI*2);
-      ctx.fillStyle = hexWithAlpha(col, 0.2 * pulse);
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.strokeStyle = hexWithAlpha(col, 0.65 + 0.08 * pulse);
+      ctx.lineWidth = 1;
+      ctx.setLineDash([5, 10]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // Midpoint dot
+      ctx.beginPath();
+      ctx.arc((x1+x2)/2, (y1+y2)/2, 1.5, 0, Math.PI*2);
+      ctx.fillStyle = hexWithAlpha(col, 0.25 * pulse);
       ctx.fill();
     }
   }

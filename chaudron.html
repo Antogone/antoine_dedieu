@@ -30,7 +30,7 @@ filter:drop-shadow(0 0 30px rgba(29,185,84,0.4));      -webkit-background-clip:t
     .hero-sub{font-size:15px;font-style:italic;color:var(--text-dim);margin-top:8px;}
 
     /* LAYOUT PRINCIPAL */
-    .brew-layout{display:grid;grid-template-columns:280px 1fr;gap:40px;align-items:start;}
+    .brew-layout{display:grid;grid-template-columns:380px 1fr;gap:40px;align-items:start;}
 
     /* ── INGRÉDIENTS (compétences) ── */
     .ingredients-panel{position:sticky;top:80px;display:flex;flex-direction:column;}
@@ -497,6 +497,22 @@ filter:drop-shadow(0 0 30px rgba(29,185,84,0.4));      -webkit-background-clip:t
       .modal-header{gap:14px;padding:18px 18px 14px;}
       .modal-body{padding:16px 18px 20px;}
     }
+
+    /* ══ Potion Bottle Ingredient Grid ══ */
+    .ing-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
+    .ing-tab{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.07em;text-transform:uppercase;
+      background:none;border:1px solid rgba(255,255,255,0.1);color:var(--text-dim);
+      padding:4px 11px;border-radius:3px;cursor:pointer;transition:all 0.2s;}
+    .ing-tab:hover{color:var(--text);}
+    .ing-bottle-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 4px 4px 0;}
+    .ing-bottle-wrap{display:flex;flex-direction:column;align-items:center;gap:5px;
+      cursor:grab;position:relative;padding:6px 4px;border-radius:8px;
+      transition:transform 0.15s,opacity 0.2s;user-select:none;
+      min-width:0;width:100%;}
+    .ing-bottle-wrap:hover{transform:translateY(-4px);}
+    .ing-bottle-wrap.hidden{display:none!important;}
+    .ing-bottle-label{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.03em;
+      text-align:center;line-height:1.35;width:100%;word-break:break-word;}
   </style>
 </head>
 <body>
@@ -529,7 +545,8 @@ filter:drop-shadow(0 0 30px rgba(29,185,84,0.4));      -webkit-background-clip:t
 
     <!-- INGRÉDIENTS -->
     <div class="ingredients-panel">
-      <div class="panel-title">⚗ Available ingredients</div>
+      <div class="panel-title">⚗ Ingredients</div>
+      <div id="ingTabs"></div>
       <div class="ing-scroll-wrap">
         <div id="ingredientsList"></div>
         <div class="ing-scroll-track"></div>
@@ -761,6 +778,17 @@ filter:drop-shadow(0 0 30px rgba(29,185,84,0.4));      -webkit-background-clip:t
 
 <script src="js/data.js"></script>
 <script>
+const CONSTELLATIONS = {
+  core_ai:        { color:'#ee4b28', label:'Core AI' },
+  specialized_ai: { color:'#a855f7', label:'Specialized' },
+  maths:          { color:'#3b82f6', label:'Maths' },
+  programming:    { color:'#f59e0b', label:'Programming' },
+  frameworks:     { color:'#f97316', label:'Frameworks' },
+  data_eng:       { color:'#0ea5e9', label:'Data Eng' },
+  bio:            { color:'#16a34a', label:'Bio' },
+  research:       { color:'#c9a84c', label:'Research' },
+};
+
 function renderEmoji(val, size) {
   if(val && (val.startsWith('http') || val.startsWith('/'))) {
     return `<img src="${val}" style="width:${size}px;height:${size}px;object-fit:contain;" alt="">`;
@@ -768,29 +796,80 @@ function renderEmoji(val, size) {
   return val || '';
 }
 
-let cauldronIds = []; // IDs des compétences into the cauldron
+let cauldronIds = [];
 const isMobile = navigator.maxTouchPoints > 0;
-let selectedIngId = null;
+let selectedIngId = null; // kept for onCauldronTap compat
+let _ingGroup = 'all';
+
+function bottleSVG(id, color, emoji, inCauldron) {
+  const sw = inCauldron ? 2.2 : 1.5;
+  const r = parseInt(color.slice(1,3)||'c9',16);
+  const g = parseInt(color.slice(3,5)||'a8',16);
+  const b = parseInt(color.slice(5,7)||'4c',16);
+  const bodyFill = `rgba(${r},${g},${b},0.22)`;
+  const liqFill  = `rgba(${r},${g},${b},0.60)`;
+  const glow = inCauldron ? `filter:drop-shadow(0 0 7px ${color});` : '';
+  const isUrl = emoji && (emoji.startsWith('http')||emoji.startsWith('/'));
+  const icon = isUrl
+    ? `<image href="${emoji}" x="16" y="33" width="24" height="24"/>`
+    : `<text x="28" y="51" text-anchor="middle" font-size="19" font-family="sans-serif">${emoji||'⚗️'}</text>`;
+  return `<svg viewBox="0 0 56 74" width="62" height="80" style="${glow}overflow:visible">
+    <rect x="20" y="1" width="16" height="9" rx="3" fill="#7a5220" stroke="#c9a84c" stroke-width="1.2"/>
+    <rect x="21" y="9" width="14" height="13" fill="${bodyFill}" stroke="#c9a84c" stroke-width="${sw}"/>
+    <path d="M21 22 L11 38 Q7 56 28 63 Q49 56 45 38 L35 22 Z" fill="${bodyFill}" stroke="#c9a84c" stroke-width="${sw}"/>
+    <clipPath id="clipliq-${id}"><path d="M21 22 L11 38 Q7 56 28 63 Q49 56 45 38 L35 22 Z"/></clipPath>
+    <rect x="0" y="45" width="56" height="22" fill="${liqFill}" clip-path="url(#clipliq-${id})"/>
+    <path d="M13 45 Q28 49 43 45" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" fill="none"/>
+    <ellipse cx="18" cy="40" rx="2.5" ry="7" fill="rgba(255,255,255,0.16)" transform="rotate(-12 18 40)"/>
+    <line x1="19" y1="22" x2="37" y2="22" stroke="#c9a84c" stroke-width="1.5" opacity="0.5"/>
+    ${icon}
+  </svg>`;
+}
 
 // ── RENDU INGRÉDIENTS ──
 function renderIngredients() {
-  const list = document.getElementById('ingredientsList');
-  list.innerHTML = COMPETENCES.map(c => {
-    const isUsed = cauldronIds.includes(c.id);
-    const isSel  = isMobile && c.id === selectedIngId;
-    const interactAttr = isMobile
-      ? `onclick="onIngTap('${c.id}')"`
-      : `draggable="true" ondragstart="onDragStart(event,'${c.id}')"`;
-    return `
-    <div class="ingredient-item ${isUsed ? 'used' : ''} ${isSel ? 'selected' : ''}"
-      id="ing-${c.id}" ${interactAttr}>
-      <span class="ing-emoji">${renderEmoji(c.emoji, 24)}</span>
-      <div>
-        <div class="ing-name">${c.name}</div>
-        <div class="ing-sub">${c.subtitle}</div>
-      </div>
+  // Tabs rendered outside the scroll container so they stay fixed above it
+  document.getElementById('ingTabs').innerHTML = `<div class="ing-tabs">
+    <button class="ing-tab" onclick="ingFilter('all')"
+      style="${_ingGroup==='all'?'background:#c9a84c;border-color:#c9a84c;color:#06080a':''}">All</button>
+    ${Object.entries(CONSTELLATIONS).map(([k,v])=>
+      `<button class="ing-tab" onclick="ingFilter('${k}')"
+        style="${_ingGroup===k?`background:${v.color};border-color:${v.color};color:#06080a`:`border-color:${v.color}55;color:${v.color}bb`}">${v.label}</button>`
+    ).join('')}
+  </div>`;
+
+  // Grid rendered directly into the scroll container
+  const bottles = COMPETENCES.map(c => {
+    const col = CONSTELLATIONS[c.constellation]?.color||'#c9a84c';
+    const visible = _ingGroup==='all'||c.constellation===_ingGroup;
+    const inCauldron = cauldronIds.includes(c.id);
+    const dragAttr = isMobile ? '' : `draggable="true" ondragstart="onDragStart(event,'${c.id}')"`;
+    return `<div class="ing-bottle-wrap${visible?'':' hidden'}"
+      id="ing-${c.id}" data-group="${c.constellation}"
+      ${dragAttr} onclick="onBottleTap('${c.id}')"
+      title="${c.name}" style="opacity:${inCauldron?0.45:1}">
+      ${bottleSVG(c.id, col, c.emoji, inCauldron)}
+      <div class="ing-bottle-label" style="color:${inCauldron?col:'var(--text)'}">${c.name}</div>
+      ${inCauldron?`<div style="position:absolute;top:1px;right:1px;background:${col};color:#000;border-radius:50%;width:13px;height:13px;font-size:8px;display:flex;align-items:center;justify-content:center;font-weight:bold">✓</div>`:''}
     </div>`;
   }).join('');
+
+  document.getElementById('ingredientsList').innerHTML =
+    `<div class="ing-bottle-grid">${bottles}</div>`;
+
+  if(window._updateIngScrollbar) window._updateIngScrollbar();
+}
+
+function ingFilter(group) {
+  _ingGroup = group;
+  renderIngredients();
+}
+
+function onBottleTap(id) {
+  if(!isMobile) return; // desktop: drag only
+  if(cauldronIds.includes(id)) cauldronIds = cauldronIds.filter(x=>x!==id);
+  else if(cauldronIds.length < 3) cauldronIds.push(id);
+  updateCauldron();
 }
 
 // ── DRAG & DROP ──
