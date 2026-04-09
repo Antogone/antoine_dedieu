@@ -6,8 +6,8 @@
 const PROFIL = {
   prenom:     'Antoine',
   nom:        'Dedieu',
-  titre:      'PhD Candidate · Health Data Science & AI',
-  institution:'Université Paris Cité',
+  titre:      'PhD Candidate · AI, Data Science and Data engineering',
+  institution:'Univeristy of West London - Université de Paris (ex Paris Descartes)',
   bio_courte: 'Health Data Scientist passionate about bioinformatics, AI and data science. Interdisciplinary background bridging computational biology, machine learning and health sciences.',
   bio_longue: `PhD candidate in Health Data Science at Université Paris Cité, working at the intersection of artificial intelligence, bioinformatics and public health.
 
@@ -22,12 +22,14 @@ Graduate Teaching Assistant across 9 modules including Computer Architecture, Al
     scholar:  '',
     cv:       '',
   },
-  stats: {
-    projets:      6,
-    langues:      3,
-    annees_these: 2,
-  },
+  infos: [
+    { label: '📍 Location',   value: 'London — open to relocate' },
+    { label: '🌐 Languages',  value: '🇬🇧 English · 🇫🇷 French' },
+    { label: '💼 Open to',    value: 'Full-time · Part-time' },
+    { label: '🎯 Hobbies',    value: 'Artistic Gymnastics · Handball · Tennis · Music' },
+  ],
   avatar_emoji: '🧬',
+  avatar_photo: 'https://media.licdn.com/dms/image/v2/D4E03AQGVV2bM5pEcTw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1688463637238?e=1777507200&v=beta&t=dtPVzg1rcIqMZt61CgCWsukAE5NlENFzS4-VxRF16Rs',
 };
 
 const FORMATIONS = [

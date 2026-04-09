@@ -457,20 +457,8 @@
       <div class="circle-center-ring"></div>
     </div>
 
-    <!-- p0 — TAROT — Toutes les Arcanes — Haut -->
-    <a href="tarot.html" class="portal-card" data-pos="p0" data-color="tarot">
-      <div class="portal-inner">
-        <div class="portal-glow"></div>
-        <span class="portal-symbol">🎴</span>
-        <div class="portal-name">The Tarot</div>
-        <div class="portal-category">✦ All Arcana</div>
-        <div class="portal-desc">Draw cards from your entire journey</div>
-        <div class="portal-arrow">Enter →</div>
-      </div>
-    </a>
-
-    <!-- p1 — RUNES — Formations — Droite haut -->
-    <a href="runes.html" class="portal-card" data-pos="p1" data-color="runes">
+    <!-- p0 — RUNES — Education — Haut -->
+    <a href="runes.html" class="portal-card" data-pos="p0" data-color="runes">
       <div class="portal-inner">
         <div class="portal-glow"></div>
         <span class="portal-symbol">ᚠ</span>
@@ -481,20 +469,8 @@
       </div>
     </a>
 
-    <!-- p2 — CONSTELLATION — Compétences — Droite bas -->
-    <a href="constellation.html" class="portal-card" data-pos="p2" data-color="stars">
-      <div class="portal-inner">
-        <div class="portal-glow"></div>
-        <span class="portal-symbol">🌌</span>
-        <div class="portal-name">Constellation</div>
-        <div class="portal-category">✦ Skills</div>
-        <div class="portal-desc">Navigate among your stars</div>
-        <div class="portal-arrow">Enter →</div>
-      </div>
-    </a>
-
-    <!-- p3 — CHAUDRON — Projets — Gauche bas -->
-    <a href="chaudron.html" class="portal-card" data-pos="p3" data-color="potion">
+    <!-- p1 — CHAUDRON — Projects — Droite haut -->
+    <a href="chaudron.html" class="portal-card" data-pos="p1" data-color="potion">
       <div class="portal-inner">
         <div class="portal-glow"></div>
         <span class="portal-symbol">🧪</span>
@@ -505,7 +481,31 @@
       </div>
     </a>
 
-    <!-- p4 — CRISTAL — Expériences — Gauche haut -->
+    <!-- p2 — TAROT — All Arcana — Droite bas -->
+    <a href="tarot.html" class="portal-card" data-pos="p2" data-color="tarot">
+      <div class="portal-inner">
+        <div class="portal-glow"></div>
+        <span class="portal-symbol">🎴</span>
+        <div class="portal-name">The Tarot</div>
+        <div class="portal-category">✦ All Arcana</div>
+        <div class="portal-desc">Draw cards from your entire journey</div>
+        <div class="portal-arrow">Enter →</div>
+      </div>
+    </a>
+
+    <!-- p3 — CONSTELLATION — Skills — Gauche bas -->
+    <a href="constellation.html" class="portal-card" data-pos="p3" data-color="stars">
+      <div class="portal-inner">
+        <div class="portal-glow"></div>
+        <span class="portal-symbol">🌌</span>
+        <div class="portal-name">Constellation</div>
+        <div class="portal-category">✦ Skills</div>
+        <div class="portal-desc">Navigate among your stars</div>
+        <div class="portal-arrow">Enter →</div>
+      </div>
+    </a>
+
+    <!-- p4 — CRISTAL — Experiences — Gauche haut (arrives last) -->
     <a href="cristal.html" class="portal-card" data-pos="p4" data-color="cristal">
       <div class="portal-inner">
         <div class="portal-glow"></div>
@@ -521,11 +521,11 @@
 
   <!-- GRILLE MOBILE (affichée seulement sous 520px) -->
   <div class="mobile-grid">
-    <a href="tarot.html"         class="portal-card" data-color="tarot">  <div class="portal-inner"><div class="portal-glow"></div><span class="portal-symbol">🎴</span><div class="portal-name">The Tarot</div><div class="portal-category">✦ Arcanes</div></div></a>
     <a href="runes.html"         class="portal-card" data-color="runes">  <div class="portal-inner"><div class="portal-glow"></div><span class="portal-symbol">ᚠ</span><div class="portal-name">The Runes</div><div class="portal-category">✦ Education</div></div></a>
-    <a href="constellation.html" class="portal-card" data-color="stars">  <div class="portal-inner"><div class="portal-glow"></div><span class="portal-symbol">🌌</span><div class="portal-name">Constellation</div><div class="portal-category">✦ Skills</div></div></a>
     <a href="chaudron.html"      class="portal-card" data-color="potion"> <div class="portal-inner"><div class="portal-glow"></div><span class="portal-symbol">🧪</span><div class="portal-name">The Cauldron</div><div class="portal-category">✦ Projects</div></div></a>
     <a href="cristal.html"       class="portal-card" data-color="cristal"><div class="portal-inner"><div class="portal-glow"></div><span class="portal-symbol">🔮</span><div class="portal-name">The Crystal</div><div class="portal-category">✦ Experiences</div></div></a>
+    <a href="constellation.html" class="portal-card" data-color="stars">  <div class="portal-inner"><div class="portal-glow"></div><span class="portal-symbol">🌌</span><div class="portal-name">Constellation</div><div class="portal-category">✦ Skills</div></div></a>
+    <a href="tarot.html"         class="portal-card" data-color="tarot">  <div class="portal-inner"><div class="portal-glow"></div><span class="portal-symbol">🎴</span><div class="portal-name">The Tarot</div><div class="portal-category">✦ Arcanes</div></div></a>
   </div>
 
 </div><!-- /page-wrap -->
@@ -748,32 +748,16 @@ function spawnBurst(x, y, n) {
     <!-- 5 portals explained -->
     <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:28px;">
 
-      <div style="display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:8px;background:rgba(220,38,38, 0.07);border:1px solid rgba(220, 38, 38, 0.135);">
-        <span style="font-size:22px;flex-shrink:0;">🎴</span>
-        <div>
-          <div style="font-family:'Cinzel',serif;font-size:11px;color:#dc2626;letter-spacing:0.1em;">TAROT</div>
-          <div style="font-size:13px;color:#c8bca8;">Draw cards at random — explore the full journey</div>
-        </div>
-      </div>
-
       <div style="display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:8px;background:rgba(201,168,76,0.07);border:1px solid rgba(201,168,76,0.15);">
-        <span style="font-size:22px;flex-shrink:0;">ᚠ</span>
+        <span style="font-size:22px;flex-shrink:0;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;">ᚠ</span>
         <div>
           <div style="font-family:'Cinzel',serif;font-size:11px;color:#c9a84c;letter-spacing:0.1em;">RUNES</div>
           <div style="font-size:13px;color:#c8bca8;">Carve the stones — uncover education & qualifications</div>
         </div>
       </div>
 
-      <div style="display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:8px;background:rgba(74,158,255,0.07);border:1px solid rgba(74,158,255,0.15);">
-        <span style="font-size:22px;flex-shrink:0;">🌌</span>
-        <div>
-          <div style="font-family:'Cinzel',serif;font-size:11px;color:#4a9eff;letter-spacing:0.1em;">CONSTELLATION</div>
-          <div style="font-size:13px;color:#c8bca8;">Navigate the star map — discover skills & expertise</div>
-        </div>
-      </div>
-
       <div style="display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:8px;background:rgba(29,185,84,0.07);border:1px solid rgba(29,185,84,0.15);">
-        <span style="font-size:22px;flex-shrink:0;">🧪</span>
+        <span style="font-size:22px;flex-shrink:0;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;">🧪</span>
         <div>
           <div style="font-family:'Cinzel',serif;font-size:11px;color:#1db954;letter-spacing:0.1em;">CAULDRON</div>
           <div style="font-size:13px;color:#c8bca8;">Brew potions — combine skills to reveal projects</div>
@@ -781,10 +765,26 @@ function spawnBurst(x, y, n) {
       </div>
 
       <div style="display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:8px;background:rgba(168,85,247,0.07);border:1px solid rgba(168,85,247,0.15);">
-        <span style="font-size:22px;flex-shrink:0;">🔮</span>
+        <span style="font-size:22px;flex-shrink:0;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;">🔮</span>
         <div>
           <div style="font-family:'Cinzel',serif;font-size:11px;color:#a855f7;letter-spacing:0.1em;">CRYSTAL</div>
           <div style="font-size:13px;color:#c8bca8;">Gaze into the mist — unveil experiences & milestones</div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:8px;background:rgba(74,158,255,0.07);border:1px solid rgba(74,158,255,0.15);">
+        <span style="font-size:22px;flex-shrink:0;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;">🌌</span>
+        <div>
+          <div style="font-family:'Cinzel',serif;font-size:11px;color:#4a9eff;letter-spacing:0.1em;">CONSTELLATION</div>
+          <div style="font-size:13px;color:#c8bca8;">Navigate the star map — discover skills & expertise</div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:8px;background:rgba(220,38,38,0.07);border:1px solid rgba(220,38,38,0.135);">
+        <span style="font-size:22px;flex-shrink:0;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;">🎴</span>
+        <div>
+          <div style="font-family:'Cinzel',serif;font-size:11px;color:#dc2626;letter-spacing:0.1em;">TAROT</div>
+          <div style="font-size:13px;color:#c8bca8;">Draw cards at random — explore the full journey</div>
         </div>
       </div>
 
