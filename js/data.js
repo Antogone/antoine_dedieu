@@ -378,7 +378,57 @@ const EXPERIENCES = [
 
 const PROJETS = [
   {
-    id:'p1', emoji:'🦠', roman:'XVIII', name:'HIV Epidemic Modelling',
+    id:'p7', emoji:'⚙️', roman:'XVIII', name:'Reproducible ML Pipeline',
+    type:'Arcana of Project', subtitle:'MLOps · Experiment tracking · Feature versioning',
+    gradient:'linear-gradient(160deg,#0f0a1a,#7c3aed)',
+    potionColor:'#7c3aed',
+    ingredients2:['c26','c16'], ingredients3:['c26','c16','c11'],
+    prophecy:'A fully reproducible ML pipeline where every experiment is tracked, every feature version is committed, and the entire pipeline runs from a single command — engineering discipline applied to machine learning.',
+    details:{ Type:'Portfolio project', Stack:'Python · scikit-learn · MLflow · pandas · joblib', Field:'ML Engineering / MLOps', GitHub:'https://github.com/AntoineDedieu/portfolio-ml-pipeline' },
+    tags:['MLflow','scikit-learn','Python','Feature Engineering','MLOps','Experiment Tracking','Reproducibility','Pipeline']
+  },
+  {
+    id:'p8', emoji:'🔍', roman:'XIX', name:'Interpretable Model Audit',
+    type:'Arcana of Project', subtitle:'SHAP · Fairness · Responsible AI',
+    gradient:'linear-gradient(160deg,#0a0f1a,#0d9488)',
+    potionColor:'#0d9488',
+    ingredients2:['c16','c14'], ingredients3:['c16','c14','c10'],
+    prophecy:'A full model audit of an XGBoost credit scoring classifier — interrogating it for fairness, explainability, and deployment readiness. Two critical legal blockers surfaced and a concrete path to remediation defined.',
+    details:{ Type:'Portfolio project', Stack:'Python · XGBoost · SHAP · fairlearn', Field:'Responsible AI / Explainability', GitHub:'https://github.com/AntoineDedieu/portfolio-model-audit' },
+    tags:['SHAP','XGBoost','fairlearn','Explainability','Responsible AI','Fairness','Model Audit','Python']
+  },
+  {
+    id:'p9', emoji:'🧪', roman:'XX', name:'A/B Test Simulation',
+    type:'Arcana of Project', subtitle:'Experimental design · Bayesian inference · Sequential testing',
+    gradient:'linear-gradient(160deg,#1a0f00,#b45309)',
+    potionColor:'#d97706',
+    ingredients2:['c10','c4'], ingredients3:['c10','c4','c18'],
+    prophecy:'An end-to-end A/B experiment simulation demonstrating what most practitioners get wrong — the peeking problem exposed empirically, sequential testing implemented correctly, and Bayesian posterior analysis confirming a 28% conversion lift with 100% posterior certainty.',
+    details:{ Type:'Portfolio project', Stack:'Python · scipy · PyMC · statsmodels · numpy', Field:'Data Science / Experimentation', GitHub:'https://github.com/AntoineDedieu/portfolio-ab-testing' },
+    tags:['A/B Testing','Bayesian Inference','PyMC','scipy','Sequential Testing','Experimental Design','Statistics','Python']
+  },
+  {
+    id:'p10', emoji:'🕸️', roman:'XXI', name:'Graph Neural Network — Citation Data',
+    type:'Arcana of Project', subtitle:'GCN · GraphSAGE · Message passing from scratch',
+    gradient:'linear-gradient(160deg,#0a0a1a,#4f46e5)',
+    potionColor:'#6366f1',
+    ingredients2:['c2','c15'], ingredients3:['c2','c15','c9'],
+    prophecy:'GCN and GraphSAGE implemented and compared on the Cora citation network — a 23 percentage point gap over an MLP baseline proving empirically that citation structure encodes topic information. Message passing derived from first principles and verified manually.',
+    details:{ Type:'Portfolio project', Stack:'Python · PyTorch · PyTorch Geometric · UMAP · networkx', Field:'AI Research / Graph ML', GitHub:'https://github.com/AntoineDedieu/portfolio-gnn' },
+    tags:['Graph Neural Networks','GCN','GraphSAGE','PyTorch','PyTorch Geometric','UMAP','Message Passing','Deep Learning']
+  },
+  {
+    id:'p11', emoji:'🔗', roman:'XXII', name:'Causal Inference — Job Training',
+    type:'Arcana of Project', subtitle:'PSM · IPW · DiD · Rosenbaum bounds',
+    gradient:'linear-gradient(160deg,#1a0a0a,#dc2626)',
+    potionColor:'#dc2626',
+    ingredients2:['c10','c21'], ingredients3:['c10','c21','c30'],
+    prophecy:'Three causal identification strategies applied to observational data with a known ground truth — propensity score matching, inverse probability weighting, and difference-in-differences — each getting closer to the true causal effect, with sensitivity to unmeasured confounding quantified via Rosenbaum bounds.',
+    details:{ Type:'Portfolio project', Stack:'Python · scikit-learn · statsmodels · scipy · pandas', Field:'Data Science / Causal Inference', GitHub:'https://github.com/AntoineDedieu/portfolio-causal-inference' },
+    tags:['Causal Inference','Propensity Score Matching','IPW','Difference-in-Differences','Rosenbaum Bounds','Observational Studies','Python','Statistics']
+  },
+  {
+    id:'p1', emoji:'🦠', roman:'XXIII', name:'HIV Epidemic Modelling',
     type:'Arcana of Project', subtitle:'Agent-based simulation · Computational Biology',
     gradient:'linear-gradient(160deg,#0a1a10,#15803d)',
     potionColor:'#15803d',
@@ -388,7 +438,7 @@ const PROJETS = [
     tags:['Python','Agent-Based','HIV','Epidemiology','Computational Biology']
   },
   {
-    id:'p2', emoji:'🏥', roman:'XIX', name:'Medical Entity Recognition',
+    id:'p2', emoji:'🏥', roman:'XXIV', name:'Medical Entity Recognition',
     type:'Arcana of Project', subtitle:'Clinical NLP · HuggingFace',
     gradient:'linear-gradient(160deg,#0a0a1a,#5851db)',
     potionColor:'#a855f7',
@@ -398,7 +448,7 @@ const PROJETS = [
     tags:['NLP','HuggingFace','BERT','Medical','Entity Recognition','Python']
   },
   {
-    id:'p3', emoji:'🎵', roman:'XX', name:'Spotify Music Analysis — R Shiny',
+    id:'p3', emoji:'🎵', roman:'XXV', name:'Spotify Music Analysis — R Shiny',
     type:'Arcana of Project', subtitle:'Data visualisation · Shiny App',
     gradient:'linear-gradient(160deg,#0a1a0e,#1db954)',
     potionColor:'#1db954',
@@ -408,7 +458,7 @@ const PROJETS = [
     tags:['R','Shiny','Spotify API','Data Visualisation','Dashboard']
   },
   {
-    id:'p4', emoji:'🧪', roman:'XXI', name:'Melanoma Survival Analysis',
+    id:'p4', emoji:'🧪', roman:'XXVI', name:'Melanoma Survival Analysis',
     type:'Arcana of Project', subtitle:'Advanced survival methods · Clinical Research',
     gradient:'linear-gradient(160deg,#1a0a1a,#b02897)',
     potionColor:'#b02897',
@@ -418,7 +468,7 @@ const PROJETS = [
     tags:['R','Survival Analysis','Melanoma','Causal Inference','Biostatistics']
   },
   {
-    id:'p5', emoji:'🩺', roman:'XXII', name:'Breast Tumour Biopsy Analysis',
+    id:'p5', emoji:'🩺', roman:'XXVII', name:'Breast Tumour Biopsy Analysis',
     type:'Arcana of Project', subtitle:'Clustering & classification · Oncology',
     gradient:'linear-gradient(160deg,#0a1a0e,#16a34a)',
     potionColor:'#16a34a',
@@ -428,7 +478,7 @@ const PROJETS = [
     tags:['R','Python','Clustering','Classification','Oncology','Biostatistics']
   },
   {
-    id:'p6', emoji:'🗄️', roman:'XXIII', name:'HEGP Data Warehouse R Package',
+    id:'p6', emoji:'🗄️', roman:'XXVIII', name:'HEGP Data Warehouse R Package',
     type:'Arcana of Project', subtitle:'R package · Data quality · CARPEM',
     gradient:'linear-gradient(160deg,#0a0f1a,#0070f3)',
     potionColor:'#0070f3',
