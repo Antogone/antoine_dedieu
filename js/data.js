@@ -7,7 +7,7 @@ const PROFIL = {
   prenom:     'Antoine',
   nom:        'Dedieu',
   titre:      'PhD Candidate · AI, Data Science and Data engineering',
-  institution:'Univeristy of West London - Université de Paris (ex Paris Descartes)',
+  institution:'University of West London - Université de Paris (ex Paris Descartes)',
   bio_courte: 'Health Data Scientist passionate about bioinformatics, AI and data science. Interdisciplinary background bridging computational biology, machine learning and health sciences.',
   bio_longue: `PhD candidate in Health Data Science at Université Paris Cité, working at the intersection of artificial intelligence, bioinformatics and public health.
 
@@ -44,29 +44,29 @@ const FORMATIONS = [
   },
   {
     id:'f2', emoji:'🧬', roman:'II', name:'Master 2 · Massive Data for Health Science',
-    type:'Arcana of Education', subtitle:'Universite Paris Cite · 2022 – 2023',
+    type:'Arcana of Education', subtitle:'Université Paris Cité · 2022 – 2023',
     gradient:'linear-gradient(160deg,#0d0d1a,#1e3264)',
     rune:'ᚢ', runeName:'Uruz', runeKeyword:'Strength & Rigour',
     prophecy:'Advanced techniques for analysing structured and textual health data: machine learning, deep learning, transformers, survival analysis and spatial methods converging into a singular mastery.',
-    details:{ Institution:'Universite Paris Cite', Period:'Sept 2022 – Jul 2023', Grade:'Completed', Field:'Health Data Science / Computer Science' },
+    details:{ Institution:'Université Paris Cité', Period:'Sept 2022 – Jul 2023', Grade:'Completed', Field:'Health Data Science / Computer Science' },
     tags:['Machine Learning','Deep Learning','NLP','Survival Analysis','Biostatistics','GIS','Pharmaco-epidemiology']
   },
   {
     id:'f3', emoji:'🏥', roman:'III', name:'Master 1 · Public Health: Massive Data',
-    type:'Arcana of Education', subtitle:'Universite Paris Cite · 2021 – 2022',
+    type:'Arcana of Education', subtitle:'Université Paris Cité · 2021 – 2022',
     gradient:'linear-gradient(160deg,#0a1a0a,#216a4c)',
     rune:'ᚦ', runeName:'Thurisaz', runeKeyword:'Awakening & Foundations',
     prophecy:'The crossroads of epidemiology, AI in health science and environmental risk assessment: where the foundations of a health data scientist were laid stone by stone.',
-    details:{ Institution:'Universite Paris Cite', Period:'Sept 2021 – Aug 2022', Field:'Public Health / Massive Data', Internship:'HEGP Data Warehouse (Dr Bastien Rance)' },
+    details:{ Institution:'Université Paris Cité', Period:'Sept 2021 – Aug 2022', Field:'Public Health / Massive Data', Internship:'HEGP Data Warehouse (Dr Bastien Rance)' },
     tags:['Epidemiology','AI in Health','Biostatistics','Data Warehouse','R','Environmental Risk']
   },
   {
     id:'f4', emoji:'🦠', roman:'IV', name:'Licence 3 · Life Sciences: Bioinformatics',
-    type:'Arcana of Education', subtitle:'Universite Paris Cite · 2020 – 2021',
+    type:'Arcana of Education', subtitle:'Université Paris Cité · 2020 – 2021',
     gradient:'linear-gradient(160deg,#0a1a0e,#16a34a)',
     rune:'ᚨ', runeName:'Ansuz', runeKeyword:'Discovery & Life',
     prophecy:'Where code met biology: agent-based modelling of HIV epidemic dynamics, computational neuroscience with NEURON and MatLab, and molecular graphics with PyMol.',
-    details:{ Institution:'Universite Paris Cite', Period:'2020 – 2021', Project:'HIV epidemic dynamics (agent-based modelling)', Field:'Computational Biology / Bioinformatics' },
+    details:{ Institution:'Université Paris Cité', Period:'2020 – 2021', Project:'HIV epidemic dynamics (agent-based modelling)', Field:'Computational Biology / Bioinformatics' },
     tags:['Bioinformatics','Computational Biology','Agent-Based Modelling','Python','Computational Neuroscience','OMICS']
   },
   {
@@ -354,7 +354,7 @@ const EXPERIENCES = [
     id:'e1b', emoji:'🎓', roman:'XV', name:'Graduate Teaching Assistant',
     type:'Arcana of Experience', subtitle:'University of West London · Oct 2023 – Present',
     gradient:'linear-gradient(160deg,#0a1a0f,#216a4c)',
-    prophecy:'Teaching across multiple Computer Science modules as part of the PhD programme, bridging theory and practice for undergraduate students.',
+    prophecy:'Teaching across multiple Computer Science modules as part of the PhD programme, bridging theory and practice for undergraduate students across 9 modules including Computer Architecture, Algorithms and Databases.',
     details:{ Organisation:'University of West London', Period:'Oct 2023 – Present', Type:'Teaching' },
     tags:['Teaching','Computer Architecture','Algorithms','Databases','Java','Python']
   },
@@ -387,7 +387,7 @@ const EXPERIENCES = [
 const PROJETS = [
   {
     id:'p12', emoji:'👗', roman:'XVIII', name:'Fashion-in-Data',
-    type:'Arcana of Project', subtitle:'Web scraping · SegFormer segmentation · Colour extraction · Streamlit',
+    type:'Arcana of Project', category:'Computer Vision', subtitle:'Web scraping · SegFormer segmentation · Colour extraction · Streamlit',
     gradient:'linear-gradient(160deg,#1a0a1a,#e11d48)',
     potionColor:'#e11d48',
     ingredients2:['c7','c3'], ingredients3:['c7','c3','c18'],
@@ -397,7 +397,7 @@ const PROJETS = [
   },
   {
     id:'p13', emoji:'📈', roman:'XIX', name:'Time Series Anomaly Dashboard',
-    type:'Arcana of Project', subtitle:'Z-score · Isolation Forest · SARIMA · Consensus voting',
+    type:'Arcana of Project', category:'Time Series', subtitle:'Z-score · Isolation Forest · SARIMA · Consensus voting',
     gradient:'linear-gradient(160deg,#0a1218,#0e7490)',
     potionColor:'#0e7490',
     ingredients2:['c8','c1'], ingredients3:['c8','c1','c14'],
@@ -407,7 +407,7 @@ const PROJETS = [
   },
   {
     id:'p14', emoji:'🚢', roman:'XX', name:'Titanic Survival Analysis',
-    type:'Arcana of Project', subtitle:'Feature engineering · MLflow · Cross-validation',
+    type:'Arcana of Project', category:'Data Science', subtitle:'Feature engineering · MLflow · Cross-validation',
     gradient:'linear-gradient(160deg,#0a0f1a,#1e40af)',
     potionColor:'#1e40af',
     ingredients2:['c1','c26'], ingredients3:['c1','c26','c18'],
@@ -417,7 +417,7 @@ const PROJETS = [
   },
   {
     id:'p15', emoji:'🕯️', roman:'XXI', name:'Salem Witch Trials: A Data Story',
-    type:'Arcana of Project', subtitle:'Historical EDA · Data storytelling · Geographic visualisation',
+    type:'Arcana of Project', category:'Data Storytelling', subtitle:'Historical EDA · Data storytelling · Geographic visualisation',
     gradient:'linear-gradient(160deg,#1a0a0a,#7f1d1d)',
     potionColor:'#991b1b',
     ingredients2:['c14','c18'], ingredients3:['c14','c18','c19'],
@@ -427,7 +427,7 @@ const PROJETS = [
   },
   {
     id:'p16', emoji:'📰', roman:'XXII', name:'NLP Text Classification',
-    type:'Arcana of Project', subtitle:'DistilBERT · AG News · Fine-tuning on Apple MPS',
+    type:'Arcana of Project', category:'NLP', subtitle:'DistilBERT · AG News · Fine-tuning on Apple MPS',
     gradient:'linear-gradient(160deg,#0a0a1a,#7c3aed)',
     potionColor:'#8b5cf6',
     ingredients2:['c6','c3'], ingredients3:['c6','c3','c15'],
@@ -437,7 +437,7 @@ const PROJETS = [
   },
   {
     id:'p17', emoji:'🐳', roman:'XXIII', name:'MLOps Platform',
-    type:'Arcana of Project', subtitle:'FastAPI · Docker · pytest · GitHub Actions · Drift detection',
+    type:'Arcana of Project', category:'ML Engineering', subtitle:'FastAPI · Docker · pytest · GitHub Actions · Drift detection',
     gradient:'linear-gradient(160deg,#0a1218,#155e75)',
     potionColor:'#0891b2',
     ingredients2:['c17','c11'], ingredients3:['c17','c11','c16'],
@@ -447,7 +447,7 @@ const PROJETS = [
   },
   {
     id:'p7', emoji:'⚙️', roman:'XXIV', name:'Reproducible ML Pipeline',
-    type:'Arcana of Project', subtitle:'MLOps · Experiment tracking · Feature versioning',
+    type:'Arcana of Project', category:'ML Engineering', subtitle:'MLOps · Experiment tracking · Feature versioning',
     gradient:'linear-gradient(160deg,#0f0a1a,#7c3aed)',
     potionColor:'#7c3aed',
     ingredients2:['c26','c16'], ingredients3:['c26','c16','c11'],
@@ -457,7 +457,7 @@ const PROJETS = [
   },
   {
     id:'p8', emoji:'🔍', roman:'XXV', name:'Interpretable Model Audit',
-    type:'Arcana of Project', subtitle:'SHAP · Fairness · Responsible AI',
+    type:'Arcana of Project', category:'Responsible AI', subtitle:'SHAP · Fairness · Responsible AI',
     gradient:'linear-gradient(160deg,#0a0f1a,#0d9488)',
     potionColor:'#0d9488',
     ingredients2:['c16','c14'], ingredients3:['c16','c14','c10'],
@@ -467,7 +467,7 @@ const PROJETS = [
   },
   {
     id:'p9', emoji:'🧪', roman:'XXVI', name:'A/B Test Simulation',
-    type:'Arcana of Project', subtitle:'Experimental design · Bayesian inference · Sequential testing',
+    type:'Arcana of Project', category:'Experimentation', subtitle:'Experimental design · Bayesian inference · Sequential testing',
     gradient:'linear-gradient(160deg,#1a0f00,#b45309)',
     potionColor:'#d97706',
     ingredients2:['c10','c4'], ingredients3:['c10','c4','c18'],
@@ -477,7 +477,7 @@ const PROJETS = [
   },
   {
     id:'p10', emoji:'🕸️', roman:'XXVII', name:'Graph Neural Network — Citation Data',
-    type:'Arcana of Project', subtitle:'GCN · GraphSAGE · Message passing from scratch',
+    type:'Arcana of Project', category:'AI Research', subtitle:'GCN · GraphSAGE · Message passing from scratch',
     gradient:'linear-gradient(160deg,#0a0a1a,#4f46e5)',
     potionColor:'#6366f1',
     ingredients2:['c2','c15'], ingredients3:['c2','c15','c9'],
@@ -487,7 +487,7 @@ const PROJETS = [
   },
   {
     id:'p11', emoji:'🔗', roman:'XXVIII', name:'Causal Inference — Job Training',
-    type:'Arcana of Project', subtitle:'PSM · IPW · DiD · Rosenbaum bounds',
+    type:'Arcana of Project', category:'Causal Inference', subtitle:'PSM · IPW · DiD · Rosenbaum bounds',
     gradient:'linear-gradient(160deg,#1a0a0a,#dc2626)',
     potionColor:'#dc2626',
     ingredients2:['c10','c21'], ingredients3:['c10','c21','c30'],
@@ -497,7 +497,7 @@ const PROJETS = [
   },
   {
     id:'p1', emoji:'🦠', roman:'XXIX', name:'HIV Epidemic Modelling',
-    type:'Arcana of Project', subtitle:'Agent-based simulation · Computational Biology',
+    type:'Arcana of Project', category:'Computational Biology', subtitle:'Agent-based simulation · Computational Biology',
     gradient:'linear-gradient(160deg,#0a1a10,#15803d)',
     potionColor:'#15803d',
     ingredients2:['c1','c12'], ingredients3:['c1','c12','c8'],
@@ -507,7 +507,7 @@ const PROJETS = [
   },
   {
     id:'p2', emoji:'🏥', roman:'XXX', name:'Medical Entity Recognition',
-    type:'Arcana of Project', subtitle:'Clinical NLP · HuggingFace',
+    type:'Arcana of Project', category:'Clinical NLP', subtitle:'Clinical NLP · HuggingFace',
     gradient:'linear-gradient(160deg,#0a0a1a,#5851db)',
     potionColor:'#a855f7',
     ingredients2:['c1','c9'], ingredients3:['c1','c9','c8'],
@@ -517,7 +517,7 @@ const PROJETS = [
   },
   {
     id:'p3', emoji:'🎵', roman:'XXXI', name:'Spotify Music Analysis — R Shiny',
-    type:'Arcana of Project', subtitle:'Data visualisation · Shiny App',
+    type:'Arcana of Project', category:'Data Visualisation', subtitle:'Data visualisation · Shiny App',
     gradient:'linear-gradient(160deg,#0a1a0e,#1db954)',
     potionColor:'#1db954',
     ingredients2:['c2','c6'], ingredients3:['c2','c6','c5'],
@@ -527,7 +527,7 @@ const PROJETS = [
   },
   {
     id:'p4', emoji:'🧪', roman:'XXXII', name:'Melanoma Survival Analysis',
-    type:'Arcana of Project', subtitle:'Advanced survival methods · Clinical Research',
+    type:'Arcana of Project', category:'Biostatistics', subtitle:'Advanced survival methods · Clinical Research',
     gradient:'linear-gradient(160deg,#1a0a1a,#b02897)',
     potionColor:'#b02897',
     ingredients2:['c2','c10'], ingredients3:['c2','c10','c8'],
@@ -537,7 +537,7 @@ const PROJETS = [
   },
   {
     id:'p5', emoji:'🩺', roman:'XXXIII', name:'Breast Tumour Biopsy Analysis',
-    type:'Arcana of Project', subtitle:'Clustering & classification · Oncology',
+    type:'Arcana of Project', category:'Oncology / ML', subtitle:'Clustering & classification · Oncology',
     gradient:'linear-gradient(160deg,#0a1a0e,#16a34a)',
     potionColor:'#16a34a',
     ingredients2:['c2','c8'], ingredients3:['c2','c8','c1'],
@@ -547,7 +547,7 @@ const PROJETS = [
   },
   {
     id:'p6', emoji:'🗄️', roman:'XXXIV', name:'HEGP Data Warehouse R Package',
-    type:'Arcana of Project', subtitle:'R package · Data quality · CARPEM',
+    type:'Arcana of Project', category:'R Package', subtitle:'R package · Data quality · CARPEM',
     gradient:'linear-gradient(160deg,#0a0f1a,#0070f3)',
     potionColor:'#0070f3',
     ingredients2:['c2','c6'], ingredients3:['c2','c6','c5'],
