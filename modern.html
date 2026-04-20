@@ -287,7 +287,7 @@
     border: 1px solid var(--border);
     border-radius: 4px;
     padding: 1.75rem;
-    transition: all 0.3s;
+    transition: border-color 0.3s ease, transform 0.25s ease;
     cursor: pointer;
     position: relative;
     overflow: hidden;
@@ -334,9 +334,12 @@
   .timeline-item {
     position: relative; margin-bottom: 3.5rem;
     opacity: 0; transform: translateX(-20px);
-    transition: opacity 0.6s, transform 0.6s;
+    will-change: opacity, transform;
   }
-  .timeline-item.visible { opacity: 1; transform: none; }
+  .timeline-item.visible {
+    animation: timelineIn 0.6s cubic-bezier(0.4,0,0.2,1) forwards;
+    animation-delay: calc(var(--i, 0) * 80ms);
+  }
   .timeline-dot {
     position: absolute; left: -2.5rem;
     width: 10px; height: 10px; border-radius: 50%;
@@ -424,19 +427,23 @@
   .footer-accent { color: var(--accent); }
 
   /* ── ANIMATIONS ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
+  @keyframes revealIn {
+    from { opacity: 0; transform: translateY(28px); }
     to   { opacity: 1; transform: none; }
   }
-  .reveal {
-    opacity: 0; transform: translateY(28px);
-    transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1);
+  .reveal { opacity: 0; transform: translateY(28px); will-change: opacity, transform; }
+  .reveal.visible {
+    animation: revealIn 0.7s cubic-bezier(0.4,0,0.2,1) forwards;
+    animation-delay: calc(var(--i, 0) * 60ms);
   }
-  .reveal.visible { opacity: 1; transform: none; }
-  .reveal-delay-1 { transition-delay: 0.1s; }
-  .reveal-delay-2 { transition-delay: 0.2s; }
-  .reveal-delay-3 { transition-delay: 0.3s; }
-  .reveal-delay-4 { transition-delay: 0.4s; }
+  .reveal-delay-1 { --i: 1; }
+  .reveal-delay-2 { --i: 2; }
+  .reveal-delay-3 { --i: 3; }
+  .reveal-delay-4 { --i: 4; }
+  @keyframes timelineIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to   { opacity: 1; transform: none; }
+  }
 
   @media (max-width: 900px) {
     nav { padding: 1rem 1.5rem; }
@@ -903,7 +910,10 @@ const io = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {
       e.target.classList.add('visible');
-      // trigger skill bars if inside skills section
+      io.unobserve(e.target);
+      e.target.addEventListener('animationend', () => {
+        e.target.style.willChange = 'auto';
+      }, { once: true });
     }
   });
 }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
@@ -1057,11 +1067,13 @@ function populatePortfolio() {
   const grid = document.querySelector('.projects-grid');
   if (grid) {
     grid.innerHTML = PROJETS.map((p, i) => {
-      const delay = ['','reveal-delay-1','reveal-delay-2'][i % 3] || '';
       const tags = p.tags.slice(0,5).map(t => `<span class="project-tag">${t}</span>`).join('');
-      const clickable = p.github ? `style="cursor:pointer" onclick="window.open('${p.github}','_blank')"` : '';
+      const baseStyle = `--i:${i % 6}`;
+      const clickable = p.github
+        ? `style="${baseStyle};cursor:pointer" onclick="window.open('${p.github}','_blank')"`
+        : `style="${baseStyle}"`;
       const ghLabel = p.github ? `<div style="font-family:var(--font-m);font-size:0.7rem;color:var(--teal);margin-top:0.75rem">↗ View on GitHub</div>` : '';
-      return `<div class="project-card reveal ${delay}" ${clickable}>
+      return `<div class="project-card reveal" ${clickable}>
         <div class="project-type">// ${p.category}</div>
         <div class="project-title">${p.name}</div>
         <div class="project-desc">${p.prophecy}</div>
@@ -1079,7 +1091,7 @@ function populatePortfolio() {
     timeline.innerHTML = EXPERIENCES.map((e, i) => {
       const [org, period] = e.subtitle.split(' · ');
       const tags = e.tags.map(t => `<span class="tl-tag">${t}</span>`).join('');
-      return `<div class="timeline-item" style="--dot-color:${colors[i % colors.length]}">
+      return `<div class="timeline-item" style="--dot-color:${colors[i % colors.length]};--i:${i}">
         <div class="timeline-dot" style="background:${colors[i%colors.length]};box-shadow:0 0 0 3px var(--bg),0 0 0 5px ${colors[i%colors.length]}"></div>
         <div class="timeline-date">${period || ''}</div>
         <div class="timeline-role">${e.name}</div>
@@ -1096,7 +1108,7 @@ function populatePortfolio() {
   if (eduGrid) {
     const edColors = ['var(--accent)','var(--teal)','var(--accent2)','var(--accent)','var(--teal)'];
     eduGrid.innerHTML = FORMATIONS.map((f, i) => `
-      <div class="edu-card reveal reveal-delay-${(i%4)+1}" style="border-left-color:${edColors[i]}">
+      <div class="edu-card reveal" style="border-left-color:${edColors[i]};--i:${i}">
         <div class="edu-degree">${f.name}</div>
         <div class="edu-school">${f.details.Institution}</div>
         <div class="edu-year">${f.details.Period || ''}</div>
