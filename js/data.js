@@ -8,19 +8,26 @@ const PROFIL = {
   nom:        'Dedieu',
   titre:      'PhD Candidate · AI, Data Science and Data engineering',
   institution:'University of West London - Université de Paris (ex Paris Descartes)',
-  bio_courte: 'Health Data Scientist passionate about bioinformatics, AI and data science. Interdisciplinary background bridging computational biology, machine learning and health sciences.',
-  bio_longue: `PhD candidate in Health Data Science at Université Paris Cité, working at the intersection of artificial intelligence, bioinformatics and public health.
 
-My interdisciplinary background spans computational biology, machine learning, NLP and biostatistics — giving me a distinct perspective on complex health data problems.
+  bio_courte: 'PhD Candidate, Data Scientist and ML engineer passionate about building AI systems that are not only theoretically but practically impactful. My work sits at the intersection of machine learning research, data engineering/science, and real-world deployment.',
 
-Graduate Teaching Assistant across 9 modules including Computer Architecture, Algorithms, Databases and Cyber Threat Analysis. Committed team player with strong communication and synthesis abilities.`,
+
+  
+
+  bio_longue: `PhD candidate in Computer Science with a Master's in Health Data Science, specialising in end-to-
+end ML systems and applied AI. 
+
+I translate complex problems into scalable, deployable solutions, bridging the gap between research and production. Experienced across machine learning, deep learning and data engineering, with a background spanning healthcare and computational domains.
+
+A collaborative communicator who combines analytical rigour with a practical, delivery-focused
+mindset. Based in London, open to relocation.`,
   contact: {
-    email:    'dedieu.anto@gmail.com',
+    email:    'antoine.dedieu@outlook.fr',
     linkedin: 'https://www.linkedin.com/in/antoine-dedieu-09aa39198/',
     github:   '',
     twitter:  '',
     scholar:  '',
-    cv:       '',
+    cv:       'DEDIEU_ANTOINE_CV.pdf',
   },
   infos: [
     { label: '📍 Location',   value: 'London — open to relocate' },
@@ -34,34 +41,25 @@ Graduate Teaching Assistant across 9 modules including Computer Architecture, Al
 
 const FORMATIONS = [
   {
-    id:'f1', emoji:'🎓', roman:'I', name:'PhD · NeuroAI',
+    id:'f1', emoji:'🎓', roman:'I', name:'PhD · Computer Science / AI',
     type:'Arcana of Education', subtitle:'University of West London · 2023 – Present',
     gradient:'linear-gradient(160deg,#1a0a2e,#450af5)',
     rune:'ᚠ', runeName:'Fehu', runeKeyword:'Supreme Knowledge',
     prophecy:'Exploring the intersection of neuroscience and artificial intelligence, developing advanced Spiking Neural Networks informed by cognitive functions emerging from the nervous system.',
-    details:{ Institution:'University of West London', Period:'Sept 2023 – Present', Status:'In progress', Field:'NeuroAI', Supervisor:'Prof. Konstantin Nikolic' },
+    details:{ Institution:'University of West London', Period:'Sept 2023 – Present', Status:'In progress', Field:'Artifical Intelligence', Supervisor:'Prof. Konstantin Nikolic' },
     tags:['NeuroAI','Spiking Neural Networks','Computational Neuroscience','Deep Learning','Research','Python','Brian2']
   },
   {
-    id:'f2', emoji:'🧬', roman:'II', name:'Master 2 · Massive Data for Health Science',
-    type:'Arcana of Education', subtitle:'Université Paris Cité · 2022 – 2023',
+    id:'f2', emoji:'🧬', roman:'II', name:'Master · Public Health: Massive Data for Health Science',
+    type:'Arcana of Education', subtitle:'Université Paris Cité · 2021 – 2023',
     gradient:'linear-gradient(160deg,#0d0d1a,#1e3264)',
     rune:'ᚢ', runeName:'Uruz', runeKeyword:'Strength & Rigour',
-    prophecy:'Advanced techniques for analysing structured and textual health data: machine learning, deep learning, transformers, survival analysis and spatial methods converging into a singular mastery.',
-    details:{ Institution:'Université Paris Cité', Period:'Sept 2022 – Jul 2023', Grade:'Completed', Field:'Health Data Science / Computer Science' },
-    tags:['Machine Learning','Deep Learning','NLP','Survival Analysis','Biostatistics','GIS','Pharmaco-epidemiology']
+    prophecy:'A two-year program training health data scientists. M1 covers epidemiology, AI in health sciences, and environmental risk assessment. M2 builds on these foundations with advanced methods: machine learning, deep learning, transformers, survival analysis, and spatial analysis.',
+    details:{ Institution:'Université Paris Cité', Period:'Sept 2021 – Jul 2023',  Field:'Health Data Science / Public Health / Computer Science', Internship:'HEGP Data Warehouse (Dr Bastien Rance)' },
+    tags:['Machine Learning','Deep Learning','NLP','Survival Analysis','Biostatistics','Epidemiology','AI in Health','GIS','Pharmaco-epidemiology','Data Warehouse','R','Environmental Risk']
   },
   {
-    id:'f3', emoji:'🏥', roman:'III', name:'Master 1 · Public Health: Massive Data',
-    type:'Arcana of Education', subtitle:'Université Paris Cité · 2021 – 2022',
-    gradient:'linear-gradient(160deg,#0a1a0a,#216a4c)',
-    rune:'ᚦ', runeName:'Thurisaz', runeKeyword:'Awakening & Foundations',
-    prophecy:'The crossroads of epidemiology, AI in health science and environmental risk assessment: where the foundations of a health data scientist were laid stone by stone.',
-    details:{ Institution:'Université Paris Cité', Period:'Sept 2021 – Aug 2022', Field:'Public Health / Massive Data', Internship:'HEGP Data Warehouse (Dr Bastien Rance)' },
-    tags:['Epidemiology','AI in Health','Biostatistics','Data Warehouse','R','Environmental Risk']
-  },
-  {
-    id:'f4', emoji:'🦠', roman:'IV', name:'Licence 3 · Life Sciences: Bioinformatics',
+    id:'f3', emoji:'🦠', roman:'III', name:'Bachelor · Bioinformatics',
     type:'Arcana of Education', subtitle:'Université Paris Cité · 2020 – 2021',
     gradient:'linear-gradient(160deg,#0a1a0e,#16a34a)',
     rune:'ᚨ', runeName:'Ansuz', runeKeyword:'Discovery & Life',
@@ -70,13 +68,13 @@ const FORMATIONS = [
     tags:['Bioinformatics','Computational Biology','Agent-Based Modelling','Python','Computational Neuroscience','OMICS']
   },
   {
-    id:'f5', emoji:'💻', roman:'V', name:'DUT · Computer Science',
-    type:'Arcana of Education', subtitle:'IUT de Paris - Rives de Seine · 2018 – 2020',
+    id:'f4', emoji:'💻', roman:'IV', name:'DUT · Computer Science',
+    type:'Arcana of Education', subtitle:'IUT de Paris Descartes · 2018 – 2020',
     gradient:'linear-gradient(160deg,#1a0f00,#b45309)',
     rune:'ᚱ', runeName:'Raidho', runeKeyword:'Journey & Structure',
     prophecy:'The technical bedrock: databases, algorithms, systems programming. The infrastructure upon which all future knowledge would be built.',
-    details:{ Institution:'IUT de Paris - Rives de Seine', Period:'2018 – 2020', Field:'Computer Science', Degree:'DUT Informatique' },
-    tags:['Algorithms','Databases','SQL','Java','C++','Systems']
+    details:{ Institution:'IUT de Paris Descartes', Period:'2018 – 2020', Field:'Computer Science', Degree:'DUT Informatique' },
+    tags:['Algorithms','Databases','SQL','Java','Python','C','C++','Systems']
   },
 ];
 
@@ -206,7 +204,7 @@ const COMPETENCES = [
   },
   {
     id:'c13', emoji:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg',
-    roman:'XIV', name:'C++',
+    roman:'XIV', name:'C / C++',
     type:'Arcana of Skill', subtitle:'Systems programming & performance computing',
     gradient:'linear-gradient(160deg,#1a0f00,#92400e)',
     constellation:'programming',
@@ -348,13 +346,13 @@ const EXPERIENCES = [
     gradient:'linear-gradient(160deg,#1a0a2e,#450af5)',
     prophecy:'Researching NeuroAI and developing advanced Spiking Neural Networks using insights into cognitive functions emerging from the nervous system. Under the supervision of Professor Konstantin Nikolic.',
     details:{ Organisation:'University of West London', Period:'Oct 2023 – Present', Field:'NeuroAI / Spiking Neural Networks', Supervisor:'Prof. Konstantin Nikolic' },
-    tags:['NeuroAI','Spiking Neural Networks','Research','Python','Deep Learning','Computational Neuroscience']
+    tags:['NeuroAI','Spiking Neural Networks','Research','Python','Deep Learning','Computational Neuroscience','AI Architecture']
   },
   {
     id:'e1b', emoji:'🎓', roman:'XV', name:'Graduate Teaching Assistant',
     type:'Arcana of Experience', subtitle:'University of West London · Oct 2023 – Present',
     gradient:'linear-gradient(160deg,#0a1a0f,#216a4c)',
-    prophecy:'Teaching across multiple Computer Science modules as part of the PhD programme, bridging theory and practice for undergraduate students across 9 modules including Computer Architecture, Algorithms and Databases.',
+    prophecy:'Teaching across multiple Computer Science modules as part of the PhD programme, bridging theory and practice for undergraduate students across 9 modules including Computer Architecture, Algorithms and Databases, Programmation Java and Python.',
     details:{ Organisation:'University of West London', Period:'Oct 2023 – Present', Type:'Teaching' },
     tags:['Teaching','Computer Architecture','Algorithms','Databases','Java','Python']
   },
@@ -364,7 +362,7 @@ const EXPERIENCES = [
     gradient:'linear-gradient(160deg,#1a1a0a,#856a00)',
     prophecy:'Building internal R and Python packages for multi-source data management, a Shiny data cleaning application, and comprehensive tutorials for R6 object-oriented programming.',
     details:{ Organisation:'ADLIN Science', Period:'Feb – Jul 2023', Duration:'6 months', Location:'Paris, France' },
-    tags:['R','Python','Package Development','Shiny','Data Cleaning','OOP','Clinical Data']
+    tags:['R','Python','Package Development','Shiny','Data Cleaning','OOP','Clinical Data','Data Analysis', 'Data Engineering']
   },
   {
     id:'e2', emoji:'🏥', roman:'XVII', name:'Health Data Scientist',
@@ -375,12 +373,12 @@ const EXPERIENCES = [
     tags:['R Package','Data Quality','NLP','GPU Optimisation','Data Warehouse','Health Data','Patient Profiling']
   },
   {
-    id:'e4', emoji:'🌐', roman:'XVIII', name:'IT Developer Intern',
+    id:'e4', emoji:'🌐', roman:'XVIII', name:'Software Developper',
     type:'Arcana of Experience', subtitle:'Green Village · Apr–Jun 2020',
     gradient:'linear-gradient(160deg,#0a1218,#0e7490)',
-    prophecy:'Full-stack data engineering: database architecture, web scraping, R and Python analytics, interactive maps, server creation and automated cron tasks.',
+    prophecy:'Software developper and data engineering task: database architecture/creating, web scraping, Python analytics, interactive maps, server creation and automated cron tasks.',
     details:{ Organisation:'Green Village', Period:'Apr – Jun 2020', Duration:'3 months', URL:'greenvillage.io' },
-    tags:['Database Architecture','Web Scraping','R','Python','Dashboard','Interactive Map','Server']
+    tags:['Database Architecture','Web Scraping','Database creation','Python','Dashboard','Interactive Map','Server']
   },
 ];
 
@@ -392,7 +390,7 @@ const PROJETS = [
     potionColor:'#e11d48',
     ingredients2:['c7','c3'], ingredients3:['c7','c3','c18'],
     prophecy:'A full CV pipeline that scrapes runway images, segments clothing with SegFormer-B2 (46 classes), extracts colour palettes in CIE Lab space via K-Means, and visualises collections in an interactive Streamlit app.',
-    details:{ Type:'Portfolio project', Stack:'Python · HuggingFace · SegFormer · rembg · Selenium · Streamlit · scikit-learn', Field:'Computer Vision / Data Engineering', GitHub:'https://github.com/AntoineDedieu/fashion-in-data' },
+    details:{ Type:'Portfolio project', Stack:'Python · HuggingFace · SegFormer · rembg · Selenium · Streamlit · scikit-learn', Field:'Computer Vision / Data Engineering', GitHub:'https://github.com/Antogone/Fashion-in-Data' },
     tags:['Computer Vision','Segmentation','SegFormer','Web Scraping','Streamlit','K-Means','Colour Science','HuggingFace']
   },
   {
@@ -402,7 +400,7 @@ const PROJETS = [
     potionColor:'#0e7490',
     ingredients2:['c8','c1'], ingredients3:['c8','c1','c14'],
     prophecy:'Three anomaly detection methods applied to NYC taxi demand data, with consensus voting to reduce false positives. Every detector parameter derived from EDA findings, not trial and error.',
-    details:{ Type:'Portfolio project', Stack:'Python · statsmodels · scikit-learn · Streamlit · Plotly', Field:'Time Series / Anomaly Detection', GitHub:'https://github.com/AntoineDedieu/portfolio-timeseries-anomaly' },
+    details:{ Type:'Portfolio project', Stack:'Python · statsmodels · scikit-learn · Streamlit · Plotly', Field:'Time Series / Anomaly Detection', GitHub:'https://github.com/Antogone/Time_series_anomaly' },
     tags:['Time Series','Anomaly Detection','SARIMA','Isolation Forest','Streamlit','Consensus Voting','Z-score']
   },
   {
@@ -412,7 +410,7 @@ const PROJETS = [
     potionColor:'#1e40af',
     ingredients2:['c1','c26'], ingredients3:['c1','c26','c18'],
     prophecy:'End-to-end Data Scientist workflow on the Titanic dataset: thorough EDA motivating every feature decision, title-based age imputation, MNAR cabin encoding, and three models compared via stratified cross-validation. Logistic Regression ties Random Forest, proving feature engineering matters more than model complexity.',
-    details:{ Type:'Portfolio project', Stack:'Python · scikit-learn · MLflow · pandas · seaborn', Field:'Data Science / Classification', GitHub:'https://github.com/AntoineDedieu/portfolio-titanic' },
+    details:{ Type:'Portfolio project', Stack:'Python · scikit-learn · MLflow · pandas · seaborn', Field:'Data Science / Classification', GitHub:'https://github.com/Antogone/Titanic_Survival_Analysis' },
     tags:['scikit-learn','MLflow','Feature Engineering','EDA','Cross-validation','Classification','MNAR','Python']
   },
   {
@@ -422,7 +420,7 @@ const PROJETS = [
     potionColor:'#991b1b',
     ingredients2:['c14','c18'], ingredients3:['c14','c18','c19'],
     prophecy:'A six-act data narrative exploring the 1692 Salem witch trials through quantitative analysis: timeline, geography, outcomes, social divisions, and wealth. No machine learning, just honest data storytelling with beautiful seaborn visualisations and a geopandas basemap.',
-    details:{ Type:'Portfolio project', Stack:'Python · seaborn · matplotlib · geopandas · contextily', Field:'Data Storytelling / EDA', GitHub:'https://github.com/AntoineDedieu/portfolio-salem' },
+    details:{ Type:'Portfolio project', Stack:'Python · seaborn · matplotlib · geopandas · contextily', Field:'Data Storytelling / EDA', GitHub:'https://github.com/Antogone/Salem' },
     tags:['Data Storytelling','EDA','Seaborn','Geographic Visualisation','geopandas','Historical Data','Data Journalism']
   },
   {
@@ -432,7 +430,7 @@ const PROJETS = [
     potionColor:'#8b5cf6',
     ingredients2:['c6','c3'], ingredients3:['c6','c3','c15'],
     prophecy:'Fine-tuning DistilBERT on AG News (4-class news classification) with 8,000 training samples, reaching 91% accuracy in 15 minutes on Apple MPS. The Business/Sci/Tech confusion boundary is the interesting finding: contextual models resolve vocabulary ambiguity that bag-of-words cannot.',
-    details:{ Type:'Portfolio project', Stack:'Python · HuggingFace Transformers · PyTorch · datasets', Field:'NLP / Text Classification', GitHub:'https://github.com/AntoineDedieu/portfolio-nlp' },
+    details:{ Type:'Portfolio project', Stack:'Python · HuggingFace Transformers · PyTorch · datasets', Field:'NLP / Text Classification', GitHub:'https://github.com/Antogone/Nlp_Classification' },
     tags:['NLP','DistilBERT','HuggingFace','PyTorch','Fine-tuning','Text Classification','Transformers','Apple MPS']
   },
   {
@@ -442,8 +440,8 @@ const PROJETS = [
     potionColor:'#0891b2',
     ingredients2:['c17','c11'], ingredients3:['c17','c11','c16'],
     prophecy:'A containerised ML serving platform: FastAPI with Pydantic validation, Prometheus metrics, KS-test drift detection, 5 pytest tests, Docker Compose deployment, and GitHub Actions CI. Clone, run docker compose up, and the API is live in two minutes.',
-    details:{ Type:'Portfolio project', Stack:'Python · FastAPI · Docker · pytest · scipy · prometheus-client', Field:'ML Engineering / MLOps', GitHub:'https://github.com/AntoineDedieu/portfolio-mlops' },
-    tags:['FastAPI','Docker','MLOps','pytest','GitHub Actions','Drift Detection','CI/CD','Model Serving']
+    details:{ Type:'Portfolio project', Stack:'Python · FastAPI · Docker · pytest · scipy · prometheus-client', Field:'ML Engineering / MLOps', GitHub:'https://github.com/Antogone/mlops-health' },
+    tags:['Docker','MLOps','pytest','GitHub Actions','Drift Detection','CI/CD','Model Serving']
   },
   {
     id:'p7', emoji:'⚙️', roman:'XXIV', name:'Reproducible ML Pipeline',
@@ -452,7 +450,7 @@ const PROJETS = [
     potionColor:'#7c3aed',
     ingredients2:['c26','c16'], ingredients3:['c26','c16','c11'],
     prophecy:'A fully reproducible ML pipeline where every experiment is tracked, every feature version is committed, and the entire pipeline runs from a single command — engineering discipline applied to machine learning.',
-    details:{ Type:'Portfolio project', Stack:'Python · scikit-learn · MLflow · pandas · joblib', Field:'ML Engineering / MLOps', GitHub:'https://github.com/AntoineDedieu/portfolio-ml-pipeline' },
+    details:{ Type:'Portfolio project', Stack:'Python · scikit-learn · MLflow · pandas · joblib', Field:'ML Engineering / MLOps', GitHub:'https://github.com/Antogone/Reproducible_ML_Pipeline_with_Experiment_Tracking' },
     tags:['MLflow','scikit-learn','Python','Feature Engineering','MLOps','Experiment Tracking','Reproducibility','Pipeline']
   },
   {
@@ -462,7 +460,7 @@ const PROJETS = [
     potionColor:'#0d9488',
     ingredients2:['c16','c14'], ingredients3:['c16','c14','c10'],
     prophecy:'A full model audit of an XGBoost credit scoring classifier — interrogating it for fairness, explainability, and deployment readiness. Two critical legal blockers surfaced and a concrete path to remediation defined.',
-    details:{ Type:'Portfolio project', Stack:'Python · XGBoost · SHAP · fairlearn', Field:'Responsible AI / Explainability', GitHub:'https://github.com/AntoineDedieu/portfolio-model-audit' },
+    details:{ Type:'Portfolio project', Stack:'Python · XGBoost · SHAP · fairlearn', Field:'Responsible AI / Explainability', GitHub:'https://github.com/Antogone/Interpretable_model_audit' },
     tags:['SHAP','XGBoost','fairlearn','Explainability','Responsible AI','Fairness','Model Audit','Python']
   },
   {
@@ -472,7 +470,7 @@ const PROJETS = [
     potionColor:'#d97706',
     ingredients2:['c10','c4'], ingredients3:['c10','c4','c18'],
     prophecy:'An end-to-end A/B experiment simulation demonstrating what most practitioners get wrong — the peeking problem exposed empirically, sequential testing implemented correctly, and Bayesian posterior analysis confirming a 28% conversion lift with 100% posterior certainty.',
-    details:{ Type:'Portfolio project', Stack:'Python · scipy · PyMC · statsmodels · numpy', Field:'Data Science / Experimentation', GitHub:'https://github.com/AntoineDedieu/portfolio-ab-testing' },
+    details:{ Type:'Portfolio project', Stack:'Python · scipy · PyMC · statsmodels · numpy', Field:'Data Science / Experimentation', GitHub:'https://github.com/Antogone/End_to_end_AB_test_simulation' },
     tags:['A/B Testing','Bayesian Inference','PyMC','scipy','Sequential Testing','Experimental Design','Statistics','Python']
   },
   {
@@ -482,7 +480,7 @@ const PROJETS = [
     potionColor:'#6366f1',
     ingredients2:['c2','c15'], ingredients3:['c2','c15','c9'],
     prophecy:'GCN and GraphSAGE implemented and compared on the Cora citation network — a 23 percentage point gap over an MLP baseline proving empirically that citation structure encodes topic information. Message passing derived from first principles and verified manually.',
-    details:{ Type:'Portfolio project', Stack:'Python · PyTorch · PyTorch Geometric · UMAP · networkx', Field:'AI Research / Graph ML', GitHub:'https://github.com/AntoineDedieu/portfolio-gnn' },
+    details:{ Type:'Portfolio project', Stack:'Python · PyTorch · PyTorch Geometric · UMAP · networkx', Field:'AI Research / Graph ML', GitHub:'https://github.com/Antogone/Graph_Neural_network_on_citation_data' },
     tags:['Graph Neural Networks','GCN','GraphSAGE','PyTorch','PyTorch Geometric','UMAP','Message Passing','Deep Learning']
   },
   {
@@ -492,7 +490,7 @@ const PROJETS = [
     potionColor:'#dc2626',
     ingredients2:['c10','c21'], ingredients3:['c10','c21','c30'],
     prophecy:'Three causal identification strategies applied to observational data with a known ground truth — propensity score matching, inverse probability weighting, and difference-in-differences — each getting closer to the true causal effect, with sensitivity to unmeasured confounding quantified via Rosenbaum bounds.',
-    details:{ Type:'Portfolio project', Stack:'Python · scikit-learn · statsmodels · scipy · pandas', Field:'Data Science / Causal Inference', GitHub:'https://github.com/AntoineDedieu/portfolio-causal-inference' },
+    details:{ Type:'Portfolio project', Stack:'Python · scikit-learn · statsmodels · scipy · pandas', Field:'Data Science / Causal Inference', GitHub:'https://github.com/Antogone/Causal_inference_on_Observational_data' },
     tags:['Causal Inference','Propensity Score Matching','IPW','Difference-in-Differences','Rosenbaum Bounds','Observational Studies','Python','Statistics']
   },
   {
@@ -522,7 +520,7 @@ const PROJETS = [
     potionColor:'#1db954',
     ingredients2:['c2','c6'], ingredients3:['c2','c6','c5'],
     prophecy:'An R Shiny application dissecting the anatomy of music through the Spotify API — data analysis, visualisation and interactive exploration of audio features.',
-    details:{ Type:'Academic project', Stack:'R / Shiny / Spotify API', Field:'Data Visualisation', GitHub:'Available on GitHub' },
+    details:{ Type:'Academic project', Stack:'R / Shiny / Spotify API', Field:'Data Visualisation', GitHub:'https://github.com/Antogone/SpotiViz' },
     tags:['R','Shiny','Spotify API','Data Visualisation','Dashboard']
   },
   {
@@ -532,7 +530,7 @@ const PROJETS = [
     potionColor:'#b02897',
     ingredients2:['c2','c10'], ingredients3:['c2','c10','c8'],
     prophecy:'Recurrent events, competitive risks, causal inference in survival — advanced statistical methods applied to melanoma clinical data.',
-    details:{ Type:'Academic project', Stack:'R / Survival packages', Field:'Biostatistics / Oncology', GitHub:'Available on GitHub' },
+    details:{ Type:'Academic project', Stack:'R / Survival packages', Field:'Biostatistics / Oncology', GitHub:'https://github.com/Antogone/M2-SURVIVAL-MELANOMA-PROJECT' },
     tags:['R','Survival Analysis','Melanoma','Causal Inference','Biostatistics']
   },
   {

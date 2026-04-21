@@ -495,26 +495,26 @@
     <h2 class="section-title reveal">Bridging research<br>and production AI</h2>
     <div class="about-grid">
       <div class="about-text reveal reveal-delay-1">
-        <p>I'm <strong>Antoine Dedieu</strong>, a PhD researcher and ML engineer passionate about building AI systems that are not only theoretically sound but practically impactful. My work sits at the intersection of machine learning research, data engineering, and real-world deployment.</p>
-        <p>From designing novel architectures to shipping production-grade pipelines, I thrive on the full journey — from first principles to final product. I'm particularly drawn to problems where data is messy, labels are sparse, and the stakes are high.</p>
+        <p>I'm <strong>Antoine Dedieu</strong>, a PhD Candidate, Data Scientist and ML engineer passionate about building AI systems that are not only theoretically sound but practically impactful. My work sits at the intersection of machine learning research, data engineering/science, and real-world deployment.</p>
+        <p>From designing novel architectures to shipping production-grade pipelines, I thrive on the full journey, from first principles to final product. I'm particularly drawn to problems where data is messy, labels are sparse, and the stakes are high.</p>
         <p>When I'm not training models, I'm thinking about interpretability, robustness, and what it means for AI systems to actually <strong>generalize</strong>.</p>
       </div>
       <div class="stat-grid reveal reveal-delay-2">
         <div class="stat-card">
           <div class="stat-num">PhD</div>
-          <div class="stat-label">Researcher</div>
+          <div class="stat-label">Ongoing</div>
         </div>
         <div class="stat-card">
           <div class="stat-num">10+</div>
-          <div class="stat-label">Projects shipped</div>
+          <div class="stat-label"><a href="https://github.com/Antogone">on GitHub</a></div>
         </div>
         <div class="stat-card">
-          <div class="stat-num">5+</div>
+          <div class="stat-num">5</div>
           <div class="stat-label">Years in ML</div>
         </div>
         <div class="stat-card">
-          <div class="stat-num">3</div>
-          <div class="stat-label">Research domains</div>
+          <div class="stat-num">1</div>
+          <div class="stat-label"><a href="https://doi.org/10.21203/rs.3.rs-8679920/v1">Preprint paper</a></div>
         </div>
       </div>
     </div>
@@ -531,19 +531,25 @@
         <div class="skills-col-title">// Languages & Frameworks</div>
         <div class="skill-list">
           <span class="skill-item cat-lang">Python</span>
+          <span class="skill-item cat-lang">R</span>
+                    <span class="skill-item cat-lang">C / C++</span>
+          <span class="skill-item cat-lang">Java</span>
+          <span class="skill-item cat-lang">SQL</span>
           <span class="skill-item cat-lang">PyTorch</span>
           <span class="skill-item cat-lang">TensorFlow</span>
           <span class="skill-item cat-lang">scikit-learn</span>
-          <span class="skill-item cat-lang">R</span>
-          <span class="skill-item cat-lang">SQL</span>
+          <span class="skill-item cat-lang">scikit-learn</span>
         </div>
       </div>
       <div class="reveal reveal-delay-2">
         <div class="skills-col-title">// Domains</div>
         <div class="skill-list">
-          <span class="skill-item cat-domain">Deep Learning</span>
+          <span class="skill-item cat-domain">Machine & Deep Learning</span>
           <span class="skill-item cat-domain">Statistical Modelling</span>
           <span class="skill-item cat-domain">MLOps & Deployment</span>
+                    <span class="skill-item cat-domain">Data visualisation</span>
+                    <span class="skill-item cat-domain">Data Analysis</span>
+                    <span class="skill-item cat-domain">Data Science</span>
           <span class="skill-item cat-domain">Data Engineering</span>
           <span class="skill-item cat-domain">Research & Writing</span>
         </div>
@@ -551,17 +557,16 @@
         <div class="skills-col-title" style="margin-top:2rem">// Tools & Platforms</div>
         <div class="skill-list">
           <span class="skill-item cat-tool">Docker</span>
-          <span class="skill-item cat-tool">Kubernetes</span>
-          <span class="skill-item cat-tool">AWS</span>
-          <span class="skill-item cat-tool">GCP</span>
           <span class="skill-item cat-tool">MLflow</span>
           <span class="skill-item cat-tool">Weights & Biases</span>
-          <span class="skill-item cat-tool">Spark</span>
-          <span class="skill-item cat-tool">Airflow</span>
           <span class="skill-item cat-tool">Git</span>
           <span class="skill-item cat-tool">Jupyter</span>
           <span class="skill-item cat-tool">FastAPI</span>
           <span class="skill-item cat-tool">Hugging Face</span>
+                    <span class="skill-item cat-tool">Latex</span>
+                              <span class="skill-item cat-tool">Oracle</span>
+
+
         </div>
       </div>
     </div>
@@ -790,6 +795,10 @@
           <a href="#" class="contact-link">
             <span class="link-icon">∂</span>
             Google Scholar
+          </a>
+          <a href="DEDIEU_ANTOINE_CV.pdf" target="_blank" rel="noopener" download class="contact-link">
+            <span class="link-icon">↓</span>
+            Download Resume
           </a>
         </div>
       </div>
@@ -1068,11 +1077,12 @@ function populatePortfolio() {
   if (grid) {
     grid.innerHTML = PROJETS.map((p, i) => {
       const tags = p.tags.slice(0,5).map(t => `<span class="project-tag">${t}</span>`).join('');
+      const gh = p.github || (p.details && p.details.GitHub) || '';
       const baseStyle = `--i:${i % 6}`;
-      const clickable = p.github
-        ? `style="${baseStyle};cursor:pointer" onclick="window.open('${p.github}','_blank')"`
+      const clickable = gh
+        ? `style="${baseStyle};cursor:pointer" onclick="window.open('${gh}','_blank')"`
         : `style="${baseStyle}"`;
-      const ghLabel = p.github ? `<div style="font-family:var(--font-m);font-size:0.7rem;color:var(--teal);margin-top:0.75rem">↗ View on GitHub</div>` : '';
+      const ghLabel = gh ? `<a href="${gh}" target="_blank" rel="noopener" style="display:inline-block;font-family:var(--font-m);font-size:0.7rem;color:var(--teal);margin-top:0.75rem;text-decoration:none" onclick="event.stopPropagation()">↗ View on GitHub</a>` : '';
       return `<div class="project-card reveal" ${clickable}>
         <div class="project-type">// ${p.category}</div>
         <div class="project-title">${p.name}</div>
@@ -1126,6 +1136,7 @@ function populatePortfolio() {
       c.linkedin && `<a href="${c.linkedin}" target="_blank" class="contact-link"><span class="link-icon">in</span>LinkedIn</a>`,
       c.github   && `<a href="${c.github}" target="_blank" class="contact-link"><span class="link-icon">⌥</span>GitHub</a>`,
       c.scholar  && `<a href="${c.scholar}" target="_blank" class="contact-link"><span class="link-icon">∂</span>Google Scholar</a>`,
+      c.cv       && `<a href="${c.cv}" target="_blank" rel="noopener" download class="contact-link"><span class="link-icon">↓</span>Download Resume</a>`,
     ].filter(Boolean);
     contactLinks.innerHTML = links.join('');
   }
